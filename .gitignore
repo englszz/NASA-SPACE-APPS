@@ -8,3 +8,4 @@ build
 next-env.d.ts
 public/fonts/
 field-shift-data/points.antes.json
+*.tsbuildinfo

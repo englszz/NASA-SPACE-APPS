@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+
+// Leaflet usa `window`: el mapa solo se carga en el navegador
+const MapExplorer = dynamic(() => import("./MapExplorer"), { ssr: false });
 
 // Transición "Abrir el mapa": el granero aparece, abre sus puertas y la cámara
 // entra por la puerta hasta el mapa. Estilo plano como Ramoncito: formas
@@ -17,7 +21,6 @@ const ROOF = "#b4561c"; // tierra, de la familia de la montaña del logo
 
 export default function BarnTransition({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [phase, setPhase] = useState<Phase>("closed");
-  const backRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) {
@@ -36,10 +39,6 @@ export default function BarnTransition({ open, onClose }: { open: boolean; onClo
     ];
     return () => timers.forEach(clearTimeout);
   }, [open]);
-
-  useEffect(() => {
-    if (phase === "inside") backRef.current?.focus();
-  }, [phase]);
 
   useEffect(() => {
     if (!open) return;
@@ -101,11 +100,8 @@ export default function BarnTransition({ open, onClose }: { open: boolean; onClo
       </div>
 
       <section className="mapRoom" aria-label="El mapa">
-        <h2 className="mapTitle">El mapa del Cibao</h2>
-        <p>Aquí irá el mapa.</p>
-        <button type="button" className="cta" ref={backRef} onClick={onClose} tabIndex={open ? 0 : -1}>
-          Volver
-        </button>
+        {/* Se monta durante el zoom para que el mapa ya esté cargando al entrar */}
+        {reached("zoom") && <MapExplorer onClose={onClose} />}
       </section>
     </div>
   );
