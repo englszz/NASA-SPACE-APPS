@@ -34,8 +34,9 @@ const nearest = (lat, lon) => {
 };
 
 const r0 = (x) => (x == null ? null : Math.round(x));
-// Clases de pendiente (aprox. FAO): <5 % baja, 5–15 % media, >15 % alta
-const erosionRisk = (p90) => (p90 == null ? null : p90 < 5 ? "baja" : p90 < 15 ? "media" : "alta");
+// Riesgo de erosión según la pendiente típica (clases FAO: 0–2 llano, 2–5 suave,
+// 5–10 inclinado, >10 fuerte): <3 % baja, 3–8 % media, >8 % alta
+const erosionRisk = (median) => (median == null ? null : median < 3 ? "baja" : median < 8 ? "media" : "alta");
 
 async function main() {
   const grid = readCsv("fieldshift_grid.csv");
@@ -47,8 +48,12 @@ async function main() {
     .filter((r) => Number.isFinite(r.dT) && Number.isFinite(r.pRatio));
   if (!cmip6?.length) console.warn("AVISO: falta fieldshift_cmip6.csv. Se omite la proyección futura.");
   // Opcional: relieve (sale de gee-terrain.js). Si no existe, todo sigue igual que antes.
-  const terrain = new Map((readCsv("fieldshift_grid_terrain.csv") ?? []).map((t) => [t.id, t]));
-  if (!terrain.size) console.warn("AVISO: falta fieldshift_grid_terrain.csv. Se omite el riesgo de erosión.");
+  const terrainRows = readCsv("fieldshift_grid_terrain.csv") ?? [];
+  const terrainOk = terrainRows.length && "slope_median" in terrainRows[0];
+  if (terrainRows.length && !terrainOk)
+    console.warn("AVISO: fieldshift_grid_terrain.csv es de la versión vieja (sin slope_median). Vuelve a correr gee-terrain.js. Se omite el riesgo de erosión.");
+  else if (!terrainRows.length) console.warn("AVISO: falta fieldshift_grid_terrain.csv. Se omite el riesgo de erosión.");
+  const terrain = new Map(terrainOk ? terrainRows.map((t) => [t.id, t]) : []);
 
   // Agrupar datos mensuales por punto
   const byId = new Map();
@@ -97,8 +102,8 @@ async function main() {
       topIrrigated: [...out.crops].sort((x, y) => y.bestIrrigated.irrigated - x.bestIrrigated.irrigated || x.bestIrrigated.irrigationMm - y.bestIrrigated.irrigationMm)
         .slice(0, 3).map((c) => ({ name: c.name, score: c.bestIrrigated.irrigated, sow: c.bestIrrigated.sowMonth, irrigationMm: c.bestIrrigated.irrigationMm })),
       ...(terrain.has(s.id) && {
-        slopePct: Math.round(terrain.get(s.id).slope_mean * 10) / 10,
-        erosionRisk: erosionRisk(terrain.get(s.id).slope_p90),
+        slopePct: Math.round(terrain.get(s.id).slope_median * 10) / 10,
+        erosionRisk: erosionRisk(terrain.get(s.id).slope_median),
       }),
     });
   }
