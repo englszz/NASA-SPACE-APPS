@@ -116,7 +116,7 @@ export function MapSection({ onOpenMap }: { onOpenMap: () => void }) {
         <div className="mapPreview">
           <div className="mapPreviewTop">
             <span className="tag">Valle del Cibao · República Dominicana</span>
-            <span className="tag tagSoft">61 puntos de análisis</span>
+            <span className="tag tagSoft">52 puntos de análisis</span>
           </div>
           <svg viewBox="0 0 400 230" className="mapDots" aria-hidden="true">
             {dots.map((d, i) => (
