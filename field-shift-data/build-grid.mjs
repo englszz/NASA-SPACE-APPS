@@ -5,6 +5,7 @@
 //   fieldshift_grid.csv       -> export de gee-grid.js (NDVI, ET, SMAP, IMERG por punto y mes)
 //   fieldshift_grid_soil.csv  -> export de gee-grid.js (suelo por punto)
 //   fieldshift_cmip6.csv      -> opcional, export de gee-cmip6.js (proyección futura del Cibao)
+//   fieldshift_grid_terrain.csv -> opcional, export de gee-terrain.js (pendiente SRTM por punto)
 // Salida:
 //   data/points.json          -> lista de puntos para pintar el mapa
 //   data/points/<id>.json     -> análisis completo de cada punto (se carga al hacer clic)
@@ -33,6 +34,8 @@ const nearest = (lat, lon) => {
 };
 
 const r0 = (x) => (x == null ? null : Math.round(x));
+// Clases de pendiente (aprox. FAO): <5 % baja, 5–15 % media, >15 % alta
+const erosionRisk = (p90) => (p90 == null ? null : p90 < 5 ? "baja" : p90 < 15 ? "media" : "alta");
 
 async function main() {
   const grid = readCsv("fieldshift_grid.csv");
@@ -43,6 +46,9 @@ async function main() {
     .map((r) => ({ ...r, scenario: r.scenario ?? "ssp245", horizon: r.horizon ?? "2041-2060" }))
     .filter((r) => Number.isFinite(r.dT) && Number.isFinite(r.pRatio));
   if (!cmip6?.length) console.warn("AVISO: falta fieldshift_cmip6.csv. Se omite la proyección futura.");
+  // Opcional: relieve (sale de gee-terrain.js). Si no existe, todo sigue igual que antes.
+  const terrain = new Map((readCsv("fieldshift_grid_terrain.csv") ?? []).map((t) => [t.id, t]));
+  if (!terrain.size) console.warn("AVISO: falta fieldshift_grid_terrain.csv. Se omite el riesgo de erosión.");
 
   // Agrupar datos mensuales por punto
   const byId = new Map();
@@ -90,6 +96,10 @@ async function main() {
       top: out.crops.slice(0, 3).map((c) => ({ name: c.name, score: c.best.rainfed, sow: c.best.sowMonth, future: c.aptitude.future })),
       topIrrigated: [...out.crops].sort((x, y) => y.bestIrrigated.irrigated - x.bestIrrigated.irrigated || x.bestIrrigated.irrigationMm - y.bestIrrigated.irrigationMm)
         .slice(0, 3).map((c) => ({ name: c.name, score: c.bestIrrigated.irrigated, sow: c.bestIrrigated.sowMonth, irrigationMm: c.bestIrrigated.irrigationMm })),
+      ...(terrain.has(s.id) && {
+        slopePct: Math.round(terrain.get(s.id).slope_mean * 10) / 10,
+        erosionRisk: erosionRisk(terrain.get(s.id).slope_p90),
+      }),
     });
   }
   fs.writeFileSync(path.join("data", "points.json"), JSON.stringify(index, null, 2));
