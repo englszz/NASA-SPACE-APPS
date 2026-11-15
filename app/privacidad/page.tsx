@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import LangToggle from "@/app/LangToggle";
 import { getLang } from "@/lib/lang-server";
 
 export async function generateMetadata() {
@@ -30,7 +29,6 @@ export default async function PrivacidadPage() {
           <Link href="/" className="mcBack">
             ← {en ? "Home" : "Inicio"}
           </Link>
-          <LangToggle />
         </div>
       </header>
 

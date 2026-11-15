@@ -6,7 +6,6 @@ import ConucoForm from "./ConucoForm";
 import Dashboard from "./Dashboard";
 import LoginCard from "./LoginCard";
 import AuthNav from "@/app/AuthNav";
-import LangToggle from "@/app/LangToggle";
 import { getLang } from "@/lib/lang-server";
 import { pick } from "@/lib/lang";
 
@@ -27,7 +26,6 @@ function Shell({ children, t }: { children: React.ReactNode; t: (es: string, en:
             ← {t("Inicio", "Home")}
           </Link>
           <AuthNav showConuco={false} variant="bar" />
-          <LangToggle />
         </div>
       </header>
       <main className="mcMain">{children}</main>

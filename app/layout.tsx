@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Lilita_One, Nunito } from "next/font/google";
 import "./globals.css";
 import RamoncitoChat from "./RamoncitoChat";
+import LangToggle from "./LangToggle";
 import { LangProvider } from "@/lib/i18n";
 import { getLang } from "@/lib/lang-server";
 
@@ -52,6 +53,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <body>
         <LangProvider initial={lang}>
           {children}
+          <LangToggle className="langFloat" />
           <RamoncitoChat />
         </LangProvider>
       </body>

@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import Fields from "./Fields";
 import AuthNav from "./AuthNav";
-import LangToggle from "./LangToggle";
 import { useLang } from "@/lib/i18n";
 import BarnTransition from "./BarnTransition";
 import {
@@ -69,7 +68,6 @@ export default function Home() {
         >
           {menuOpen ? t("Cerrar", "Close") : t("Menú", "Menu")}
         </button>
-        <LangToggle className="langMobile" />
 
         <nav id="mainNav" className={`nav${menuOpen ? " isOpen" : ""}`} aria-label={t("Secciones", "Sections")}>
           {NAV.map((item) => (
@@ -84,7 +82,6 @@ export default function Home() {
             </a>
           ))}
           <AuthNav />
-          <LangToggle className="langDesktop" />
         </nav>
       </header>
 

@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // El indicador de desarrollo (la «N» de abajo a la izquierda) tapaba el selector EN | ES.
+  // Los errores se siguen mostrando en pantalla al programar.
+  devIndicators: false,
   // En Vercel cada ruta del servidor se empaqueta aparte: la de Ramoncito lee los
   // datos de las zonas desde public/data, así que hay que incluirlos en su paquete.
   outputFileTracingIncludes: {
