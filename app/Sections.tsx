@@ -816,6 +816,70 @@ export function ChallengeSection() {
   );
 }
 
+export function GlobalSection() {
+  const { t } = useLang();
+  const tx = useTx();
+  const steps: { k: L; title: L; text: L }[] = [
+    {
+      k: { es: "Hoy", en: "Today" },
+      title: { es: "El Valle del Cibao", en: "The Cibao Valley" },
+      text: {
+        es: "52 zonas del Cibao, en República Dominicana, con sus suelos, su clima y los cultivos que se siembran allí.",
+        en: "52 areas of the Cibao, in the Dominican Republic, with their soils, their climate and the crops grown there.",
+      },
+    },
+    {
+      k: { es: "Lo que ya es global", en: "Already global" },
+      title: { es: "Los datos cubren toda la Tierra", en: "The data covers the whole Earth" },
+      text: {
+        es: "NASA POWER, GPM IMERG, MODIS, SMAP, SRTM, CMIP6 y SoilGrids miden todo el planeta, y el método para comparar rotaciones es el mismo en cualquier lugar.",
+        en: "NASA POWER, GPM IMERG, MODIS, SMAP, SRTM, CMIP6 and SoilGrids measure the whole planet, and the method for comparing rotations is the same anywhere.",
+      },
+    },
+    {
+      k: { es: "Lo que sigue", en: "What's next" },
+      title: { es: "Llevarlo a otras regiones", en: "Bring it to other regions" },
+      text: {
+        es: "Sumar nuevas zonas y los cultivos de cada lugar, con la ayuda de agricultores y técnicos que conocen esa tierra.",
+        en: "Add new areas and each place's own crops, with the help of farmers and experts who know that land.",
+      },
+    },
+  ];
+  return (
+    <section id="global" className="band bandCream bandSand">
+      <div className="container">
+        <div className="headWithArt">
+          <SectionHead
+            n="07"
+            eyebrow={t("Del Cibao al mundo", "From the Cibao to the world")}
+            title={t("Hecho para el Cibao, pensado para el mundo", "Made for the Cibao, designed for the world")}
+            lead={t(
+              "The Conuco empieza en República Dominicana, en el Valle del Cibao, porque ahí queremos ayudar primero y conocemos sus cultivos y su gente. Pero la idea es que sea global: que cualquier agricultor, en cualquier país, pueda usarlo para decidir qué sembrar en su propia tierra.",
+              "The Conuco starts in the Dominican Republic, in the Cibao Valley, because that's where we want to help first and we know its crops and its people. But the idea is for it to be global: any farmer, in any country, should be able to use it to decide what to plant on their own land.",
+            )}
+          />
+          <Image
+            src="/planeta.png"
+            alt={t("El planeta Tierra", "Planet Earth")}
+            width={600}
+            height={547}
+            className="sectionArt sectionArtGlobe"
+          />
+        </div>
+        <ol className="scopeGrid">
+          {steps.map((s) => (
+            <li key={s.k.es}>
+              <span className="scopeK">{tx(s.k)}</span>
+              <h3>{tx(s.title)}</h3>
+              <p>{tx(s.text)}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
 export function SiteFooter() {
   const { t } = useLang();
   const tx = useTx();

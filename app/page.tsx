@@ -8,6 +8,7 @@ import { useLang } from "@/lib/i18n";
 import BarnTransition from "./BarnTransition";
 import {
   ChallengeSection,
+  GlobalSection,
   ClimateSection,
   CropsSection,
   RotationSection,
@@ -25,6 +26,7 @@ const NAV = [
   { id: "clima", es: "Clima futuro", en: "Future climate" },
   { id: "ramoncito", es: "Ramoncito", en: "Ramoncito" },
   { id: "reto", es: "El reto", en: "The challenge" },
+  { id: "global", es: "Global", en: "Global" },
 ];
 
 export default function Home() {
@@ -124,6 +126,7 @@ export default function Home() {
         <ClimateSection />
         <RamoncitoSection />
         <ChallengeSection />
+        <GlobalSection />
       </main>
 
       <SiteFooter />

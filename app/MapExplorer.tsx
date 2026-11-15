@@ -232,6 +232,8 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
   const markersRef = useRef<Map<string, L.CircleMarker>>(new Map());
   const boundsRef = useRef<L.LatLngBounds | null>(null);
   const userMovedRef = useRef(false);
+  // true cuando la persona se aleja hasta ver todo el país (o más)
+  const [zoomedOut, setZoomedOut] = useState(false);
 
   const [points, setPoints] = useState<PointSummary[]>([]);
   const [layer, setLayer] = useState<LayerId>("agua");
@@ -266,6 +268,14 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
     // El contenedor crece con la animación del granero: recalcular tamaño y
     // volver a encuadrar los puntos mientras la persona no haya movido el mapa
     map.on("dragstart", () => (userMovedRef.current = true));
+    // Al alejarse a la mitad (o menos) del zoom que encuadra el Cibao, se ve toda la isla:
+    // ahí se muestra el aviso de que por ahora solo cubrimos el Cibao
+    map.on("zoomend", () => {
+      const b = boundsRef.current;
+      if (!b) return;
+      const fit = map.getBoundsZoom(b, false, L.point(96, 96));
+      setZoomedOut(map.getZoom() <= fit - 1);
+    });
     mapEl.current.addEventListener("wheel", () => (userMovedRef.current = true), { passive: true });
     const ro = new ResizeObserver(() => {
       map.invalidateSize();
@@ -345,6 +355,14 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
     };
   }, [selected]);
 
+  // Botón «Centrar en el Cibao»: vuelve a encuadrar los 52 puntos
+  const centerCibao = () => {
+    const map = mapRef.current;
+    if (!map || !boundsRef.current) return;
+    userMovedRef.current = false;
+    map.flyToBounds(boundsRef.current, { ...fitPadding(), duration: 0.8 });
+  };
+
   const summary = useMemo(() => points.find((p) => p.id === selected) ?? null, [points, selected]);
 
   return (
@@ -388,6 +406,22 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
                   </li>
                 ))}
             </ul>
+          </div>
+          <div className="mapTools">
+            <button type="button" className="centerBtn" onClick={centerCibao}>
+              <span aria-hidden="true">⌖</span> {t("Centrar en el Cibao", "Center on the Cibao")}
+            </button>
+            {zoomedOut && (
+              <p className="scopeNote" role="status">
+                <img src="/planeta.png" alt="" />
+                <span>
+                  {t(
+                    "Por ahora cubrimos el Valle del Cibao, en República Dominicana. La idea es llegar a todo el mundo.",
+                    "For now we cover the Cibao Valley, in the Dominican Republic. The goal is to reach the whole world.",
+                  )}
+                </span>
+              </p>
+            )}
           </div>
           {error && <p className="mapError">{tx(error)}</p>}
         </div>
