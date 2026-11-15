@@ -111,6 +111,7 @@ export function RotationsTab({
           onChange={(e) => {
             setPreset(e.target.value);
             if (e.target.value === OTHER_PREFIX) guide("otro");
+            else setOther(""); // escogió un cultivo de la lista
           }}
         >
           {CURRENT_PRESETS.map((p) => (
@@ -133,34 +134,42 @@ export function RotationsTab({
         )}
       </label>
 
-      {otherMode && (
-        <form
-          className="otherCrop"
-          onSubmit={(e) => {
-            e.preventDefault();
-            askOther();
-          }}
-        >
-          <label>
-            <span>{t("¿Qué siembras?", "What do you grow?")}</span>
-            <input
-              value={other}
-              onChange={(e) => setOther(e.target.value)}
-              placeholder={t("Ej.: ají, tomate, café…", "e.g. peppers, tomatoes, coffee…")}
-              maxLength={60}
-            />
-          </label>
-          <button type="submit" className="cta" disabled={!cleanCrop(other)}>
-            {t("Pregúntale a Ramoncito", "Ask Ramoncito")}
-          </button>
-          <small>
-            {t(
-              "Ese cultivo no está en nuestros cálculos. Ramoncito (IA) lo compara con las opciones de esta zona que ves abajo.",
-              "That crop isn't in our calculations. Ramoncito (AI) compares it with this area's options shown below.",
-            )}
-          </small>
-        </form>
-      )}
+      {/* Siempre visible: si lo que siembra no está en la lista, lo escribe aquí */}
+      <form
+        className={`otherCrop${otherMode ? " isOn" : ""}`}
+        onSubmit={(e) => {
+          e.preventDefault();
+          askOther();
+        }}
+      >
+        <label>
+          <span>{t("¿Siembras algo que no está en la lista? Escríbelo aquí:", "Growing something that isn't on the list? Type it here:")}</span>
+          <input
+            value={other}
+            onChange={(e) => {
+              setOther(e.target.value);
+              // Al escribir, la lista pasa a «Otro cultivo»; si borra todo, vuelve a la primera opción
+              if (e.target.value.trim()) {
+                if (!otherMode) {
+                  setPreset(OTHER_PREFIX);
+                  guide("otro");
+                }
+              } else if (otherMode) setPreset(CURRENT_PRESETS[0].id);
+            }}
+            placeholder={t("Ej.: ají, tomate, café, auyama…", "e.g. peppers, tomatoes, coffee, squash…")}
+            maxLength={60}
+          />
+        </label>
+        <button type="submit" className="cta" disabled={!cleanCrop(other)}>
+          {t("Pregúntale a Ramoncito", "Ask Ramoncito")}
+        </button>
+        <small>
+          {t(
+            "Ese cultivo no está en nuestros cálculos. Ramoncito (IA) te dice si le va bien a esta zona y lo compara con las opciones que ves abajo.",
+            "That crop isn't in our calculations. Ramoncito (AI) tells you whether it suits this area and compares it with the options below.",
+          )}
+        </small>
+      </form>
 
       <YearStrip notes={notes} />
 

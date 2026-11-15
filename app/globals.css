@@ -4016,3 +4016,9 @@ button.ctaSmall {
 @media (prefers-reduced-motion: reduce) {
   .backBtn.isCallout { animation: none; }
 }
+
+/* el cuadro «¿Siembras algo que no está en la lista?» resalta cuando se está usando */
+.otherCrop:not(.isOn) {
+  background: var(--paper);
+  border-color: var(--line-light);
+}
