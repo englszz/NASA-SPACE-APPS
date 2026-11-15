@@ -11,7 +11,7 @@ van solo en el archivo `.env.local`, que git ya ignora.
 2. Menú **API Keys** → **Create API Key** → nómbrala `the-conuco` → copia la clave (empieza por `gsk_`).
    Solo se muestra una vez: guárdala para la Parte D.
 3. Menú **Docs → Models** (o https://console.groq.com/docs/models): busca un modelo de texto grande que
-   esté disponible (por ejemplo `llama-3.3-70b-versatile`). Anota su nombre exacto para la Parte D.
+   esté disponible (por ejemplo `openai/gpt-oss-120b`). Anota su nombre exacto para la Parte D.
 
 > Plan gratuito: tiene un límite de peticiones por minuto y por día. La web ya limita a cada usuario a
 > 20 preguntas cada 10 minutos para no gastarlo.
