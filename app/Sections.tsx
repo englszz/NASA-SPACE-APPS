@@ -295,15 +295,24 @@ export function RotationSection() {
   return (
     <section id="rotaciones" className="band bandCream bandSand">
       <div className="container">
-        <SectionHead
-          n="02"
-          eyebrow={t("Rotaciones", "Rotations")}
-          title={t("Tres caminos para tu parcela, con sus razones", "Three paths for your plot, with their reasons")}
-          lead={t(
-            "Comparamos tu rotación actual con dos alternativas. Cada una dice por qué se sugiere, en qué datos se apoya, qué gana tu suelo, qué información falta y qué riesgos hay que revisar.",
-            "We compare your current rotation with two alternatives. Each one says why it's suggested, what data supports it, what your soil gains, what information is missing and which risks to review.",
-          )}
-        />
+        <div className="headWithArt">
+          <SectionHead
+            n="02"
+            eyebrow={t("Rotaciones", "Rotations")}
+            title={t("Tres caminos para tu parcela, con sus razones", "Three paths for your plot, with their reasons")}
+            lead={t(
+              "Comparamos tu rotación actual con dos alternativas. Cada una dice por qué se sugiere, en qué datos se apoya, qué gana tu suelo, qué información falta y qué riesgos hay que revisar.",
+              "We compare your current rotation with two alternatives. Each one says why it's suggested, what data supports it, what your soil gains, what information is missing and which risks to review.",
+            )}
+          />
+          <Image
+            src="/rastrillo.png"
+            alt={t("Rastrillo de Ramoncito", "Ramoncito's rake")}
+            width={240}
+            height={600}
+            className="sectionArt sectionArtTall"
+          />
+        </div>
 
         <div className="priorities">
           <p className="prioritiesLabel">{t("¿Qué es lo más importante para ti?", "What matters most to you?")}</p>
