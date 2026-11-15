@@ -117,7 +117,7 @@ export default function RamoncitoChat() {
       {hint && !open && (
         <div className="rcHint" role="status">
           <button type="button" className="rcHintText" onClick={() => setOpen(true)}>
-            Soy tu asistente virtual
+            ¡Hola! Mi nombre es Ramoncito y soy tu asistente virtual. <b>¡Consulta cualquier duda!</b>
           </button>
           <button type="button" className="rcHintClose" onClick={closeHint} aria-label="Cerrar este mensaje">
             ×
