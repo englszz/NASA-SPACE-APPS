@@ -12,6 +12,10 @@ export const TIPS = {
     es: "¡Hola! Mi nombre es Ramoncito y soy tu asistente virtual. Te iré dando consejos mientras recorres la página. ¡Consulta cualquier duda!",
     en: "Hi! My name is Ramoncito and I'm your virtual assistant. I'll give you tips as you explore. Ask me anything!",
   },
+  inicio: {
+    es: "Cuando quieras conocer toda la página (cultivos, clima futuro y más), toca «Ir al inicio», arriba a la izquierda.",
+    en: "Whenever you want to see the whole site (crops, future climate and more), tap «Go to home» at the top left.",
+  },
   mapa: {
     es: "Este es el mapa del Cibao. Cada círculo es una zona de unos 11 km. Toca el que esté más cerca de tu conuco.",
     en: "This is the Cibao map. Each circle is an area of about 11 km. Tap the one closest to your conuco (farm).",
@@ -108,7 +112,7 @@ export const GENERAL_TIPS: { home: TipId[]; map: TipId[] } = {
 };
 
 /** Consejos que solo tienen sentido con el mapa abierto */
-export const MAP_TIPS = new Set<TipId>(["mapa", "capa-agua", "capa-futuro", "capa-lluvia", "capa-suelo", "capa-erosion", "punto", "tab-rotaciones", "tab-futuro", "tab-pasado", "simulador", "lejos", "g-capas"]);
+export const MAP_TIPS = new Set<TipId>(["inicio", "mapa", "capa-agua", "capa-futuro", "capa-lluvia", "capa-suelo", "capa-erosion", "punto", "tab-rotaciones", "tab-futuro", "tab-pasado", "simulador", "lejos", "g-capas"]);
 
 export const guide = (id: TipId) => window.dispatchEvent(new CustomEvent("ramoncito-guia", { detail: id }));
 

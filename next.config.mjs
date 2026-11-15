@@ -8,6 +8,10 @@ const nextConfig = {
   outputFileTracingIncludes: {
     "/api/ramoncito": ["./public/data/**/*"],
   },
+  // /jueces ya no existe: la entrada con el granero sale en la página principal la primera vez
+  async redirects() {
+    return [{ source: "/jueces", destination: "/", permanent: false }];
+  },
 };
 
 export default nextConfig;

@@ -29,7 +29,7 @@ const NAV = [
   { id: "reto", es: "El reto", en: "The challenge" },
 ];
 
-// La portada. Al entrar por primera vez (y siempre en /jueces) se abre el mapa con la
+// La portada. Al entrar por primera vez se abre el mapa con la
 // animación del granero. El servidor ya sabe si es la primera visita (cookie), así que
 // la pantalla verde del granero sale desde el primer instante, sin mostrar antes la portada.
 export default function HomeView({ intro = false }: { intro?: boolean }) {

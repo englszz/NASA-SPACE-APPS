@@ -3990,7 +3990,7 @@ button.ctaSmall {
   margin: 0;
 }
 
-/* Entrada directa (primera visita y /jueces): verde opaco desde el primer instante,
+/* Entrada directa (primera visita): verde opaco desde el primer instante,
    así no se ve la portada antes de que aparezca el granero */
 .barnOverlay.is-intro {
   opacity: 1;
@@ -4000,4 +4000,19 @@ button.ctaSmall {
     linear-gradient(rgba(20, 52, 17, 0.35), rgba(20, 52, 17, 0.35)),
     url("/patterns/hileras.svg") repeat,
     #327a29;
+}
+
+/* En la primera visita, el botón «Ir al inicio» late suave para que se note */
+.backBtn.isCallout {
+  background: var(--sun);
+  animation: backPulse 2.2s ease-in-out 3s infinite;
+}
+
+@keyframes backPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 165, 24, 0.7); }
+  50% { box-shadow: 0 0 0 10px rgba(244, 165, 24, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backBtn.isCallout { animation: none; }
 }

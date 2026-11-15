@@ -100,20 +100,15 @@ export default function RamoncitoChat() {
     setTip(id);
   }, []);
 
-  // Cargar lo ya visto. En /jueces se empieza de cero para ver toda la guía.
+  // Cargar los consejos que ya vio y si los apagó
   useEffect(() => {
-    if (location.pathname.startsWith("/jueces")) {
-      store.del(SEEN_KEY);
-      store.del(MUTE_KEY);
-    } else {
-      try {
-        seen.current = new Set(JSON.parse(store.get(SEEN_KEY) ?? "[]"));
-      } catch {
-        seen.current = new Set();
-      }
-      if (store.get(OLD_HINT_KEY) === "1") seen.current.add("hola");
-      muted.current = store.get(MUTE_KEY) === "1";
+    try {
+      seen.current = new Set(JSON.parse(store.get(SEEN_KEY) ?? "[]"));
+    } catch {
+      seen.current = new Set();
     }
+    if (store.get(OLD_HINT_KEY) === "1") seen.current.add("hola");
+    muted.current = store.get(MUTE_KEY) === "1";
     const hello = setTimeout(() => show("hola"), 1200);
     const onTip = (e: Event) => show((e as CustomEvent<TipId>).detail);
     window.addEventListener("ramoncito-guia", onTip);

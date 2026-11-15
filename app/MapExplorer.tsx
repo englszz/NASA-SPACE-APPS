@@ -225,7 +225,9 @@ export const aptWord = (lang: Lang, x: number) =>
 
 // =====================================================================
 
-export default function MapExplorer({ onClose }: { onClose: () => void }) {
+// firstVisit: el mapa se abrió solo al entrar por primera vez. Entonces el botón para
+// ir a la portada se resalta y Ramoncito explica cómo llegar al inicio.
+export default function MapExplorer({ onClose, firstVisit = false }: { onClose: () => void; firstVisit?: boolean }) {
   const { lang, t } = useLang();
   const tx = (x: L2) => t(x.es, x.en);
   const mapEl = useRef<HTMLDivElement>(null);
@@ -359,7 +361,10 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
   // Guía de Ramoncito: al abrir el mapa, al cambiar de capa y al alejarse
   useEffect(() => {
     guide("mapa");
-  }, []);
+    if (!firstVisit) return;
+    const t = setTimeout(() => guide("inicio"), 20000);
+    return () => clearTimeout(t);
+  }, [firstVisit]);
   useEffect(() => {
     if (zoomedOut) guide("lejos");
   }, [zoomedOut]);
@@ -389,8 +394,8 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
   return (
     <div className="explorer">
       <header className="explorerBar">
-        <button type="button" className="backBtn" onClick={onClose}>
-          ← {t("Volver", "Back")}
+        <button type="button" className={`backBtn${firstVisit ? " isCallout" : ""}`} onClick={onClose}>
+          ← {t("Ir al inicio", "Go to home")}
         </button>
         <div className="explorerTitle">
           <strong>{t("El mapa del Cibao", "The Cibao map")}</strong>

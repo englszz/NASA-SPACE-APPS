@@ -20,7 +20,7 @@ const DEEP = "#1d4a19";
 const CREAM = "#fbf6e6";
 const ROOF = "#b4561c"; // tierra, de la familia de la montaña del logo
 
-// intro: entrada directa al abrir la web (primera visita o /jueces). El fondo verde
+// intro: entrada directa al abrir la web por primera vez. El fondo verde
 // cubre la pantalla desde el primer instante para que no se vea antes la portada.
 export default function BarnTransition({ open, intro = false, onClose }: { open: boolean; intro?: boolean; onClose: () => void }) {
   const { t } = useLang();
@@ -107,7 +107,7 @@ export default function BarnTransition({ open, intro = false, onClose }: { open:
 
       <section className="mapRoom" aria-label={t("El mapa", "The map")}>
         {/* Se monta durante el zoom para que el mapa ya esté cargando al entrar */}
-        {reached("zoom") && <MapExplorer onClose={onClose} />}
+        {reached("zoom") && <MapExplorer onClose={onClose} firstVisit={intro} />}
       </section>
     </div>
   );
