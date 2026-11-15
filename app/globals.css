@@ -1821,3 +1821,275 @@ button.cta {
     display: none;
   }
 }
+
+/* =====================================================================
+   FONDOS DE HILERAS, IMÁGENES DE RAMONCITO Y PANEL EN LENGUAJE SENCILLO
+   ===================================================================== */
+.bandPattern {
+  background: var(--green-deep) url("/patterns/hileras-oscuro.svg") repeat;
+}
+
+.headWithArt {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.headWithArt .sectionHead {
+  flex: 1;
+}
+
+.sectionArt {
+  flex-shrink: 0;
+  width: clamp(160px, 22vw, 280px);
+  height: auto;
+  margin-bottom: clamp(28px, 4vw, 48px);
+  filter: drop-shadow(5px 6px 0 rgba(0, 0, 0, 0.3));
+}
+
+.ramoncitoArt img {
+  width: min(100%, 340px);
+  filter: drop-shadow(6px 8px 0 rgba(0, 0, 0, 0.3));
+}
+
+.footerArt {
+  display: block;
+  width: 150px;
+  height: auto;
+  margin-top: 20px;
+  filter: drop-shadow(4px 5px 0 rgba(0, 0, 0, 0.35));
+}
+
+/* granero: las hileras se ven detrás mientras se abre */
+.barnOverlay.is-pop {
+  background:
+    linear-gradient(rgba(20, 52, 17, 0.35), rgba(20, 52, 17, 0.35)),
+    url("/patterns/hileras.svg") repeat;
+}
+
+.explorerBar {
+  background: var(--green-deep) url("/patterns/hileras-oscuro.svg") repeat;
+}
+
+/* ---- panel del mapa en lenguaje sencillo ---- */
+.howTo {
+  margin: 14px 0;
+  padding-left: 20px;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.plainFacts {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plainFacts li {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  column-gap: 12px;
+  padding: 10px 12px;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 10px;
+}
+
+.plainFacts span {
+  grid-row: span 2;
+  align-self: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.plainFacts strong {
+  font-size: 0.98rem;
+  color: var(--green-deep);
+}
+
+.plainFacts p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+.panelTabs {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin: 18px -4px 0;
+  padding: 4px;
+  background: rgba(29, 74, 25, 0.08);
+  border-radius: 12px;
+}
+
+.panelTabs button {
+  padding: 9px 6px;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: var(--green-title);
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.panelTabs button.isOn {
+  color: var(--cream);
+  background: var(--green-title);
+}
+
+.panelTabs button:focus-visible,
+.futurePickers select:focus-visible {
+  outline: 3px dashed var(--sun);
+  outline-offset: 2px;
+}
+
+.tabPane {
+  padding-top: 16px;
+}
+
+.lede {
+  margin: 0 0 10px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.tabPane .insights {
+  margin-top: 16px;
+}
+
+.futurePickers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.futurePickers label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.futurePickers select {
+  padding: 8px;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--green-deep);
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 8px;
+}
+
+.futureList {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.futureList li {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 12px;
+}
+
+.fIcon {
+  font-size: 1.4rem;
+  line-height: 1.2;
+}
+
+.futureList strong {
+  color: var(--green-deep);
+}
+
+.futureList p {
+  margin: 2px 0 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.futureList li > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.compareBars {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.compareBars div {
+  display: grid;
+  grid-template-columns: 52px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+}
+
+.compareBars i {
+  display: block;
+  height: 10px;
+  background: #e9b44c;
+  border-radius: 5px;
+}
+
+.compareBars i.hot {
+  background: #c2410c;
+}
+
+.compareBars b {
+  text-align: right;
+}
+
+.cropFuture {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 12px;
+}
+
+.cropFuture p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.cropFuture .lede {
+  margin: 0;
+}
+
+.cropFuture .down b { color: #b42e2e; }
+.cropFuture .up b { color: #2f7d2a; }
+
+@media (max-width: 820px) {
+  .headWithArt {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sectionArt {
+    align-self: center;
+    margin-bottom: 24px;
+  }
+}

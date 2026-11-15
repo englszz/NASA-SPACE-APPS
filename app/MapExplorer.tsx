@@ -2,6 +2,7 @@
 
 // Mapa del Cibao: 52 puntos de análisis sobre imagen satelital.
 // Se carga solo en el navegador (Leaflet necesita `window`).
+// Todo el texto está pensado para que lo entienda cualquier agricultor.
 
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -19,17 +20,16 @@ type PointSummary = {
   waterBalanceMm: number | null;
   slopePct?: number;
   erosionRisk?: "baja" | "media" | "alta" | null;
+  heatDaysNow?: number;
+  heatDaysFuture?: number;
 };
 
 type Indicator = {
   key: string;
   title: string;
-  unit?: string;
-  source?: string;
   early?: number;
   recent?: number;
   significant?: boolean;
-  pValue?: number;
   direction?: string;
   message?: string;
 };
@@ -39,84 +39,77 @@ type Crop = {
   id: string;
   name: string;
   family: string;
-  cycle: number;
   best: CropBest;
   bestIrrigated: CropBest;
-  aptitude: { early: number; recent: number; future: number };
+  aptitude: { recent: number; future: number | null; futureByScenario?: Record<string, number> };
+};
+
+type Projection = {
+  key: string;
+  scenario: string;
+  horizon: string;
+  tempChangeC: number;
+  rainChangePct: number;
+  heatDaysNow: number;
+  heatDaysFuture: number;
+  waterBalanceNowMm: number;
+  waterBalanceFutureMm: number;
 };
 
 type PointDetail = {
-  region: { name: string; lat: number; lon: number; elevationM: number };
   compare: { early: string; recent: string };
   indicators: Indicator[];
-  soil?: { textureClass: string; note?: string; sand: number; clay: number; silt: number; ph: number };
-  projections?: {
-    key: string;
-    label: string;
-    tempChangeC: number;
-    rainChangePct: number;
-    heatDaysNow: number;
-    heatDaysFuture: number;
-    waterBalanceNowMm: number;
-    waterBalanceFutureMm: number;
-  }[];
+  soil?: { textureClass: string; note?: string };
+  projections?: Projection[];
   crops: Crop[];
   insights?: { type: string; text: string }[];
 };
 
-// ---------- capas del mapa ----------
-type LayerId = "agua" | "lluvia" | "suelo" | "erosion";
-type Bin = { label: string; color: string; test: (p: PointSummary) => boolean };
-
-const LAYERS: Record<LayerId, { label: string; title: string; bins: Bin[] }> = {
-  agua: {
-    label: "Agua",
-    title: "Balance hídrico (lluvia − evaporación), mm/año",
-    bins: [
-      { label: "< −200 · déficit fuerte", color: "#b45309", test: (p) => (p.waterBalanceMm ?? 0) < -200 },
-      { label: "−200 a 0 · déficit", color: "#f2b544", test: (p) => (p.waterBalanceMm ?? 0) < 0 },
-      { label: "0 a 300 · superávit", color: "#9ad17f", test: (p) => (p.waterBalanceMm ?? 0) < 300 },
-      { label: "> 300 · superávit alto", color: "#2f9e57", test: () => true },
-    ],
-  },
-  lluvia: {
-    label: "Lluvia",
-    title: "Lluvia anual 2016–2025 (GPM IMERG), mm",
-    bins: [
-      { label: "< 1350", color: "#cfe8f3", test: (p) => (p.rainMm ?? 0) < 1350 },
-      { label: "1350–1450", color: "#8cc4e0", test: (p) => (p.rainMm ?? 0) < 1450 },
-      { label: "1450–1600", color: "#3f8fd0", test: (p) => (p.rainMm ?? 0) < 1600 },
-      { label: "> 1600", color: "#1c4f94", test: () => true },
-    ],
-  },
-  suelo: {
-    label: "Suelo",
-    title: "Textura del suelo 0–30 cm (ISRIC SoilGrids)",
-    bins: [
-      { label: "Arcilla", color: "#b5651d", test: (p) => p.soil === "Arcilla" },
-      { label: "Franco arcilloso", color: "#e8b06a", test: (p) => p.soil === "Franco arcilloso" },
-      { label: "Otro", color: "#d9d9d9", test: () => true },
-    ],
-  },
-  erosion: {
-    label: "Erosión",
-    title: "Riesgo de erosión por pendiente (NASA SRTM)",
-    bins: [
-      { label: "Baja (< 3 %)", color: "#7bc96f", test: (p) => p.erosionRisk === "baja" },
-      { label: "Media (3–8 %)", color: "#f2b544", test: (p) => p.erosionRisk === "media" },
-      { label: "Alta (> 8 %)", color: "#d64545", test: (p) => p.erosionRisk === "alta" },
-      { label: "Sin dato", color: "#d9d9d9", test: () => true },
-    ],
-  },
+// ---------- textos sencillos ----------
+const SOIL_PLAIN: Record<string, string> = {
+  Arcilla: "Tierra pesada: guarda mucha agua y puede encharcarse.",
+  "Franco arcilloso": "Tierra equilibrada, algo pesada: guarda bien el agua.",
+  Franco: "Tierra equilibrada: buena para casi todo.",
+  "Franco arenoso": "Tierra suelta: el agua se va rápido.",
+  Arena: "Tierra muy suelta: casi no guarda agua.",
 };
 
-// En el celular el panel inferior y la leyenda tapan la parte de abajo y de arriba
-const fitPadding = (): L.FitBoundsOptions =>
-  window.innerWidth <= 820
-    ? { paddingTopLeft: [16, 110], paddingBottomRight: [16, 140] }
-    : { padding: [48, 48] };
+const EROSION_PLAIN = {
+  baja: "Terreno llano: la lluvia casi no arrastra la tierra.",
+  media: "Terreno algo inclinado: cuida que el suelo no quede desnudo.",
+  alta: "Terreno inclinado: la lluvia puede llevarse la tierra buena.",
+};
 
-const colorFor = (layer: LayerId, p: PointSummary) => LAYERS[layer].bins.find((b) => b.test(p))!.color;
+const waterPlain = (mm: number) =>
+  mm < -200
+    ? "Falta mucha agua: se evapora más de lo que llueve."
+    : mm < 0
+      ? "Falta un poco de agua en el año."
+      : mm < 300
+        ? "Hay agua suficiente en el año."
+        : "Sobra agua: cuidado con encharcamientos.";
+
+// Indicadores con nombre y unidad en palabras sencillas
+const IND_PLAIN: Record<string, { label: string; unit: string; dec?: number }> = {
+  heat: { label: "Días de mucho calor", unit: "días al año con más de 32 °C", dec: 0 },
+  rain: { label: "Lluvia", unit: "mm al año", dec: 0 },
+  soil: { label: "Humedad de la tierra", unit: "de 0 (seca) a 1 (empapada)", dec: 2 },
+  evap: { label: "Agua que se evapora", unit: "mm al año", dec: 0 },
+  frost: { label: "Heladas", unit: "días al año", dec: 0 },
+  extreme: { label: "Aguaceros muy fuertes", unit: "meses al año", dec: 1 },
+  veg: { label: "Plantas estresadas", unit: "meses al año con plantas débiles (visto por satélite)", dec: 1 },
+  water: { label: "Agua disponible", unit: "mm al año (lluvia menos evaporación)", dec: 0 },
+};
+
+const INSIGHT_LABEL: Record<string, string> = {
+  oportunidad: "Buena oportunidad",
+  "oportunidad-futuro": "Mejora en el futuro",
+  alerta: "Cuidado",
+  "alerta-futuro": "Cuidado en el futuro",
+  riego: "Con riego",
+  futuro: "El futuro",
+  riesgo: "Riesgo",
+};
 
 const FAMILY_LABEL: Record<string, string> = {
   cereal: "Cereal",
@@ -125,8 +118,76 @@ const FAMILY_LABEL: Record<string, string> = {
   perenne: "Perenne",
 };
 
-const fmt = (v: number | undefined | null) =>
-  v == null ? "—" : Math.abs(v) >= 100 ? Math.round(v).toLocaleString("es-DO") : Math.abs(v) >= 10 ? v.toFixed(1) : v.toFixed(2);
+// ---------- capas del mapa ----------
+type LayerId = "agua" | "futuro" | "lluvia" | "suelo" | "erosion";
+type Bin = { label: string; color: string; test: (p: PointSummary) => boolean };
+
+const LAYERS: Record<LayerId, { label: string; title: string; bins: Bin[] }> = {
+  agua: {
+    label: "Agua",
+    title: "¿Alcanza el agua de lluvia?",
+    bins: [
+      { label: "Falta mucha", color: "#b45309", test: (p) => (p.waterBalanceMm ?? 0) < -200 },
+      { label: "Falta un poco", color: "#f2b544", test: (p) => (p.waterBalanceMm ?? 0) < 0 },
+      { label: "Suficiente", color: "#9ad17f", test: (p) => (p.waterBalanceMm ?? 0) < 300 },
+      { label: "Sobra", color: "#2f9e57", test: () => true },
+    ],
+  },
+  futuro: {
+    label: "Futuro",
+    title: "Días de mucho calor al año hacia 2041–2060",
+    bins: [
+      { label: "Menos de 120", color: "#fde7a6", test: (p) => (p.heatDaysFuture ?? 0) < 120 },
+      { label: "120 a 200", color: "#f6b04a", test: (p) => (p.heatDaysFuture ?? 0) < 200 },
+      { label: "200 a 240", color: "#e0662e", test: (p) => (p.heatDaysFuture ?? 0) < 240 },
+      { label: "Más de 240", color: "#a8261e", test: () => true },
+    ],
+  },
+  lluvia: {
+    label: "Lluvia",
+    title: "Cuánto llueve al año (satélite GPM)",
+    bins: [
+      { label: "Menos de 1350 mm", color: "#cfe8f3", test: (p) => (p.rainMm ?? 0) < 1350 },
+      { label: "1350 a 1450 mm", color: "#8cc4e0", test: (p) => (p.rainMm ?? 0) < 1450 },
+      { label: "1450 a 1600 mm", color: "#3f8fd0", test: (p) => (p.rainMm ?? 0) < 1600 },
+      { label: "Más de 1600 mm", color: "#1c4f94", test: () => true },
+    ],
+  },
+  suelo: {
+    label: "Tierra",
+    title: "Tipo de tierra",
+    bins: [
+      { label: "Arcilla (pesada)", color: "#b5651d", test: (p) => p.soil === "Arcilla" },
+      { label: "Franco arcillosa (equilibrada)", color: "#e8b06a", test: (p) => p.soil === "Franco arcilloso" },
+      { label: "Otra", color: "#d9d9d9", test: () => true },
+    ],
+  },
+  erosion: {
+    label: "Erosión",
+    title: "¿La lluvia arrastra la tierra?",
+    bins: [
+      { label: "Poco (terreno llano)", color: "#7bc96f", test: (p) => p.erosionRisk === "baja" },
+      { label: "Algo", color: "#f2b544", test: (p) => p.erosionRisk === "media" },
+      { label: "Mucho (inclinado)", color: "#d64545", test: (p) => p.erosionRisk === "alta" },
+      { label: "Sin dato", color: "#d9d9d9", test: () => true },
+    ],
+  },
+};
+
+const colorFor = (layer: LayerId, p: PointSummary) => LAYERS[layer].bins.find((b) => b.test(p))!.color;
+
+// En el celular el panel inferior y la leyenda tapan la parte de abajo y de arriba
+const fitPadding = (): L.FitBoundsOptions =>
+  window.innerWidth <= 820 ? { paddingTopLeft: [16, 110], paddingBottomRight: [16, 140] } : { padding: [48, 48] };
+
+const fmt = (v: number | undefined | null, dec?: number) =>
+  v == null
+    ? "—"
+    : dec != null
+      ? v.toLocaleString("es-DO", { maximumFractionDigits: dec, minimumFractionDigits: dec })
+      : Math.abs(v) >= 100
+        ? Math.round(v).toLocaleString("es-DO")
+        : v.toFixed(1);
 
 // =====================================================================
 
@@ -143,7 +204,6 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
   const [detail, setDetail] = useState<PointDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Cargar la lista de puntos
   useEffect(() => {
     fetch("/data/points.json")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
@@ -249,9 +309,9 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
         </button>
         <div className="explorerTitle">
           <strong>El mapa del Cibao</strong>
-          <span>{points.length || "…"} puntos · toca uno para ver su análisis</span>
+          <span>Toca un círculo para ver esa zona</span>
         </div>
-        <div className="layerSwitch" role="radiogroup" aria-label="Capa del mapa">
+        <div className="layerSwitch" role="radiogroup" aria-label="Qué mostrar en el mapa">
           {(Object.keys(LAYERS) as LayerId[]).map((id) => (
             <button
               key={id}
@@ -290,11 +350,19 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
           {!selected && (
             <div className="panelEmpty">
               <p className="eyebrowMini">Cómo usarlo</p>
-              <h2>Escoge un punto del valle</h2>
-              <p>
-                Cada círculo resume unos 11 km del Cibao con 20 años de datos de la NASA. Cambia la capa arriba para ver
-                agua, lluvia, suelo o erosión.
-              </p>
+              <h2>Escoge una zona del valle</h2>
+              <ol className="howTo">
+                <li>
+                  <b>Toca un círculo</b> cerca de tu conuco.
+                </li>
+                <li>
+                  Mira <b>qué sembrar</b> y en qué mes.
+                </li>
+                <li>
+                  Abre <b>El futuro</b> para ver cómo cambiará el clima en esa zona.
+                </li>
+              </ol>
+              <p>Arriba puedes cambiar lo que pintan los círculos: agua, futuro, lluvia, tierra o erosión.</p>
             </div>
           )}
 
@@ -302,24 +370,16 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
             <>
               <div className="panelHead">
                 <div>
-                  <p className="eyebrowMini">Punto de análisis</p>
+                  <p className="eyebrowMini">Zona de unos 11 km</p>
                   <h2>{summary?.name ?? "…"}</h2>
-                  {summary && (
-                    <p className="panelMeta">
-                      {summary.lat.toFixed(2)}°, {summary.lon.toFixed(2)}° · {summary.elevationM} m de altura
-                    </p>
-                  )}
+                  {summary && <p className="panelMeta">{summary.elevationM} m sobre el nivel del mar</p>}
                 </div>
                 <button type="button" className="panelClose" onClick={() => setSelected(null)} aria-label="Cerrar">
                   ×
                 </button>
               </div>
 
-              {!detail ? (
-                <p className="panelLoading">Cargando análisis…</p>
-              ) : (
-                <PointPanel d={detail} s={summary} />
-              )}
+              {!detail ? <p className="panelLoading">Cargando…</p> : <PointPanel key={selected} d={detail} s={summary} />}
             </>
           )}
         </aside>
@@ -330,7 +390,74 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
 
 // =====================================================================
 
+type Tab = "sembrar" | "futuro" | "pasado";
+
 function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
+  const [tab, setTab] = useState<Tab>("sembrar");
+
+  return (
+    <div className="panelBody">
+      <ul className="plainFacts">
+        {d.soil && (
+          <li>
+            <span>Tierra</span>
+            <strong>{d.soil.textureClass}</strong>
+            <p>{SOIL_PLAIN[d.soil.textureClass] ?? d.soil.note}</p>
+          </li>
+        )}
+        {s?.waterBalanceMm != null && (
+          <li>
+            <span>Agua</span>
+            <strong>{s.rainMm != null ? `Llueven ${fmt(s.rainMm)} mm al año` : "—"}</strong>
+            <p>{waterPlain(s.waterBalanceMm)}</p>
+          </li>
+        )}
+        {s?.erosionRisk && (
+          <li>
+            <span>Erosión</span>
+            <strong className={`risk risk-${s.erosionRisk}`}>
+              {s.erosionRisk === "baja" ? "Poca" : s.erosionRisk === "media" ? "Algo" : "Mucha"}
+            </strong>
+            <p>{EROSION_PLAIN[s.erosionRisk]}</p>
+          </li>
+        )}
+      </ul>
+
+      <div className="panelTabs" role="tablist" aria-label="Información de la zona">
+        {(
+          [
+            ["sembrar", "Qué sembrar"],
+            ["futuro", "El futuro"],
+            ["pasado", "Cómo ha cambiado"],
+          ] as [Tab, string][]
+        ).map(([id, label]) => (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={tab === id}
+            className={tab === id ? "isOn" : undefined}
+            onClick={() => setTab(id)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {tab === "sembrar" && <SowTab d={d} />}
+      {tab === "futuro" && <FutureTab d={d} />}
+      {tab === "pasado" && <PastTab d={d} />}
+
+      <p className="uncertainty">
+        <strong>Ojo:</strong> cada círculo resume una zona de unos 11 km, no tu finca exacta. Son datos de satélite y
+        modelos de la NASA: úsalos como guía y confírmalos con tu experiencia y con un técnico agrícola.
+      </p>
+    </div>
+  );
+}
+
+// ---------- Qué sembrar ----------
+function SowTab({ d }: { d: PointDetail }) {
   const [mode, setMode] = useState<"secano" | "riego">("secano");
   const crops = useMemo(() => {
     const list = [...d.crops];
@@ -343,174 +470,224 @@ function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
     else list.sort((a, b) => b.best.rainfed - a.best.rainfed);
     return list.slice(0, 5);
   }, [d, mode]);
-  const proj = d.projections?.find((p) => p.key === "ssp245_2041-2060") ?? d.projections?.[0];
+
+  const tips = (d.insights ?? []).filter((x) => !x.type.includes("futuro"));
 
   return (
-    <div className="panelBody">
-      <ul className="facts">
-        {d.soil && (
-          <li>
-            <span>Suelo</span>
-            <strong>{d.soil.textureClass}</strong>
-          </li>
-        )}
-        {s?.erosionRisk && (
-          <li>
-            <span>Erosión</span>
-            <strong className={`risk risk-${s.erosionRisk}`}>
-              {s.erosionRisk} · {s.slopePct} %
-            </strong>
-          </li>
-        )}
-        {s?.rainMm != null && (
-          <li>
-            <span>Lluvia</span>
-            <strong>{fmt(s.rainMm)} mm/año</strong>
-          </li>
-        )}
-        {s?.waterBalanceMm != null && (
-          <li>
-            <span>Balance</span>
-            <strong>{fmt(s.waterBalanceMm)} mm/año</strong>
-          </li>
-        )}
-      </ul>
-      {d.soil?.note && <p className="soilNote">{d.soil.note}</p>}
-
-      <section className="panelSec">
-        <div className="secHead">
-          <h3>Qué sembrar</h3>
-          <div className="miniTabs" role="radiogroup" aria-label="Tipo de manejo">
-            {(["secano", "riego"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                role="radio"
-                aria-checked={mode === m}
-                className={mode === m ? "isOn" : undefined}
-                onClick={() => setMode(m)}
-              >
-                {m === "secano" ? "Solo lluvia" : "Con riego"}
-              </button>
-            ))}
-          </div>
+    <section className="tabPane">
+      <div className="secHead">
+        <p className="lede">Los cultivos que mejor se dan aquí:</p>
+        <div className="miniTabs" role="radiogroup" aria-label="Con o sin riego">
+          {(["secano", "riego"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              role="radio"
+              aria-checked={mode === m}
+              className={mode === m ? "isOn" : undefined}
+              onClick={() => setMode(m)}
+            >
+              {m === "secano" ? "Solo lluvia" : "Con riego"}
+            </button>
+          ))}
         </div>
-        <ol className="cropRank">
-          {crops.map((c) => {
-            const b = mode === "riego" ? c.bestIrrigated : c.best;
-            const score = mode === "riego" ? b.irrigated : b.rainfed;
-            const delta = c.aptitude.future - c.aptitude.recent;
-            return (
-              <li key={c.id}>
-                <div className="cropTop">
-                  <strong>{c.name}</strong>
-                  <span className={`famTag fam-${c.family}`}>{FAMILY_LABEL[c.family] ?? c.family}</span>
-                  <span className="cropScore">{Math.round(score * 100)}%</span>
-                </div>
-                <div className="bar">
-                  <i style={{ width: `${Math.round(score * 100)}%` }} />
-                </div>
-                <p className="cropMeta">
-                  Siembra {b.sowMonth} → cosecha {b.harvestMonth}
-                  {mode === "riego" && ` · riego ~${Math.round(b.irrigationMm)} mm`}
-                  {Math.abs(delta) >= 0.05 && (
-                    <span className={delta < 0 ? "down" : "up"}>
-                      {" "}
-                      · 2041–60: {delta < 0 ? "▼" : "▲"} {Math.round(Math.abs(delta) * 100)} pts
-                    </span>
-                  )}
-                </p>
-              </li>
-            );
-          })}
-        </ol>
-        <p className="hint">Aptitud según temperatura, lluvia y suelo del punto (parámetros FAO).</p>
-      </section>
+      </div>
+      <ol className="cropRank">
+        {crops.map((c) => {
+          const b = mode === "riego" ? c.bestIrrigated : c.best;
+          const score = mode === "riego" ? b.irrigated : b.rainfed;
+          return (
+            <li key={c.id}>
+              <div className="cropTop">
+                <strong>{c.name}</strong>
+                <span className={`famTag fam-${c.family}`}>{FAMILY_LABEL[c.family] ?? c.family}</span>
+                <span className="cropScore">
+                  {score >= 0.8 ? "Muy bien" : score >= 0.6 ? "Bien" : score >= 0.4 ? "Regular" : "Difícil"}
+                </span>
+              </div>
+              <div className="bar">
+                <i style={{ width: `${Math.round(score * 100)}%` }} />
+              </div>
+              <p className="cropMeta">
+                Siembra en <b>{b.sowMonth}</b>, cosecha en <b>{b.harvestMonth}</b>
+                {mode === "riego" && b.irrigationMm > 5 && ` · necesita unos ${Math.round(b.irrigationMm)} mm de riego`}
+              </p>
+            </li>
+          );
+        })}
+      </ol>
+      {!!tips.length && (
+        <ul className="insights">
+          {tips.slice(0, 4).map((x, i) => (
+            <li key={i} className={`ins-${x.type}`}>
+              <span>{INSIGHT_LABEL[x.type] ?? x.type}</span>
+              {x.text}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
 
-      <section className="panelSec">
-        <h3>Cómo ha cambiado</h3>
-        <p className="hint">
-          {d.compare.early} frente a {d.compare.recent}
-        </p>
-        <ul className="indList">
-          {d.indicators.map((i) => (
+// ---------- El futuro ----------
+function FutureTab({ d }: { d: PointDetail }) {
+  const [horizon, setHorizon] = useState("2041-2060");
+  const [scenario, setScenario] = useState("ssp245");
+  const key = `${scenario}_${horizon}`;
+  const p = d.projections?.find((x) => x.key === key);
+
+  const cropChanges = useMemo(
+    () =>
+      d.crops
+        .map((c) => ({ name: c.name, now: c.aptitude.recent, fut: c.aptitude.futureByScenario?.[key] ?? null }))
+        .filter((c): c is { name: string; now: number; fut: number } => c.fut != null && c.now >= 0.3)
+        .map((c) => ({ ...c, delta: c.fut - c.now })),
+    [d, key],
+  );
+
+  if (!p) return <p className="lede">No hay proyección del futuro para esta zona.</p>;
+
+  const [y1, y2] = horizon.split("-");
+  const hotMore = p.heatDaysFuture - p.heatDaysNow;
+  const rainTxt =
+    Math.abs(p.rainChangePct) < 5
+      ? "casi igual que hoy"
+      : p.rainChangePct > 0
+        ? `${p.rainChangePct}% más que hoy`
+        : `${Math.abs(p.rainChangePct)}% menos que hoy`;
+  const waterWorse = p.waterBalanceFutureMm < p.waterBalanceNowMm;
+  const losers = cropChanges.filter((c) => c.delta <= -0.1).sort((a, b) => a.delta - b.delta);
+  const winners = cropChanges.filter((c) => c.delta >= 0.1).sort((a, b) => b.delta - a.delta);
+  const maxHeat = Math.max(p.heatDaysNow, p.heatDaysFuture, 1);
+
+  return (
+    <section className="tabPane">
+      <div className="futurePickers">
+        <label>
+          ¿Cuándo?
+          <select value={horizon} onChange={(e) => setHorizon(e.target.value)}>
+            <option value="2026-2045">Pronto (2026–2045)</option>
+            <option value="2041-2060">Más adelante (2041–2060)</option>
+          </select>
+        </label>
+        <label>
+          Si la contaminación…
+          <select value={scenario} onChange={(e) => setScenario(e.target.value)}>
+            <option value="ssp245">baja un poco</option>
+            <option value="ssp585">sigue igual</option>
+          </select>
+        </label>
+      </div>
+
+      <p className="lede">
+        Entre {y1} y {y2}, en esta zona:
+      </p>
+
+      <ul className="futureList">
+        <li>
+          <span className="fIcon" aria-hidden="true">🌡️</span>
+          <div>
+            <strong>Hará {fmt(p.tempChangeC, 1)} °C más de calor</strong>
+            <p>en promedio que hoy.</p>
+          </div>
+        </li>
+        <li>
+          <span className="fIcon" aria-hidden="true">☀️</span>
+          <div>
+            <strong>
+              {hotMore > 0
+                ? `${Math.round(hotMore)} días más de mucho calor al año`
+                : "Los días de mucho calor se mantienen"}
+            </strong>
+            <div className="compareBars">
+              <div>
+                <span>Hoy</span>
+                <i style={{ width: `${(p.heatDaysNow / maxHeat) * 100}%` }} />
+                <b>{Math.round(p.heatDaysNow)}</b>
+              </div>
+              <div>
+                <span>Futuro</span>
+                <i className="hot" style={{ width: `${(p.heatDaysFuture / maxHeat) * 100}%` }} />
+                <b>{Math.round(p.heatDaysFuture)}</b>
+              </div>
+            </div>
+            <p>días al año con más de 32 °C.</p>
+          </div>
+        </li>
+        <li>
+          <span className="fIcon" aria-hidden="true">🌧️</span>
+          <div>
+            <strong>Lloverá {rainTxt}</strong>
+          </div>
+        </li>
+        <li>
+          <span className="fIcon" aria-hidden="true">💧</span>
+          <div>
+            <strong>{waterWorse ? "Faltará más agua" : "El agua alcanzará igual o mejor"}</strong>
+            <p>Con más calor se evapora más agua. {waterPlain(p.waterBalanceFutureMm)}</p>
+          </div>
+        </li>
+      </ul>
+
+      <div className="cropFuture">
+        <p className="lede">Qué pasará con los cultivos:</p>
+        {losers.length > 0 && (
+          <p className="down">
+            <b>Les irá peor:</b> {losers.map((c) => c.name).join(", ")}.
+          </p>
+        )}
+        {winners.length > 0 && (
+          <p className="up">
+            <b>Les irá mejor:</b> {winners.map((c) => c.name).join(", ")}.
+          </p>
+        )}
+        {losers.length === 0 && winners.length === 0 && <p>Los cultivos principales se mantienen parecidos.</p>}
+      </div>
+
+      <p className="hint">
+        Esto no es el pronóstico del tiempo de mañana: es cómo podría ser el clima promedio de esos años, según los
+        modelos climáticos de la NASA (NEX-GDDP-CMIP6).
+      </p>
+    </section>
+  );
+}
+
+// ---------- Cómo ha cambiado ----------
+function PastTab({ d }: { d: PointDetail }) {
+  return (
+    <section className="tabPane">
+      <p className="lede">
+        Comparamos los años {d.compare.early} con {d.compare.recent}:
+      </p>
+      <ul className="indList">
+        {d.indicators.map((i) => {
+          const pl = IND_PLAIN[i.key];
+          return (
             <li key={i.key}>
               <div className="indTop">
-                <strong>{i.title}</strong>
+                <strong>{pl?.label ?? i.title}</strong>
                 {i.early != null && (
                   <span className={`conf ${i.significant ? "isClear" : ""}`}>
-                    {!i.significant
-                      ? "No concluyente"
-                      : i.direction === "en descenso"
-                        ? "▼ Tendencia clara"
-                        : "▲ Tendencia clara"}
+                    {!i.significant ? "Sin cambio claro" : i.direction === "en descenso" ? "▼ Bajó" : "▲ Subió"}
                   </span>
                 )}
               </div>
               {i.early != null ? (
                 <p className="indVals">
-                  {fmt(i.early)} → <b>{fmt(i.recent)}</b> <span>{i.unit}</span>
+                  Antes {fmt(i.early, pl?.dec)} → ahora <b>{fmt(i.recent, pl?.dec)}</b> <span>{pl?.unit}</span>
                 </p>
               ) : (
                 <p className="indVals">{i.message}</p>
               )}
             </li>
-          ))}
-        </ul>
-      </section>
-
-      {proj && (
-        <section className="panelSec">
-          <h3>Lo que viene</h3>
-          <p className="hint">{proj.label} · CMIP6</p>
-          <ul className="facts factsFuture">
-            <li>
-              <span>Temperatura</span>
-              <strong>+{proj.tempChangeC} °C</strong>
-            </li>
-            <li>
-              <span>Días sobre 32 °C</span>
-              <strong>
-                {fmt(proj.heatDaysNow)} → {fmt(proj.heatDaysFuture)}
-              </strong>
-            </li>
-            <li>
-              <span>Lluvia</span>
-              <strong>
-                {proj.rainChangePct > 0 ? "+" : ""}
-                {proj.rainChangePct}%
-              </strong>
-            </li>
-            <li>
-              <span>Balance</span>
-              <strong>
-                {fmt(proj.waterBalanceNowMm)} → {fmt(proj.waterBalanceFutureMm)}
-              </strong>
-            </li>
-          </ul>
-        </section>
-      )}
-
-      {!!d.insights?.length && (
-        <section className="panelSec">
-          <h3>Avisos para este punto</h3>
-          <ul className="insights">
-            {d.insights.map((x, i) => (
-              <li key={i} className={`ins-${x.type}`}>
-                <span>{x.type}</span>
-                {x.text}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <p className="uncertainty">
-        <strong>Cómo leer estos datos.</strong> Cada punto resume un área de unos 11 km, no tu finca exacta.
-        «Tendencia clara» significa que el cambio es estadísticamente significativo (p &lt; 0.05); «no concluyente», que
-        puede deberse a la variación normal entre años. Las proyecciones son un rango posible, no una predicción.
-        Confirma siempre con tu experiencia y con un técnico agrícola local.
+          );
+        })}
+      </ul>
+      <p className="hint">
+        «Subió» o «Bajó» quiere decir que el cambio es real según una prueba estadística. «Sin cambio claro» quiere decir
+        que la diferencia puede ser solo la variación normal de un año a otro.
       </p>
-    </div>
+    </section>
   );
 }

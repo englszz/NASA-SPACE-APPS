@@ -325,14 +325,23 @@ export function RotationSection() {
 
 export function CropsSection() {
   return (
-    <section id="cultivos" className="band bandDeep">
+    <section id="cultivos" className="band bandDeep bandPattern">
       <div className="container">
-        <SectionHead
-          n="03"
-          eyebrow="Cultivos"
-          title="Rotar familias protege el suelo"
-          lead="Alternar cereales, leguminosas y raíces devuelve nutrientes, corta plagas y conserva el agua. Evaluamos cada cultivo según la temperatura, la lluvia y el tipo de suelo de tu parcela."
-        />
+        <div className="headWithArt">
+          <SectionHead
+            n="03"
+            eyebrow="Cultivos"
+            title="Rotar familias protege el suelo"
+            lead="Alternar cereales, leguminosas y raíces devuelve nutrientes, corta plagas y conserva el agua. Evaluamos cada cultivo según la temperatura, la lluvia y el tipo de suelo de tu parcela."
+          />
+          <Image
+            src="/ramoncito-planta.png"
+            alt="Ramoncito sentado, mostrando una plantita"
+            width={566}
+            height={451}
+            className="sectionArt"
+          />
+        </div>
 
         <ul className="families">
           {(Object.keys(FAMILIES) as Family[]).map((f) => (
@@ -431,10 +440,10 @@ export function RamoncitoSection() {
     "¿Cómo recupero un suelo cansado?",
   ];
   return (
-    <section id="ramoncito" className="band bandDeep">
+    <section id="ramoncito" className="band bandDeep bandPattern">
       <div className="container split splitCenter">
         <div className="ramoncitoArt">
-          <Image src="/ramoncito.svg" alt="Ramoncito" width={606} height={516} />
+          <Image src="/ramoncito-rastrillo.png" alt="Ramoncito con su rastrillo" width={462} height={581} />
         </div>
         <div>
           <SectionHead
@@ -520,6 +529,13 @@ export function SiteFooter() {
             Proyecto del equipo The Conuco para NASA Space Apps Challenge 2026. Sitio independiente: no está
             afiliado ni respaldado por la NASA.
           </p>
+          <Image
+            src="/ramoncito-cosecha.png"
+            alt="Ramoncito caminando con una caja de cosecha"
+            width={626}
+            height={668}
+            className="footerArt"
+          />
         </div>
         <div>
           <h3>Fuentes de datos</h3>
