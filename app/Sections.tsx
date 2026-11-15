@@ -880,6 +880,164 @@ export function GlobalSection() {
   );
 }
 
+export function FeedbackSection() {
+  const { lang, t } = useLang();
+  const tx = useTx();
+  const WHO: { id: string; label: L }[] = [
+    { id: "agricultor", label: { es: "Agricultor", en: "Farmer" } },
+    { id: "tecnico", label: { es: "Técnico agrícola", en: "Agronomist" } },
+    { id: "juez", label: { es: "Juez de Space Apps", en: "Space Apps judge" } },
+    { id: "estudiante", label: { es: "Estudiante", en: "Student" } },
+    { id: "otro", label: { es: "Otro", en: "Other" } },
+  ];
+  const [quien, setQuien] = useState("otro");
+  const [stars, setStars] = useState(0);
+  const [msg, setMsg] = useState("");
+  const [trap, setTrap] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [error, setError] = useState("");
+
+  const send = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!msg.trim() || state === "sending") return;
+    setState("sending");
+    setError("");
+    try {
+      const r = await fetch("/api/opinion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quien, calificacion: stars || null, mensaje: msg, idioma: lang, web: trap }),
+      });
+      if (r.ok) {
+        setState("sent");
+        return;
+      }
+      const j = await r.json().catch(() => ({}));
+      setError(
+        j.error === "rate"
+          ? t("Ya enviaste varias opiniones. Inténtalo más tarde.", "You've already sent several. Please try again later.")
+          : t("No se pudo enviar. Revisa tu conexión e inténtalo otra vez.", "Couldn't send it. Check your connection and try again."),
+      );
+      setState("error");
+    } catch {
+      setError(t("No se pudo enviar. Revisa tu conexión e inténtalo otra vez.", "Couldn't send it. Check your connection and try again."));
+      setState("error");
+    }
+  };
+
+  const reset = () => {
+    setMsg("");
+    setStars(0);
+    setQuien("otro");
+    setState("idle");
+  };
+
+  return (
+    <section id="opinion" className="band bandCream">
+      <div className="container split">
+        <SectionHead
+          n="08"
+          eyebrow={t("Tu opinión", "Your feedback")}
+          title={t("¿Qué te pareció The Conuco?", "What did you think of The Conuco?")}
+          lead={t(
+            "Cuéntanos qué te sirvió, qué no se entiende o qué te gustaría que tuviera. Lo leemos todo y nos ayuda a mejorar.",
+            "Tell us what helped, what's confusing or what you'd like it to have. We read everything and it helps us improve.",
+          )}
+        />
+
+        {state === "sent" ? (
+          <div className="fbCard fbSent" role="status">
+            <Image src="/ramoncito-ok.png" alt="" width={489} height={624} className="fbSentArt" />
+            <div>
+              <p className="fbSentTitle">{t("¡Enviado!", "Sent!")}</p>
+              <p>{t("Gracias por tu opinión. El equipo de The Conuco la va a leer.", "Thanks for your feedback. The Conuco team will read it.")}</p>
+              <button type="button" className="fcMore" onClick={reset}>
+                {t("Enviar otra opinión", "Send more feedback")}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <form className="fbCard" onSubmit={send}>
+            <fieldset className="field">
+              <legend>{t("¿Quién eres?", "Who are you?")}</legend>
+              <div className="prioChips">
+                {WHO.map((w) => (
+                  <button
+                    key={w.id}
+                    type="button"
+                    aria-pressed={quien === w.id}
+                    className={quien === w.id ? "isOn" : undefined}
+                    onClick={() => setQuien(w.id)}
+                  >
+                    {tx(w.label)}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <fieldset className="field">
+              <legend>{t("¿Cuánto te gustó? (opcional)", "How much did you like it? (optional)")}</legend>
+              <div className="fbStars" role="radiogroup" aria-label={t("Calificación de 1 a 5", "Rating from 1 to 5")}>
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    role="radio"
+                    aria-checked={stars === n}
+                    aria-label={t(`${n} de 5`, `${n} of 5`)}
+                    className={n <= stars ? "isOn" : undefined}
+                    onClick={() => setStars(stars === n ? 0 : n)}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+            </fieldset>
+
+            <label className="field">
+              <span>{t("Tu comentario", "Your comment")}</span>
+              <textarea
+                value={msg}
+                onChange={(e) => setMsg(e.target.value)}
+                maxLength={1000}
+                rows={5}
+                required
+                placeholder={t(
+                  "Ej.: me gustaría ver también el precio de los cultivos en el mercado",
+                  "e.g. I'd also like to see crop prices at the market",
+                )}
+              />
+              <small>
+                {t(
+                  "No escribas tu nombre, teléfono ni correo: no hace falta. Solo el equipo puede leer las opiniones.",
+                  "Don't include your name, phone or email: there's no need. Only the team can read the feedback.",
+                )}
+              </small>
+            </label>
+
+            {/* Campo trampa para robots: las personas no lo ven */}
+            <input
+              className="fbTrap"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              value={trap}
+              onChange={(e) => setTrap(e.target.value)}
+            />
+
+            {error && <p className="mcError">{error}</p>}
+            <div className="formActions">
+              <button type="submit" className="cta" disabled={!msg.trim() || state === "sending"}>
+                {state === "sending" ? t("Enviando…", "Sending…") : t("Enviar", "Send")}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export function SiteFooter() {
   const { t } = useLang();
   const tx = useTx();

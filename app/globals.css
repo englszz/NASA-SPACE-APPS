@@ -4037,3 +4037,93 @@ button.ctaSmall {
     display: none;
   }
 }
+
+/* =====================================================================
+   SECCIÓN «TU OPINIÓN» (feedback)
+   ===================================================================== */
+.fbCard {
+  display: grid;
+  gap: 18px;
+  padding: clamp(18px, 3vw, 28px);
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 18px;
+}
+
+.fbStars {
+  display: flex;
+  gap: 4px;
+}
+
+.fbStars button {
+  padding: 0 2px;
+  font-size: 2rem;
+  line-height: 1;
+  color: rgba(29, 74, 25, 0.22);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.1s ease, color 0.1s ease;
+}
+
+.fbStars button.isOn {
+  color: var(--sun);
+  text-shadow: 0 1px 0 rgba(29, 74, 25, 0.35);
+}
+
+.fbStars button:hover {
+  transform: scale(1.12);
+}
+
+.fbStars button:focus-visible {
+  outline: 3px dashed var(--sun);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.fbCard .cta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.fbTrap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.fbSent {
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  animation: rcIn 0.3s ease-out;
+}
+
+.fbSentArt {
+  width: 100%;
+  height: auto;
+}
+
+.fbSentTitle {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--green-title);
+}
+
+.fbSent p {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .fbSent {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+  .fbSentArt {
+    width: 110px;
+  }
+}

@@ -47,6 +47,7 @@ método y los datos de la NASA sirven para cualquier lugar: la idea es que llegu
 | **Ramoncito (IA)** | Consejos para el conuco y un chat en todas las páginas (el sombrero de abajo a la derecha), **sin necesidad de cuenta**. Responde sobre la zona que la persona está mirando en el mapa o sobre su conuco, usa solo esos datos y avisa de sus límites. |
 | **Guía de Ramoncito** | Globos cortos que explican lo que puede confundir justo cuando se toca (un punto del mapa, cada capa, las pestañas, el simulador, el cultivo «Otro»…) y, de vez en cuando, algún consejo general. Cada consejo sale una sola vez y se pueden apagar. |
 | **Del Cibao al mundo** | Sección que explica que el proyecto empieza en el Cibao y que la idea es llevarlo a otras regiones. |
+| **Tu opinión** | Formulario al final de la portada para dejar comentarios (quién eres, calificación de 1 a 5 y comentario). Se guardan en Supabase (`supabase/opiniones.sql`); nadie puede leerlas desde la web, solo el equipo. |
 
 Todo está escrito en **palabras sencillas**, con un glosario y avisos de incertidumbre, porque el reto pide que
 la herramienta sirva a agricultores con poca experiencia técnica. La web está en **inglés por defecto** y se
@@ -149,6 +150,7 @@ app/                 Páginas y componentes de la web
   api/ramoncito/     Ruta del servidor que llama a Groq
 lib/                 Supabase, idiomas y datos del conuco (cuenta o cookie)
 supabase/schema.sql  Tabla «conucos» con reglas de privacidad (RLS)
+supabase/opiniones.sql Tabla «opiniones» (solo se puede enviar, no leer, desde la web)
 field-shift-data/    Scripts de Earth Engine y de análisis, y los datos generados
 public/              Imágenes, íconos y datos que sirve la web
 ```

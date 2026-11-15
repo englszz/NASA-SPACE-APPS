@@ -55,6 +55,12 @@ function PrivacyEs() {
           visita, como la dirección IP, para que la web funcione y sea segura.
         </p>
 
+        <p>
+          Si nos dejas <b>tu opinión</b> al final de la portada, guardamos lo que escribes, quién dices ser (por
+          ejemplo, agricultor) y la calificación, <b>sin tu nombre, tu correo ni tu dirección IP</b>. Solo el equipo
+          puede leerlas. Por eso te pedimos que no escribas datos personales en el comentario.
+        </p>
+
         <h2>2. Si entras con Google</h2>
         <p>Al usar «Entrar con Google», Google nos comparte únicamente:</p>
         <ul>
@@ -176,6 +182,12 @@ function PrivacyEn() {
           keep any of your data. Your browser does connect to outside services to show the map and the weather (see
           section 5), and our hosting provider may log normal technical data from any visit, such as your IP address,
           so the site works and stays secure.
+        </p>
+
+        <p>
+          If you leave <b>feedback</b> at the bottom of the home page, we keep what you write, who you say you are (for
+          example, a farmer) and your rating, <b>without your name, email or IP address</b>. Only the team can read it.
+          That&apos;s why we ask you not to include personal details in your comment.
         </p>
 
         <h2>2. If you sign in with Google</h2>

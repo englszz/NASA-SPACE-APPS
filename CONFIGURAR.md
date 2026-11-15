@@ -30,6 +30,9 @@ van solo en el archivo `.env.local`, que git ya ignora.
 2. Cuando termine de crearse: menú **SQL Editor** → **New query** → pega TODO el contenido de
    `supabase/schema.sql` → **Run**. Debe decir *Success*.
    Esto crea la tabla `conucos` con la regla de que **cada persona solo ve su propio conuco**.
+   Después, en otra **New query**, pega `supabase/opiniones.sql` → **Run**. Crea la tabla `opiniones`
+   para la sección «Tu opinión»: se pueden enviar desde la web, pero solo ustedes las leen en
+   **Table Editor → opiniones**.
 3. Copia estos dos valores (Supabase cambió los nombres; estos son los actuales):
    - **La URL del proyecto:** **Project Settings → Data API → API URL**.
      Tiene la forma `https://xxxxxxxx.supabase.co`. («Project URL» y «API URL» son lo mismo.)
@@ -94,6 +97,7 @@ Reinicia el servidor (`Ctrl+C` y luego `npm run dev`) y entra a **http://localho
 
 | Mensaje | Causa probable |
 |---|---|
+| «No se pudo enviar» en «Tu opinión» | No corriste `supabase/opiniones.sql` en Supabase → SQL Editor |
 | No aparece «Inicia sesión para una experiencia más personalizada» en Mi conuco | Faltan las variables de Supabase o no reiniciaste el servidor |
 | Google dice *redirect_uri_mismatch* | La URI de la Parte C3 no es exactamente la de Supabase |
 | Google dice que la app no está verificada / acceso bloqueado | Tu correo no está en *Usuarios de prueba* (Parte C2) |

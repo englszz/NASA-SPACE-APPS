@@ -10,6 +10,7 @@ import { FIRST_VISIT_COOKIE, readLocalConuco } from "@/lib/conuco-local";
 import {
   ChallengeSection,
   GlobalSection,
+  FeedbackSection,
   ClimateSection,
   CropsSection,
   RotationSection,
@@ -146,6 +147,7 @@ export default function HomeView({ intro = false }: { intro?: boolean }) {
         <RamoncitoSection />
         <ChallengeSection />
         <GlobalSection />
+        <FeedbackSection />
       </main>
 
       <SiteFooter />
