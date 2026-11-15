@@ -2,29 +2,14 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Model } from "@/app/agro";
 import { ForecastDays, RotationsTab } from "@/app/PanelExtras";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { AGUA, MAX_ZONE_KM, nearestZone, type Conuco, type ZonePoint } from "@/lib/conuco";
 import ConucoForm from "./ConucoForm";
-
-type Msg = { role: "user" | "assistant"; content: string };
-
-// Muestra el texto de la IA: saltos de línea y **negritas**, sin HTML
-function RichText({ text }: { text: string }) {
-  return (
-    <>
-      {text.split("\n").map((line, i) =>
-        line.trim() ? (
-          <p key={i}>
-            {line.split("**").map((part, j) => (j % 2 ? <b key={j}>{part}</b> : <Fragment key={j}>{part}</Fragment>))}
-          </p>
-        ) : null,
-      )}
-    </>
-  );
-}
+import RichText from "@/app/RichText";
+import { openRamoncito } from "@/app/RamoncitoChat";
 
 async function ask(body: object): Promise<string> {
   const r = await fetch("/api/ramoncito", {
@@ -116,10 +101,7 @@ export default function Dashboard({ conuco, firstName }: { conuco: Conuco; first
           {zone ? <ForecastDays lat={zone.lat} lon={zone.lon} /> : <p className="hint">Cargando…</p>}
         </section>
 
-        <div className="mcCol">
-          <Advice />
-          <Chat />
-        </div>
+        <Advice />
       </div>
 
       <section className="mcCard">
@@ -163,7 +145,9 @@ function Advice() {
   return (
     <section className="mcCard mcAdvice">
       <div className="mcAdviceHead">
-        <Image src="/ramoncito-planta.png" alt="" width={566} height={451} />
+        <span className="rcAvatar rcAvatarLg">
+          <Image src="/ia-sombrero.png" alt="" width={256} height={256} />
+        </span>
         <div>
           <h2>Consejos de Ramoncito</h2>
           <p className="hint">Con el tiempo de esta semana, tu tierra y lo que te importa.</p>
@@ -176,85 +160,15 @@ function Advice() {
           <RichText text={text} />
         </div>
       )}
-      <button type="button" className="fcMore" onClick={load} disabled={busy}>
-        Pedir consejos otra vez
-      </button>
-      <p className="hint">Ramoncito es una IA: puede equivocarse. Confírmalo con tu experiencia o con un técnico.</p>
-    </section>
-  );
-}
-
-// ---------- Chat con Ramoncito ----------
-const EXAMPLES = ["¿Qué siembro el mes que viene?", "¿Riego esta semana?", "¿Cómo protejo mi tierra de la lluvia?"];
-
-function Chat() {
-  const [msgs, setMsgs] = useState<Msg[]>([]);
-  const [input, setInput] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-  const endRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ block: "nearest" });
-  }, [msgs, busy]);
-
-  const send = async (text: string) => {
-    const q = text.trim();
-    if (!q || busy) return;
-    const next: Msg[] = [...msgs, { role: "user", content: q.slice(0, 1500) }];
-    setMsgs(next);
-    setInput("");
-    setBusy(true);
-    setError("");
-    try {
-      const reply = await ask({ mode: "chat", messages: next });
-      setMsgs([...next, { role: "assistant", content: reply }]);
-    } catch (e) {
-      setError((e as Error).message);
-    }
-    setBusy(false);
-  };
-
-  return (
-    <section className="mcCard mcChat">
-      <h2>Pregúntale a Ramoncito</h2>
-      <div className="chatLog" aria-live="polite">
-        {!msgs.length && (
-          <div className="chips">
-            {EXAMPLES.map((q) => (
-              <button key={q} type="button" onClick={() => send(q)}>
-                {q}
-              </button>
-            ))}
-          </div>
-        )}
-        {msgs.map((m, i) => (
-          <div key={i} className={`bubbleMsg ${m.role === "user" ? "me" : "bot"}`}>
-            {m.role === "assistant" ? <RichText text={m.content} /> : m.content}
-          </div>
-        ))}
-        {busy && <div className="bubbleMsg bot">Ramoncito está escribiendo…</div>}
-        <div ref={endRef} />
-      </div>
-      {error && <p className="mcError">{error}</p>}
-      <form
-        className="chatForm"
-        onSubmit={(e) => {
-          e.preventDefault();
-          send(input);
-        }}
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Escribe tu pregunta…"
-          maxLength={1500}
-          aria-label="Tu pregunta para Ramoncito"
-        />
-        <button type="submit" className="cta" disabled={busy || !input.trim()}>
-          Enviar
+      <div className="formActions">
+        <button type="button" className="fcMore" onClick={load} disabled={busy}>
+          Pedir consejos otra vez
         </button>
-      </form>
+        <button type="button" className="fcMore" onClick={openRamoncito}>
+          Hacerle una pregunta
+        </button>
+      </div>
+      <p className="hint">Ramoncito es una IA: puede equivocarse. Confírmalo con tu experiencia o con un técnico.</p>
     </section>
   );
 }

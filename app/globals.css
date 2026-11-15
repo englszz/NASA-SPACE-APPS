@@ -3037,3 +3037,225 @@ button.cta {
     margin: 0 auto;
   }
 }
+
+/* =====================================================================
+   CHAT FLOTANTE DE RAMONCITO (IA)
+   ===================================================================== */
+.rcFab {
+  position: fixed;
+  right: clamp(14px, 3vw, 28px);
+  bottom: clamp(14px, 3vw, 28px);
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  padding: 0;
+  background: var(--green-deep);
+  border: 3px solid var(--sun);
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.rcFab:hover {
+  transform: scale(1.06) rotate(-4deg);
+}
+
+.rcFab:focus-visible {
+  outline: 3px dashed var(--sun);
+  outline-offset: 4px;
+}
+
+.rcFab img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}
+
+.rcFabTag {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  padding: 2px 7px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--green-deep);
+  background: var(--sun);
+  border: 2px solid var(--green-deep);
+  border-radius: 999px;
+}
+
+.rcPanel {
+  position: fixed;
+  right: clamp(14px, 3vw, 28px);
+  bottom: calc(clamp(14px, 3vw, 28px) + 80px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 28px));
+  height: min(560px, calc(100dvh - 130px));
+  overflow: hidden;
+  color: var(--ink);
+  background: var(--cream);
+  border: 1px solid var(--line-light);
+  border-radius: 20px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+  animation: rcIn 0.2s ease-out;
+}
+
+@keyframes rcIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.rcHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  color: var(--cream);
+  background: var(--green-deep) url("/patterns/hileras-oscuro.svg") repeat;
+}
+
+.rcHead strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.1;
+}
+
+.rcHead span {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+.rcAvatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--green-deep);
+  border: 2px solid var(--sun);
+  border-radius: 50%;
+}
+
+.rcAvatar img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.rcAvatarLg {
+  width: 64px;
+  height: 64px;
+}
+
+.rcAvatarLg img {
+  width: 54px;
+  height: 54px;
+}
+
+.rcClose {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  font: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--green-deep);
+  background: var(--cream);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.rcBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  overflow-y: auto;
+}
+
+.rcNote p {
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.rcCta {
+  display: inline-block;
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.rcChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rcChips button {
+  padding: 7px 11px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--green-title);
+  background: #fff;
+  border: 1px solid var(--line-light);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.rcTyping {
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.rcForm {
+  padding: 10px 12px;
+  border-top: 1px solid var(--line-light);
+}
+
+.rcFoot {
+  margin: 0;
+  padding: 0 12px 10px;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+/* el botón de la sección Ramoncito ahora es <button> */
+button.ctaSmall {
+  font: inherit;
+  font-weight: 800;
+  border: 0;
+  cursor: pointer;
+}
+
+/* que el círculo no tape el zoom del mapa */
+.leafletMap .leaflet-bottom.leaflet-right {
+  margin-bottom: 84px;
+}
+
+@media (max-width: 640px) {
+  .rcFab {
+    width: 58px;
+    height: 58px;
+  }
+  .rcFab img {
+    width: 40px;
+    height: 40px;
+  }
+  .rcPanel {
+    right: 14px;
+    left: 14px;
+    width: auto;
+    bottom: 84px;
+    height: calc(100dvh - 110px);
+  }
+}

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { openRamoncito } from "./RamoncitoChat";
 
 // Contenido tomado de la configuración de field-shift-data/build-data.mjs
 // (cultivos: valores aproximados FAO ECOCROP / FAO-56; indicadores del reto).
@@ -465,9 +466,9 @@ export function RamoncitoSection() {
             <div className="chatInput" aria-disabled="true">
               Escribe tu pregunta…
             </div>
-            <a className="ctaSmall" href="/mi-conuco">
-              Habla con Ramoncito en Mi conuco →
-            </a>
+            <button type="button" className="ctaSmall" onClick={openRamoncito}>
+              Habla con Ramoncito →
+            </button>
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@ export default function LoginCard({ failed }: { failed?: boolean }) {
 
   return (
     <section className="mcCard mcLogin">
-      <Image src="/ramoncito-rastrillo.png" alt="" width={462} height={581} className="mcLoginArt" />
+      <Image src="/ramoncito-ok.png" alt="" width={489} height={624} className="mcLoginArt" />
       <div>
         <p className="eyebrowMini">Mi conuco</p>
         <h1>Tu tierra, tus datos, tus consejos</h1>
