@@ -4,7 +4,7 @@
 // línea de tiempo de 20 años. Todo se calcula con app/agro.ts (mismo método
 // que field-shift-data/build-data.mjs).
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CURRENT_PRESETS,
   MONTHS,
@@ -377,5 +377,173 @@ function MiniBars({ title, unit, data, color }: { title: string; unit: string; d
         ))}
       </svg>
     </figure>
+  );
+}
+
+// =====================================================================
+// PRONÓSTICO DE LOS PRÓXIMOS DÍAS (Open-Meteo: modelos de NOAA, ECMWF y otros)
+// La NASA no publica un pronóstico diario de fácil acceso; sus datos miden lo
+// que ya pasó. Para los próximos 14 días usamos Open-Meteo (gratuito, abierto).
+// =====================================================================
+
+type Day = {
+  date: string;
+  code: number;
+  tmax: number;
+  tmin: number;
+  rain: number;
+  prob: number | null;
+  et0: number;
+  wind: number;
+};
+
+const forecastCache = new Map<string, { at: number; days: Day[] }>();
+
+async function loadForecast(lat: number, lon: number): Promise<Day[]> {
+  const key = `${lat},${lon}`;
+  const hit = forecastCache.get(key);
+  if (hit && Date.now() - hit.at < 30 * 60 * 1000) return hit.days;
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum," +
+    "precipitation_probability_max,et0_fao_evapotranspiration,wind_speed_10m_max" +
+    "&timezone=America%2FSanto_Domingo&forecast_days=14";
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(String(r.status));
+  const d = (await r.json()).daily;
+  const days: Day[] = d.time.map((date: string, i: number) => ({
+    date,
+    code: d.weather_code[i],
+    tmax: d.temperature_2m_max[i],
+    tmin: d.temperature_2m_min[i],
+    rain: d.precipitation_sum[i] ?? 0,
+    prob: d.precipitation_probability_max[i],
+    et0: d.et0_fao_evapotranspiration[i] ?? 0,
+    wind: d.wind_speed_10m_max[i] ?? 0,
+  }));
+  forecastCache.set(key, { at: Date.now(), days });
+  return days;
+}
+
+// Códigos del tiempo de la OMM en palabras sencillas
+function sky(code: number): [string, string] {
+  if (code === 0) return ["☀️", "Despejado"];
+  if (code <= 2) return ["🌤️", "Poco nublado"];
+  if (code === 3) return ["☁️", "Nublado"];
+  if (code === 45 || code === 48) return ["🌫️", "Neblina"];
+  if (code >= 51 && code <= 57) return ["🌦️", "Llovizna"];
+  if (code >= 61 && code <= 67) return ["🌧️", "Lluvia"];
+  if (code >= 80 && code <= 82) return ["🌧️", "Aguaceros"];
+  if (code >= 95) return ["⛈️", "Tormenta"];
+  return ["🌥️", "Variable"];
+}
+
+// Un consejo práctico por día (el primero que aplique)
+function advice(d: Day, prev: Day[]): { text: string; kind: string } {
+  if (d.rain >= 20)
+    return { text: "Aguacero: no abones ni fumigues, el agua lo lava. Revisa que el agua corra.", kind: "storm" };
+  if (d.code >= 95)
+    return { text: "Tormenta eléctrica: evita estar en el campo abierto cuando truene y no fumigues.", kind: "storm" };
+  if (d.wind >= 35) return { text: "Viento fuerte: no fumigues hoy.", kind: "wind" };
+  const rainedBefore = prev.slice(-2).reduce((s, x) => s + x.rain, 0);
+  if (rainedBefore >= 10 && d.rain < 10)
+    return { text: "Buen día para sembrar: la tierra quedó húmeda de la lluvia.", kind: "sow" };
+  if (d.rain >= 5 && (d.prob ?? 100) >= 60) return { text: "Va a llover: no hace falta regar.", kind: "rain" };
+  if (d.tmax >= 34) return { text: "Mucho calor: riega temprano o al caer la tarde.", kind: "hot" };
+  if (d.rain < 1 && d.et0 >= 4) return { text: "Seco y caluroso: la tierra pierde agua, vigila el riego.", kind: "dry" };
+  return { text: "Buen día para trabajar el conuco.", kind: "ok" };
+}
+
+const dayName = (iso: string, i: number) => {
+  if (i === 0) return "Hoy";
+  if (i === 1) return "Mañana";
+  const d = new Date(iso + "T12:00:00");
+  const s = d.toLocaleDateString("es-DO", { weekday: "short", day: "numeric" });
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
+export function ForecastDays({ lat, lon }: { lat: number; lon: number }) {
+  const [days, setDays] = useState<Day[] | null>(null);
+  const [error, setError] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    setDays(null);
+    setError(false);
+    loadForecast(lat, lon)
+      .then((d) => alive && setDays(d))
+      .catch(() => alive && setError(true));
+    return () => {
+      alive = false;
+    };
+  }, [lat, lon]);
+
+  if (error)
+    return (
+      <p className="lede">No se pudo cargar el pronóstico. Revisa la conexión a internet e inténtalo de nuevo.</p>
+    );
+  if (!days) return <p className="hint">Buscando el pronóstico…</p>;
+
+  const week = days.slice(0, 7);
+  const rain7 = week.reduce((s, d) => s + d.rain, 0);
+  const lost7 = week.reduce((s, d) => s + d.et0, 0);
+  const balance = rain7 - lost7;
+  const maxRain = Math.max(...days.map((d) => d.rain), 5);
+  const shown = showAll ? days : week;
+
+  return (
+    <div className="forecast">
+      <div className={`fcSummary ${balance >= 0 ? "ok" : "short"}`}>
+        <strong>
+          Esta semana {balance >= 0 ? "la lluvia alcanza" : `faltarán unos ${Math.round(-balance)} mm de agua`}
+        </strong>
+        <p>
+          Lloverán unos <b>{Math.round(rain7)} mm</b> y la tierra perderá unos <b>{Math.round(lost7)} mm</b> por el sol y
+          el calor (evaporación).{" "}
+          {balance < 0 ? "Si tu cultivo está pequeño o en flor, conviene regar." : "Por ahora no hace falta regar."}
+        </p>
+      </div>
+
+      <ol className="fcList">
+        {shown.map((d, i) => {
+          const [icon, label] = sky(d.code);
+          const a = advice(d, days.slice(0, i));
+          return (
+            <li key={d.date} className={i >= 7 ? "far" : undefined}>
+              <div className="fcTop">
+                <span className="fcDay">{dayName(d.date, i)}</span>
+                <span className="fcIcon" title={label} aria-label={label}>
+                  {icon}
+                </span>
+                <span className="fcTemp">
+                  <b>{Math.round(d.tmax)}°</b> / {Math.round(d.tmin)}°
+                </span>
+                <span className="fcRain" title={`Lluvia: ${d.rain.toFixed(1)} mm`}>
+                  <i style={{ width: `${Math.min(100, (d.rain / maxRain) * 100)}%` }} />
+                  <em>
+                    {d.rain < 0.5 ? "sin lluvia" : `${Math.round(d.rain)} mm`}
+                    {d.prob != null && d.rain >= 0.5 ? ` · ${d.prob}%` : ""}
+                  </em>
+                </span>
+              </div>
+              <p className={`fcTip tip-${a.kind}`}>{a.text}</p>
+            </li>
+          );
+        })}
+      </ol>
+
+      <button type="button" className="fcMore" onClick={() => setShowAll((x) => !x)}>
+        {showAll ? "Ver solo 7 días" : "Ver 14 días"}
+      </button>
+      {showAll && <p className="hint">Después de 7 días el pronóstico es menos seguro: tómalo como una idea.</p>}
+      <p className="hint">
+        Pronóstico para el centro de esta zona, de{" "}
+        <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">
+          Open-Meteo
+        </a>{" "}
+        (modelos de NOAA, ECMWF y otros servicios meteorológicos). Se actualiza cada hora.
+      </p>
+    </div>
   );
 }

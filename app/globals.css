@@ -1921,9 +1921,6 @@ button.cta {
 }
 
 .panelTabs {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 4px;
@@ -2476,4 +2473,136 @@ button.cta {
 .tableView th:first-child,
 .tableView td:first-child {
   text-align: left;
+}
+
+/* ---- pronóstico de los próximos días ---- */
+.futureSwitch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 14px;
+}
+
+.futureSwitch button {
+  padding: 8px;
+  font-size: 0.86rem;
+}
+
+.fcSummary {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+
+.fcSummary.ok {
+  background: rgba(47, 158, 87, 0.1);
+  border-color: #2f9e57;
+}
+
+.fcSummary.short {
+  background: rgba(244, 165, 24, 0.18);
+  border-color: var(--sun);
+}
+
+.fcSummary strong {
+  color: var(--green-deep);
+}
+
+.fcSummary p {
+  margin: 4px 0 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.fcList {
+  display: grid;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fcList li {
+  padding: 9px 0;
+  border-bottom: 1px solid var(--line-light);
+}
+
+.fcList li.far {
+  opacity: 0.7;
+}
+
+.fcTop {
+  display: grid;
+  grid-template-columns: 64px 26px 66px 1fr;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.86rem;
+}
+
+.fcDay {
+  font-weight: 800;
+  color: var(--green-deep);
+}
+
+.fcIcon {
+  font-size: 1.15rem;
+}
+
+.fcTemp b {
+  color: var(--ink);
+}
+
+.fcTemp {
+  color: var(--ink-soft);
+}
+
+.fcRain {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fcRain i {
+  display: block;
+  flex: 0 0 auto;
+  max-width: 40%;
+  height: 8px;
+  background: var(--chart-rain);
+  border-radius: 4px;
+}
+
+.fcRain em {
+  font-style: normal;
+  font-size: 0.78rem;
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+
+.fcTip {
+  margin: 4px 0 0 70px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.tip-storm { color: #a8261e; font-weight: 700; }
+.tip-wind { color: #8a5a00; font-weight: 700; }
+.tip-sow { color: #2f7d2a; font-weight: 800; }
+.tip-sow::before { content: "🌱 "; }
+
+.fcMore {
+  margin-top: 10px;
+  padding: 7px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--green-title);
+  background: transparent;
+  border: 1.5px solid var(--green-title);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.forecast .hint a {
+  color: inherit;
 }

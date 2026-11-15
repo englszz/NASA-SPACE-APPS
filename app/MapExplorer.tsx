@@ -8,7 +8,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Model } from "./agro";
-import { RotationsTab, Timeline, WhatIf } from "./PanelExtras";
+import { ForecastDays, RotationsTab, Timeline, WhatIf } from "./PanelExtras";
 
 // ---------- tipos (lo que usamos de los JSON de field-shift-data) ----------
 type PointSummary = {
@@ -363,7 +363,8 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
                   Mira <b>qué sembrar</b> y en qué mes.
                 </li>
                 <li>
-                  Abre <b>El futuro</b> para ver cómo cambiará el clima en esa zona.
+                  Abre <b>El futuro</b> para ver el tiempo de los próximos días y cómo cambiará el clima en los
+                  años que vienen.
                 </li>
               </ol>
               <p>Arriba puedes cambiar lo que pintan los círculos: agua, futuro, lluvia, tierra o erosión.</p>
@@ -452,7 +453,7 @@ function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
       {tab === "sembrar" && <SowTab d={d} />}
       {tab === "rotaciones" &&
         (d.model ? <RotationsTab model={d.model} /> : <p className="lede">Faltan datos: corre «npm run data».</p>)}
-      {tab === "futuro" && <FutureTab d={d} />}
+      {tab === "futuro" && <FutureTab d={d} s={s} />}
       {tab === "pasado" && <PastTab d={d} />}
 
       <p className="uncertainty">
@@ -540,7 +541,28 @@ function SowTab({ d }: { d: PointDetail }) {
 }
 
 // ---------- El futuro ----------
-function FutureTab({ d }: { d: PointDetail }) {
+function FutureTab({ d, s }: { d: PointDetail; s: PointSummary | null }) {
+  const [view, setView] = useState<"dias" | "anos">("dias");
+  return (
+    <section className="tabPane">
+      <div className="miniTabs futureSwitch" role="radiogroup" aria-label="Qué futuro ver">
+        <button type="button" role="radio" aria-checked={view === "dias"} className={view === "dias" ? "isOn" : undefined} onClick={() => setView("dias")}>
+          Próximos días
+        </button>
+        <button type="button" role="radio" aria-checked={view === "anos"} className={view === "anos" ? "isOn" : undefined} onClick={() => setView("anos")}>
+          Años que vienen
+        </button>
+      </div>
+      {view === "dias" ? (
+        s ? <ForecastDays lat={s.lat} lon={s.lon} /> : null
+      ) : (
+        <ClimateFuture d={d} />
+      )}
+    </section>
+  );
+}
+
+function ClimateFuture({ d }: { d: PointDetail }) {
   const [horizon, setHorizon] = useState("2041-2060");
   const [scenario, setScenario] = useState("ssp245");
   const key = `${scenario}_${horizon}`;
@@ -571,7 +593,7 @@ function FutureTab({ d }: { d: PointDetail }) {
   const maxHeat = Math.max(p.heatDaysNow, p.heatDaysFuture, 1);
 
   return (
-    <section className="tabPane">
+    <div>
       <div className="futurePickers">
         <label>
           ¿Cuándo?
@@ -660,7 +682,7 @@ function FutureTab({ d }: { d: PointDetail }) {
       </p>
 
       {d.model && <WhatIf model={d.model} />}
-    </section>
+    </div>
   );
 }
 
