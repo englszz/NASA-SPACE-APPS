@@ -26,7 +26,6 @@ const NAV = [
   { id: "clima", es: "Clima futuro", en: "Future climate" },
   { id: "ramoncito", es: "Ramoncito", en: "Ramoncito" },
   { id: "reto", es: "El reto", en: "The challenge" },
-  { id: "global", es: "Global", en: "Global" },
 ];
 
 export default function Home() {
