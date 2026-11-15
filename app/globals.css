@@ -3471,3 +3471,83 @@ button.ctaSmall {
   font-weight: 800;
   color: var(--sun);
 }
+
+/* ---- globo «Soy tu asistente virtual» junto al sombrero ---- */
+.rcHint {
+  position: fixed;
+  right: calc(clamp(14px, 3vw, 28px) + 78px);
+  bottom: calc(clamp(14px, 3vw, 28px) + 14px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 4px 4px 14px;
+  background: var(--cream);
+  border: 2px solid var(--green-deep);
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  animation: rcIn 0.25s ease-out;
+}
+
+/* piquito que apunta al sombrero */
+.rcHint::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--cream);
+  border-top: 2px solid var(--green-deep);
+  border-right: 2px solid var(--green-deep);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.rcHintText {
+  padding: 4px 0;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  white-space: nowrap;
+  color: var(--green-deep);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.rcHintClose {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  font: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--green-deep);
+  background: rgba(29, 74, 25, 0.1);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.rcHintClose:hover {
+  background: rgba(29, 74, 25, 0.2);
+}
+
+.rcHintText:focus-visible,
+.rcHintClose:focus-visible {
+  outline: 3px dashed var(--sun);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .rcHint {
+    right: calc(14px + 66px);
+    bottom: 22px;
+  }
+  .rcHintText {
+    font-size: 0.85rem;
+  }
+}

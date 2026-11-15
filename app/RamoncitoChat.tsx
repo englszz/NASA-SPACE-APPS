@@ -14,6 +14,8 @@ type Access = "loading" | "noconfig" | "guest" | "noconuco" | "ready";
 
 const EXAMPLES = ["¿Qué siembro el mes que viene?", "¿Riego esta semana?", "¿Cómo protejo mi tierra de la lluvia?"];
 
+const HINT_KEY = "ramoncito-globo-cerrado";
+
 export const openRamoncito = () => window.dispatchEvent(new Event("abrir-ramoncito"));
 
 export default function RamoncitoChat() {
@@ -23,6 +25,7 @@ export default function RamoncitoChat() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [hint, setHint] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -41,6 +44,28 @@ export default function RamoncitoChat() {
       setAccess("guest");
     }
   }, []);
+
+  // Globo «Soy tu asistente virtual»: se muestra hasta que la persona lo cierra con la X
+  useEffect(() => {
+    let closed = false;
+    try {
+      closed = localStorage.getItem(HINT_KEY) === "1";
+    } catch {
+      // sin almacenamiento (modo privado): se muestra igual
+    }
+    if (closed) return;
+    const t = setTimeout(() => setHint(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
+  const closeHint = () => {
+    setHint(false);
+    try {
+      localStorage.setItem(HINT_KEY, "1");
+    } catch {
+      // sin almacenamiento: solo se oculta por ahora
+    }
+  };
 
   useEffect(() => {
     const show = () => setOpen(true);
@@ -89,6 +114,16 @@ export default function RamoncitoChat() {
 
   return (
     <>
+      {hint && !open && (
+        <div className="rcHint" role="status">
+          <button type="button" className="rcHintText" onClick={() => setOpen(true)}>
+            Soy tu asistente virtual
+          </button>
+          <button type="button" className="rcHintClose" onClick={closeHint} aria-label="Cerrar este mensaje">
+            ×
+          </button>
+        </div>
+      )}
       <button
         type="button"
         className={`rcFab${open ? " isOpen" : ""}`}
