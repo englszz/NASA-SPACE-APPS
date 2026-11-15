@@ -14,9 +14,11 @@
 > SRTM) with CMIP6 climate projections, ISRIC soil data and FAO crop parameters to show, for 52 zones of the
 > valley, which crops suit each soil and climate, when to sow, how conditions have changed, what the next 14
 > days and the coming decades look like, and how the farmer's current crop rotation compares with at least three
-> alternatives (why, evidence, benefits, information gaps and risks). Farmers can sign in with Google, register
-> their own plot privately and get plain-language advice from **Ramoncito**, an AI assistant grounded on their
-> zone's data. It supports — and never replaces — farmers' judgment and local agronomists.
+> alternatives (why, evidence, benefits, information gaps and risks). Farmers can register their plot **without an
+> account** (it's stored in a cookie in their own browser) or sign in with Google, and get plain-language advice from
+> **Ramoncito**, an AI assistant grounded on their zone's data that also guides first-time visitors around the site.
+> Crops that aren't in the model can be typed in and Ramoncito compares them with the zone's options.
+> It supports — and never replaces — farmers' judgment and local agronomists. Live site: https://theconuco.vercel.app
 
 ## ¿Qué es?
 
@@ -25,20 +27,26 @@ en decisiones que cualquier agricultor puede entender: **qué sembrar, en qué m
 cuidar la tierra y qué esperar del clima**, hoy y en los años que vienen.
 
 Cubre **52 zonas de unos 11 km** en el Valle del Cibao: de Montecristi y Castañuelas, en la Línea Noroeste,
-hasta San Francisco de Macorís y Nagua, pasando por Santiago, Mao y La Vega.
+hasta San Francisco de Macorís y Nagua, pasando por Santiago, Mao y La Vega. Empieza en el Cibao, pero el
+método y los datos de la NASA sirven para cualquier lugar: la idea es que llegue a todo el mundo.
+
+**Web:** https://theconuco.vercel.app
 
 ## Qué hace
 
 | Parte | Qué ofrece |
 |---|---|
-| **Mapa del Cibao** | Imagen satelital con las 52 zonas y 5 capas: agua (balance hídrico), futuro (días de mucho calor hacia 2041–2060), lluvia, tipo de tierra y riesgo de erosión. Se abre con una animación de un granero. |
+| **Entrada** | La **primera vez** que alguien entra, la web abre sola el mapa con la animación de un granero (sin mostrar antes la portada). El botón **«Ir al inicio»** lleva a la portada; desde la segunda visita se entra directo a ella. |
+| **Mapa del Cibao** | Imagen satelital con las 52 zonas y 5 capas: agua (balance hídrico), futuro (días de mucho calor hacia 2041–2060), lluvia, tipo de tierra y riesgo de erosión. Botón **«Centrar en el Cibao»** y un aviso al alejarse hasta ver todo el país. |
 | **Qué sembrar** | Los cultivos que mejor se dan en cada zona, solo con lluvia o con riego, con mes de siembra y de cosecha y el riego que necesitan. |
-| **Rotaciones** | Lo que el agricultor siembra hoy frente a **3 alternativas** calculadas para su zona, con un calendario de 12 meses (cuándo queda la tierra desnuda y qué meses son difíciles) y, para cada opción: **por qué se sugiere, en qué datos se apoya, qué gana la tierra, qué falta saber y qué riesgos revisar**. |
+| **Rotaciones** | Lo que el agricultor siembra hoy frente a **3 alternativas** calculadas para su zona, con un calendario de 12 meses (cuándo queda la tierra desnuda y qué meses son difíciles) y, para cada opción: **por qué se sugiere, en qué datos se apoya, qué gana la tierra, qué falta saber y qué riesgos revisar**. Si siembra algo que no está en la lista (ají, tomate, café…), lo **escribe** y Ramoncito lo compara con las opciones de la zona. |
 | **El futuro** | Pronóstico de los próximos **14 días** con un consejo práctico por día, y el clima de **2026–2045 y 2041–2060** en dos escenarios de emisiones, con qué cultivos ganan o pierden. |
 | **¿Y si…?** | Simulador: cambia la lluvia (−40 % a +20 %) y la temperatura (0 a +3 °C) y mira qué cultivos aguantan. |
 | **Cómo ha cambiado** | 8 indicadores (calor, lluvia, humedad del suelo, evaporación, heladas, lluvias extremas, estrés de la vegetación y agua disponible) de 2006–2015 frente a 2016–2025, marcados como **«Subió», «Bajó» o «Sin cambio claro»** según una prueba estadística, y la línea de tiempo de 20 años. |
-| **Mi conuco** | Entrar con Google y registrar el conuco (ubicación, tamaño en tareas, siembra actual, agua, equipo, mercado y prioridades). Cada persona **solo ve su propio conuco**. |
-| **Ramoncito (IA)** | Consejos diarios para el conuco del agricultor y un chat disponible en todas las páginas (el sombrero de abajo a la derecha). Usa solo los datos de la zona y avisa de sus límites. |
+| **Mi conuco** | Registrar el conuco (ubicación, tamaño en tareas, siembra actual, agua, equipo, mercado y prioridades) **sin crear una cuenta**: se guarda en una cookie del propio navegador. Quien quiera puede **iniciar sesión con Google** para guardarlo en su cuenta y verlo en cualquier teléfono; cada persona **solo ve su propio conuco**. Se abre con el botón **«Registrar mi conuco»**. |
+| **Ramoncito (IA)** | Consejos para el conuco y un chat en todas las páginas (el sombrero de abajo a la derecha), **sin necesidad de cuenta**. Responde sobre la zona que la persona está mirando en el mapa o sobre su conuco, usa solo esos datos y avisa de sus límites. |
+| **Guía de Ramoncito** | Globos cortos que explican lo que puede confundir justo cuando se toca (un punto del mapa, cada capa, las pestañas, el simulador, el cultivo «Otro»…) y, de vez en cuando, algún consejo general. Cada consejo sale una sola vez y se pueden apagar. |
+| **Del Cibao al mundo** | Sección que explica que el proyecto empieza en el Cibao y que la idea es llevarlo a otras regiones. |
 
 Todo está escrito en **palabras sencillas**, con un glosario y avisos de incertidumbre, porque el reto pide que
 la herramienta sirva a agricultores con poca experiencia técnica. La web está en **inglés por defecto** y se
@@ -89,7 +97,7 @@ script en 6,215 de 6,240 casos (el resto difiere 0.01 por redondeo).
 
 - **Web:** Next.js 15 (App Router) · React 19 · TypeScript 5 · CSS propio · `next/font` (Lilita One y Nunito)
 - **Mapa:** Leaflet 1.9 · imagen satelital de Esri
-- **Cuentas y base de datos:** Supabase (Auth con Google OAuth + PostgreSQL con Row Level Security) · `@supabase/ssr`
+- **Cuentas y base de datos (opcional):** Supabase (Auth con Google OAuth + PostgreSQL con Row Level Security) · `@supabase/ssr`. Sin cuenta, el conuco se guarda en una cookie del navegador (`lib/conuco-local.ts`)
 - **IA:** Groq (modelo `openai/gpt-oss-120b`), llamado solo desde el servidor
 - **Pronóstico:** API de Open-Meteo
 - **Datos:** Google Earth Engine (JavaScript) · Node.js (scripts `build-data.mjs` y `build-grid.mjs`) · API de NASA POWER
@@ -106,8 +114,8 @@ npm run data        # copia los datos de field-shift-data/data a public/data
 npm run dev         # abre http://localhost:3000
 ```
 
-El mapa, los cultivos, las rotaciones y el pronóstico funcionan sin configurar nada.
-Para **Mi conuco** y **Ramoncito** hace falta crear `.env.local` con las claves de Supabase y Groq:
+El mapa, los cultivos, las rotaciones, el pronóstico y **Mi conuco sin cuenta** funcionan sin configurar nada.
+Para **Ramoncito** hace falta la clave de Groq, y para **iniciar sesión con Google**, las de Supabase. Van en `.env.local`:
 los pasos están en [`CONFIGURAR.md`](CONFIGURAR.md) y el formato en [`.env.example`](.env.example).
 **Nunca subas `.env.local` a GitHub.**
 
@@ -128,14 +136,18 @@ en la cuenta de Earth Engine del equipo y falta agregar a esta carpeta.
 
 ```
 app/                 Páginas y componentes de la web
-  page.tsx           Portada y secciones
+  page.tsx           Decide si es la primera visita (entrada con el granero)
+  HomeView.tsx       Portada y secciones
+  Sections.tsx       Textos de cada sección
+  BarnTransition.tsx Animación del granero que abre el mapa
   MapExplorer.tsx    Mapa y panel de cada zona
-  PanelExtras.tsx    Rotaciones, simulador, pronóstico y línea de tiempo
+  PanelExtras.tsx    Rotaciones (con cultivo «Otro»), simulador, pronóstico y línea de tiempo
   agro.ts            Motor agrícola (aptitud FAO, rotaciones, simulador)
-  RamoncitoChat.tsx  Chat flotante de la IA
-  mi-conuco/         Inicio de sesión, registro y panel privado
+  RamoncitoChat.tsx  Chat flotante de la IA y globos de la guía
+  guia.ts            Textos de la guía de Ramoncito
+  mi-conuco/         Registro sin cuenta, inicio de sesión opcional y panel del conuco
   api/ramoncito/     Ruta del servidor que llama a Groq
-lib/                 Supabase y datos del conuco
+lib/                 Supabase, idiomas y datos del conuco (cuenta o cookie)
 supabase/schema.sql  Tabla «conucos» con reglas de privacidad (RLS)
 field-shift-data/    Scripts de Earth Engine y de análisis, y los datos generados
 public/              Imágenes, íconos y datos que sirve la web
@@ -143,11 +155,14 @@ public/              Imágenes, íconos y datos que sirve la web
 
 ## Privacidad y seguridad
 
-- Cada agricultor **solo puede ver, cambiar o borrar su propio conuco**: lo garantiza la base de datos con
-  reglas RLS, no solo la web.
+- **Sin cuenta**, el conuco se guarda solo en una cookie del navegador del agricultor, con la ubicación
+  redondeada a unos 100 m. El servidor la lee para calcular los consejos, pero no la guarda.
+- **Con cuenta**, cada agricultor **solo puede ver, cambiar o borrar su propio conuco**: lo garantiza la base
+  de datos con reglas RLS, no solo la web.
 - La clave de la IA vive **solo en el servidor**. A la IA se le envía un resumen sin nombre, correo ni
-  coordenadas exactas, y cada usuario tiene un límite de preguntas.
-- El agricultor puede **borrar su conuco** cuando quiera.
+  coordenadas exactas, y hay un límite de preguntas por persona.
+- El agricultor puede **borrar su conuco** cuando quiera. Más detalles en la
+  [política de privacidad](https://theconuco.vercel.app/privacidad).
 
 ## Límites (lo que hay que saber)
 
@@ -160,8 +175,9 @@ public/              Imágenes, íconos y datos que sirve la web
 
 ## Uso de inteligencia artificial
 
-- **Dentro de la web:** Ramoncito usa un modelo de lenguaje vía Groq para explicar los datos y responder
-  preguntas, siempre con la advertencia de que puede equivocarse.
+- **Dentro de la web:** Ramoncito usa un modelo de lenguaje vía Groq para explicar los datos, responder
+  preguntas y comparar cultivos que no están en el modelo, siempre con la advertencia de que puede
+  equivocarse. Los globos de la guía son textos fijos escritos por el equipo, no generados por la IA.
 - **Para construir el proyecto:** el equipo usó asistentes de IA (ChatGPT y Claude) como apoyo para investigar
   las fuentes de datos y para programar; todas las decisiones, los datos y los resultados fueron revisados
   por el equipo.

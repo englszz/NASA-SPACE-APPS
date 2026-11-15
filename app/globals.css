@@ -4022,3 +4022,18 @@ button.ctaSmall {
   background: var(--paper);
   border-color: var(--line-light);
 }
+
+/* En el teléfono, con el panel de una zona abierto, el globo de consejos sube a la parte
+   del mapa para no tapar el panel (ni sus botones) */
+@media (max-width: 820px) {
+  body:has(.mapRoom .panel.isOpen) .rcHint {
+    top: 150px;
+    right: 14px;
+    bottom: auto;
+    width: min(300px, calc(100vw - 28px));
+    border-radius: 18px;
+  }
+  body:has(.mapRoom .panel.isOpen) .rcHint::after {
+    display: none;
+  }
+}

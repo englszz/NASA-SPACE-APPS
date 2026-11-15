@@ -1,5 +1,8 @@
 # Configurar «Mi conuco»: Google, Supabase y Groq
 
+**Mi conuco sin cuenta funciona sin configurar nada** (se guarda en una cookie del navegador). Esta guía es
+para activar la IA de Ramoncito (Parte A) y el inicio de sesión opcional con Google (Partes B, C y D).
+
 Son 4 partes. Hazlas en orden. **Nunca pegues claves en el chat ni las subas a GitHub**:
 van solo en el archivo `.env.local`, que git ya ignora.
 
@@ -91,7 +94,7 @@ Reinicia el servidor (`Ctrl+C` y luego `npm run dev`) y entra a **http://localho
 
 | Mensaje | Causa probable |
 |---|---|
-| «Falta configurar el inicio de sesión» | Faltan las variables de Supabase o no reiniciaste el servidor |
+| No aparece «Inicia sesión para una experiencia más personalizada» en Mi conuco | Faltan las variables de Supabase o no reiniciaste el servidor |
 | Google dice *redirect_uri_mismatch* | La URI de la Parte C3 no es exactamente la de Supabase |
 | Google dice que la app no está verificada / acceso bloqueado | Tu correo no está en *Usuarios de prueba* (Parte C2) |
 | «No se pudo guardar» | No corriste `supabase/schema.sql` (Parte B2) |
