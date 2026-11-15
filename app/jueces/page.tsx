@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function Judges() {
-  return <HomeView judges />;
+  return <HomeView intro />;
 }

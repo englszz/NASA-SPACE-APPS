@@ -9,6 +9,8 @@
 import { AGUA, EQUIPO, PRIORIDADES, VENTA, type Conuco } from "./conuco";
 
 export const CONUCO_COOKIE = "mi-conuco";
+// Si no existe, es la primera visita: la portada abre el mapa con la animación del granero
+export const FIRST_VISIT_COOKIE = "conuco-ya-visito";
 const MAX_AGE = 60 * 60 * 24 * 365; // un año
 
 // «Otro» cultivo que no está en la lista: se guarda como «otro:lo que escribió la persona»

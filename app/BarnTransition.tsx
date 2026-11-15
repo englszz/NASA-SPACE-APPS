@@ -20,7 +20,9 @@ const DEEP = "#1d4a19";
 const CREAM = "#fbf6e6";
 const ROOF = "#b4561c"; // tierra, de la familia de la montaña del logo
 
-export default function BarnTransition({ open, onClose }: { open: boolean; onClose: () => void }) {
+// intro: entrada directa al abrir la web (primera visita o /jueces). El fondo verde
+// cubre la pantalla desde el primer instante para que no se vea antes la portada.
+export default function BarnTransition({ open, intro = false, onClose }: { open: boolean; intro?: boolean; onClose: () => void }) {
   const { t } = useLang();
   const [phase, setPhase] = useState<Phase>("closed");
 
@@ -51,7 +53,9 @@ export default function BarnTransition({ open, onClose }: { open: boolean; onClo
 
   // Clases acumuladas: en "zoom" también siguen activas "pop" y "doors"
   const reached = (p: Phase) => ORDER.indexOf(phase) >= ORDER.indexOf(p);
-  const cls = ["barnOverlay", ...ORDER.slice(1).filter(reached).map((p) => `is-${p}`)].join(" ");
+  const cls = ["barnOverlay", intro && open ? "is-intro" : "", ...ORDER.slice(1).filter(reached).map((p) => `is-${p}`)]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={cls} aria-hidden={!open}>

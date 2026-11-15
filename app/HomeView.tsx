@@ -6,7 +6,7 @@ import Fields from "./Fields";
 import AuthNav from "./AuthNav";
 import { useLang } from "@/lib/i18n";
 import BarnTransition from "./BarnTransition";
-import { readLocalConuco } from "@/lib/conuco-local";
+import { FIRST_VISIT_COOKIE, readLocalConuco } from "@/lib/conuco-local";
 import {
   ChallengeSection,
   GlobalSection,
@@ -29,31 +29,26 @@ const NAV = [
   { id: "reto", es: "El reto", en: "The challenge" },
 ];
 
-const FIRST_VISIT_KEY = "conuco-ya-visito";
-
 // La portada. Al entrar por primera vez (y siempre en /jueces) se abre el mapa con la
-// animación del granero; al cerrarlo queda la portada de siempre.
-export default function HomeView({ judges = false }: { judges?: boolean }) {
+// animación del granero. El servidor ya sabe si es la primera visita (cookie), así que
+// la pantalla verde del granero sale desde el primer instante, sin mostrar antes la portada.
+export default function HomeView({ intro = false }: { intro?: boolean }) {
   const { t } = useLang();
   const [jump, setJump] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mapOpen, setMapOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(intro);
+  // Fondo verde de entrada: solo mientras dura la primera apertura del mapa
+  const [introOn, setIntroOn] = useState(intro);
   const [active, setActive] = useState("inicio");
 
   // ¿Ya registró su conuco en este navegador? Cambia el botón de la portada
   const [hasConuco, setHasConuco] = useState(false);
   useEffect(() => setHasConuco(!!readLocalConuco()), []);
 
+  // Ya visitó: la próxima vez entra directo a la portada
   useEffect(() => {
-    let first = true;
-    try {
-      first = !localStorage.getItem(FIRST_VISIT_KEY);
-      localStorage.setItem(FIRST_VISIT_KEY, "1");
-    } catch {
-      // sin almacenamiento: se trata como primera visita
-    }
-    if (judges || first) setMapOpen(true);
-  }, [judges]);
+    document.cookie = `${FIRST_VISIT_COOKIE}=1; path=/; max-age=31536000; samesite=lax`;
+  }, []);
 
   // Marca en el header la sección que se está viendo
   useEffect(() => {
@@ -155,7 +150,14 @@ export default function HomeView({ judges = false }: { judges?: boolean }) {
 
       <SiteFooter />
 
-      <BarnTransition open={mapOpen} onClose={() => setMapOpen(false)} />
+      <BarnTransition
+        open={mapOpen}
+        intro={introOn}
+        onClose={() => {
+          setMapOpen(false);
+          setIntroOn(false);
+        }}
+      />
     </div>
   );
 }
