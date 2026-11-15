@@ -7,7 +7,15 @@ import RamoncitoChat from "./RamoncitoChat";
 const display = Lilita_One({ weight: "400", subsets: ["latin"], variable: "--font-fallback-display" });
 const body = Nunito({ subsets: ["latin"], variable: "--font-body" });
 
+// Dirección pública de la web (en Vercel se toma sola; en local es localhost)
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "The Conuco",
   description: "Datos de la NASA para decidir qué sembrar, cuándo y dónde en el Cibao. Proyecto para NASA Space Apps Challenge 2026 (Field Shift).",
   applicationName: "The Conuco",
