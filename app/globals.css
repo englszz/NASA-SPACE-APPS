@@ -3074,19 +3074,6 @@ button.cta {
   object-fit: contain;
 }
 
-.rcFabTag {
-  position: absolute;
-  top: -4px;
-  right: -6px;
-  padding: 2px 7px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--green-deep);
-  background: var(--sun);
-  border: 2px solid var(--green-deep);
-  border-radius: 999px;
-}
-
 .rcPanel {
   position: fixed;
   right: clamp(14px, 3vw, 28px);

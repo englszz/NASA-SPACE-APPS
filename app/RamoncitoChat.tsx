@@ -98,7 +98,6 @@ export default function RamoncitoChat() {
         aria-label={open ? "Cerrar el chat de Ramoncito" : "Hablar con Ramoncito (IA)"}
       >
         <Image src="/ia-sombrero.png" alt="" width={256} height={256} />
-        {!open && <span className="rcFabTag">IA</span>}
       </button>
 
       {open && (
@@ -126,7 +125,7 @@ export default function RamoncitoChat() {
             {access === "guest" && (
               <div className="rcNote">
                 <p>
-                  <b>¡Klk!</b> Soy Ramoncito. Para darte consejos de <b>tu</b> conuco necesito saber dónde está.
+                  Hola, soy Ramoncito. Para darte consejos sobre <b>tu</b> conuco necesito saber dónde está.
                 </p>
                 <p>Entra con Google y regístralo: toma un minuto y tus datos solo los ves tú.</p>
                 <Link href="/mi-conuco" className="cta rcCta" onClick={() => setOpen(false)}>
@@ -150,7 +149,7 @@ export default function RamoncitoChat() {
                   <>
                     <div className="bubbleMsg bot">
                       <p>
-                        ¡Klk! Pregúntame lo que quieras de tu conuco: qué sembrar, cuándo regar o cómo cuidar tu tierra.
+                        Hola. Puedes preguntarme sobre tu conuco: qué sembrar, cuándo regar o cómo cuidar tu tierra.
                       </p>
                     </div>
                     <div className="rcChips">

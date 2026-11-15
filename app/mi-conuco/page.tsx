@@ -63,7 +63,7 @@ export default async function MiConucoPage({ searchParams }: { searchParams: Pro
       ) : (
         <section className="mcCard">
           <p className="eyebrowMini">Paso 1 de 1</p>
-          <h1>{firstName ? `¡Klk, ${firstName}! ` : ""}Cuéntanos de tu conuco</h1>
+          <h1>{firstName ? `Hola, ${firstName}. ` : ""}Cuéntanos sobre tu conuco</h1>
           <p className="mcLead">
             Con esto Ramoncito te da consejos para tu tierra exacta. Lo que escribas aquí <b>solo lo ves tú</b>.
           </p>
