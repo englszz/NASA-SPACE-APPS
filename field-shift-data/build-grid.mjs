@@ -62,19 +62,41 @@ async function main() {
     byId.get(r.id).push(r);
   }
 
-  // NASA POWER tiene celdas de 0.5° x 0.625°: se descarga una vez por celda, no por punto
-  const cellKey = (lat, lon) => `cell_${Math.round(lat / 0.5)}_${Math.round(lon / 0.625)}`;
-  const powerByCell = new Map();
-  for (const s of soils) {
-    const k = cellKey(s.lat, s.lon);
-    if (!powerByCell.has(k)) powerByCell.set(k, s);
-  }
-  console.log(`${soils.length} puntos, ${powerByCell.size} celdas de NASA POWER.`);
+  // NASA POWER (MERRA-2) tiene celdas de 0.5° x 0.625° (~55 x 65 km). Antes se usaba la celda más
+  // cercana sin mirar qué había en ella: en la costa norte caía sobre el mar (casi sin días de calor
+  // en Castañuelas) y en La Vega sobre la Cordillera Central (904 m). Ahora, para cada punto:
+  //  1. se miran las 4 celdas vecinas y se descartan las de mar (diferencia día-noche < 7 °C;
+  //     el mar amortigua la temperatura: en tierra adentro la diferencia es de 9-10 °C);
+  //  2. se escoge la más parecida al punto en distancia y en altura (100 m de altura ≈ 10 km);
+  //  3. se corrige la temperatura por la diferencia de altura con el gradiente estándar
+  //     de la atmósfera (−6.5 °C por km), usando la altura del punto (SRTM).
+  const LAT_STEP = 0.5, LON_STEP = 0.625, LAPSE = 0.0065, MARINE_DTR = 7;
+  const cellAt = (i, j) => ({ key: `cell_${i}_${j}`, lat: i * LAT_STEP, lon: j * LON_STEP });
+  const neighbors = (lat, lon) => {
+    const i = Math.floor(lat / LAT_STEP), j = Math.floor(lon / LON_STEP);
+    return [cellAt(i, j), cellAt(i + 1, j), cellAt(i, j + 1), cellAt(i + 1, j + 1)];
+  };
+  const cells = new Map();
+  for (const s of soils) for (const c of neighbors(s.lat, s.lon)) cells.set(c.key, c);
   const noSoil = soils.filter((s) => s.sand == null || s.clay == null || s.silt == null).length;
   if (noSoil) console.warn(`AVISO: ${noSoil} puntos sin datos de suelo en fieldshift_grid_soil.csv.`);
-  for (const [k, s] of powerByCell) {
-    powerByCell.set(k, toDaily(await fetchPower({ lat: s.lat, lon: s.lon }, k)));
+  for (const c of cells.values()) {
+    const json = await fetchPower({ lat: c.lat, lon: c.lon }, c.key);
+    const daily = toDaily(json);
+    const dtr = daily.reduce((sum, d) => sum + (d.tmax - d.tmin), 0) / daily.length;
+    Object.assign(c, { daily, elev: json.geometry?.coordinates?.[2] ?? null, dtr, marine: dtr < MARINE_DTR });
   }
+  const marine = [...cells.values()].filter((c) => c.marine);
+  console.log(`${soils.length} puntos, ${cells.size} celdas vecinas de NASA POWER (${marine.length} de mar: ${marine.map((c) => c.key).join(", ") || "ninguna"}).`);
+
+  const pickCell = (s) => {
+    const cand = neighbors(s.lat, s.lon).map((c) => cells.get(c.key));
+    const land = cand.filter((c) => !c.marine);
+    const pool = land.length ? land : cand;
+    if (!land.length) console.warn(`AVISO: ${s.id} solo tiene celdas de mar alrededor; se usa la más cercana.`);
+    const score = (c) => km(s.lat, s.lon, c.lat, c.lon) + (c.elev != null ? Math.abs(c.elev - s.elev) / 10 : 0);
+    return pool.reduce((a, b) => (score(b) < score(a) ? b : a));
+  };
 
   fs.mkdirSync(path.join("data", "points"), { recursive: true });
   const index = [];
@@ -84,11 +106,20 @@ async function main() {
       id: s.id, name: near.km <= 3 ? near.name : `${near.km} km de ${near.name}`, country: "República Dominicana",
       lat: s.lat, lon: s.lon, elevationM: Math.round(s.elev),
     };
+    const cell = pickCell(s);
+    const dT = cell.elev != null ? LAPSE * (cell.elev - s.elev) : 0;
+    const daily = cell.daily.map((d) => ({ ...d, t: d.t + dT, tmax: d.tmax + dT, tmin: d.tmin + dT }));
     const { out } = analyze({
-      region, daily: powerByCell.get(cellKey(s.lat, s.lon)), gee: byId.get(s.id) ?? [],
+      region, daily, gee: byId.get(s.id) ?? [],
       soilRow: { sand: s.sand, clay: s.clay, silt: s.silt, ph: s.ph, soc: s.soc }, cmip6,
     });
     delete out.soilTypes; // ya no hace falta: cada punto trae su propio suelo
+    // De dónde sale la temperatura de este punto (transparencia)
+    out.climateSource = {
+      powerCell: cell.key, cellLat: cell.lat, cellLon: cell.lon, cellElevM: Math.round(cell.elev ?? 0),
+      pointElevM: Math.round(s.elev), tempAdjustC: Math.round(dT * 10) / 10,
+      method: "Celda vecina de NASA POWER en tierra más parecida en distancia y altura, corregida a la altura del punto (−6.5 °C/km)",
+    };
     fs.writeFileSync(path.join("data", "points", `${s.id}.json`), JSON.stringify(out));
 
     const ind = Object.fromEntries(out.indicators.map((i) => [i.key, i]));

@@ -8,54 +8,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1268,
-    "heatDays": 0,
-    "waterBalanceMm": 638,
+    "heatDays": 273,
+    "waterBalanceMm": -425,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Feb",
-        "future": 0.8
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "May",
-        "future": 0.6
+        "score": 0.67,
+        "sow": "Oct",
+        "future": 0.55
       },
       {
         "name": "Guandul",
-        "score": 0.6,
-        "sow": "Mar",
-        "future": 0.58
+        "score": 0.47,
+        "sow": "Sep",
+        "future": 0.36
+      },
+      {
+        "name": "Maíz",
+        "score": 0.3,
+        "sow": "Sep",
+        "future": 0.3
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
-        "score": 1,
-        "sow": "Abr",
-        "irrigationMm": 0
+        "score": 0.85,
+        "sow": "Nov",
+        "irrigationMm": 217
       },
       {
         "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Ene",
-        "irrigationMm": 0
+        "score": 0.74,
+        "sow": "Nov",
+        "irrigationMm": 118
       },
       {
         "name": "Maíz",
-        "score": 0.6,
-        "sow": "Mar",
-        "irrigationMm": 0
+        "score": 0.51,
+        "sow": "Nov",
+        "irrigationMm": 151
       }
     ],
     "slopePct": 1.2,
     "erosionRisk": "baja",
-    "heatDaysNow": 0,
-    "heatDaysFuture": 11
+    "heatDaysNow": 273,
+    "heatDaysFuture": 313
   },
   {
     "id": "p19.65_-71.60",
@@ -66,54 +66,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1335,
-    "heatDays": 198,
-    "waterBalanceMm": -290,
+    "heatDays": 267,
+    "waterBalanceMm": -352,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.78,
+        "score": 0.69,
         "sow": "Oct",
-        "future": 0.72
+        "future": 0.57
       },
       {
         "name": "Guandul",
-        "score": 0.56,
+        "score": 0.48,
         "sow": "Sep",
-        "future": 0.51
+        "future": 0.31
       },
       {
-        "name": "Maíz",
-        "score": 0.49,
-        "sow": "Sep",
-        "future": 0.32
+        "name": "Arroz",
+        "score": 0.39,
+        "sow": "Ago",
+        "future": 0.37
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
-        "score": 1,
+        "score": 0.89,
         "sow": "Nov",
-        "irrigationMm": 212
+        "irrigationMm": 228
       },
       {
         "name": "Sorgo",
-        "score": 0.8,
+        "score": 0.76,
         "sow": "Nov",
-        "irrigationMm": 119
+        "irrigationMm": 129
       },
       {
         "name": "Maíz",
-        "score": 0.6,
+        "score": 0.53,
         "sow": "Nov",
-        "irrigationMm": 150
+        "irrigationMm": 161
       }
     ],
     "slopePct": 2.1,
     "erosionRisk": "baja",
-    "heatDaysNow": 198,
-    "heatDaysFuture": 251
+    "heatDaysNow": 267,
+    "heatDaysFuture": 308
   },
   {
     "id": "p19.55_-71.60",
@@ -124,54 +124,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1443,
-    "heatDays": 198,
-    "waterBalanceMm": -182,
+    "heatDays": 252,
+    "waterBalanceMm": -231,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.97,
+        "score": 0.91,
         "sow": "Oct",
-        "future": 0.9
+        "future": 0.77
       },
       {
         "name": "Guandul",
-        "score": 0.8,
+        "score": 0.72,
         "sow": "Sep",
-        "future": 0.72
+        "future": 0.47
       },
       {
         "name": "Maíz",
-        "score": 0.74,
+        "score": 0.49,
         "sow": "Sep",
-        "future": 0.48
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.97,
         "sow": "Nov",
-        "irrigationMm": 127
+        "irrigationMm": 135
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.89,
         "sow": "Nov",
-        "irrigationMm": 223
+        "irrigationMm": 237
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.85,
         "sow": "Nov",
-        "irrigationMm": 158
+        "irrigationMm": 167
       }
     ],
     "slopePct": 2.9,
     "erosionRisk": "baja",
-    "heatDaysNow": 198,
-    "heatDaysFuture": 251
+    "heatDaysNow": 252,
+    "heatDaysFuture": 295
   },
   {
     "id": "p19.75_-71.50",
@@ -182,54 +182,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1236,
-    "heatDays": 11,
-    "waterBalanceMm": 222,
+    "heatDays": 272,
+    "waterBalanceMm": -476,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "future": 1
-      },
-      {
-        "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "future": 0.9
+        "score": 0.84,
+        "sow": "Oct",
+        "future": 0.69
       },
       {
         "name": "Guandul",
-        "score": 0.85,
-        "sow": "Abr",
-        "future": 0.85
+        "score": 0.65,
+        "sow": "Sep",
+        "future": 0.45
+      },
+      {
+        "name": "Maíz",
+        "score": 0.45,
+        "sow": "Sep",
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "irrigationMm": 0
+        "score": 0.93,
+        "sow": "Nov",
+        "irrigationMm": 122
       },
       {
         "name": "Arroz",
-        "score": 0.95,
-        "sow": "Sep",
-        "irrigationMm": 3
+        "score": 0.82,
+        "sow": "Nov",
+        "irrigationMm": 222
       },
       {
         "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "irrigationMm": 0
+        "score": 0.77,
+        "sow": "Nov",
+        "irrigationMm": 154
       }
     ],
     "slopePct": 1.8,
     "erosionRisk": "baja",
-    "heatDaysNow": 11,
-    "heatDaysFuture": 81
+    "heatDaysNow": 272,
+    "heatDaysFuture": 311
   },
   {
     "id": "p19.65_-71.50",
@@ -240,54 +240,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1287,
-    "heatDays": 177,
-    "waterBalanceMm": -337,
+    "heatDays": 267,
+    "waterBalanceMm": -420,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.85,
         "sow": "Oct",
-        "future": 0.93
-      },
-      {
-        "name": "Maíz",
-        "score": 0.77,
-        "sow": "Sep",
-        "future": 0.55
+        "future": 0.71
       },
       {
         "name": "Guandul",
-        "score": 0.77,
-        "sow": "Ago",
-        "future": 0.74
+        "score": 0.66,
+        "sow": "Sep",
+        "future": 0.35
+      },
+      {
+        "name": "Maíz",
+        "score": 0.45,
+        "sow": "Sep",
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.94,
         "sow": "Nov",
-        "irrigationMm": 119
+        "irrigationMm": 132
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.83,
         "sow": "Nov",
-        "irrigationMm": 211
+        "irrigationMm": 235
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.79,
         "sow": "Nov",
-        "irrigationMm": 149
+        "irrigationMm": 164
       }
     ],
     "slopePct": 1.8,
     "erosionRisk": "baja",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 267,
+    "heatDaysFuture": 307
   },
   {
     "id": "p19.55_-71.50",
@@ -298,54 +298,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1399,
-    "heatDays": 177,
-    "waterBalanceMm": -225,
+    "heatDays": 244,
+    "waterBalanceMm": -284,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.91,
         "sow": "Oct",
-        "future": 0.93
+        "future": 0.78
       },
       {
         "name": "Guandul",
-        "score": 0.81,
+        "score": 0.72,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.52
       },
       {
         "name": "Maíz",
-        "score": 0.77,
+        "score": 0.5,
         "sow": "Sep",
-        "future": 0.55
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.98,
         "sow": "Nov",
-        "irrigationMm": 127
+        "irrigationMm": 136
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.91,
         "sow": "Nov",
-        "irrigationMm": 223
+        "irrigationMm": 239
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.86,
         "sow": "Nov",
-        "irrigationMm": 157
+        "irrigationMm": 167
       }
     ],
     "slopePct": 4.6,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 244,
+    "heatDaysFuture": 286
   },
   {
     "id": "p19.45_-71.50",
@@ -356,54 +356,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1500,
-    "heatDays": 177,
-    "waterBalanceMm": -125,
+    "heatDays": 228,
+    "waterBalanceMm": -167,
     "futureRainChangePct": -3,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.93,
         "sow": "Oct",
-        "future": 0.93
+        "future": 0.83
       },
       {
         "name": "Guandul",
-        "score": 0.81,
+        "score": 0.75,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.64
       },
       {
         "name": "Maíz",
-        "score": 0.77,
+        "score": 0.59,
         "sow": "Sep",
-        "future": 0.55
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.99,
         "sow": "Nov",
-        "irrigationMm": 129
+        "irrigationMm": 135
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.93,
         "sow": "Nov",
-        "irrigationMm": 229
+        "irrigationMm": 241
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.88,
         "sow": "Nov",
-        "irrigationMm": 159
+        "irrigationMm": 166
       }
     ],
     "slopePct": 6.1,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 228,
+    "heatDaysFuture": 272
   },
   {
     "id": "p19.75_-71.40",
@@ -414,54 +414,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1228,
-    "heatDays": 11,
-    "waterBalanceMm": 215,
+    "heatDays": 260,
+    "waterBalanceMm": -470,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "future": 1
-      },
-      {
-        "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "future": 0.9
+        "score": 0.87,
+        "sow": "Oct",
+        "future": 0.73
       },
       {
         "name": "Guandul",
-        "score": 0.85,
-        "sow": "Abr",
-        "future": 0.85
+        "score": 0.68,
+        "sow": "Sep",
+        "future": 0.44
+      },
+      {
+        "name": "Maíz",
+        "score": 0.45,
+        "sow": "Sep",
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "irrigationMm": 0
+        "score": 0.95,
+        "sow": "Nov",
+        "irrigationMm": 120
       },
       {
         "name": "Arroz",
-        "score": 0.95,
-        "sow": "Sep",
-        "irrigationMm": 3
+        "score": 0.85,
+        "sow": "Nov",
+        "irrigationMm": 219
       },
       {
         "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "irrigationMm": 0
+        "score": 0.81,
+        "sow": "Nov",
+        "irrigationMm": 151
       }
     ],
     "slopePct": 4.1,
     "erosionRisk": "media",
-    "heatDaysNow": 11,
-    "heatDaysFuture": 81
+    "heatDaysNow": 260,
+    "heatDaysFuture": 301
   },
   {
     "id": "p19.65_-71.40",
@@ -472,54 +472,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1256,
-    "heatDays": 177,
-    "waterBalanceMm": -367,
+    "heatDays": 267,
+    "waterBalanceMm": -450,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.85,
         "sow": "Oct",
-        "future": 0.93
-      },
-      {
-        "name": "Maíz",
-        "score": 0.77,
-        "sow": "Sep",
-        "future": 0.55
+        "future": 0.71
       },
       {
         "name": "Guandul",
-        "score": 0.77,
-        "sow": "Ago",
-        "future": 0.74
+        "score": 0.66,
+        "sow": "Sep",
+        "future": 0.35
+      },
+      {
+        "name": "Maíz",
+        "score": 0.45,
+        "sow": "Sep",
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.94,
         "sow": "Nov",
-        "irrigationMm": 117
+        "irrigationMm": 130
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.83,
         "sow": "Nov",
-        "irrigationMm": 210
+        "irrigationMm": 234
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.79,
         "sow": "Nov",
-        "irrigationMm": 147
+        "irrigationMm": 162
       }
     ],
     "slopePct": 2.6,
     "erosionRisk": "baja",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 267,
+    "heatDaysFuture": 307
   },
   {
     "id": "p19.55_-71.40",
@@ -530,54 +530,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1354,
-    "heatDays": 177,
-    "waterBalanceMm": -271,
+    "heatDays": 260,
+    "waterBalanceMm": -346,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.87,
         "sow": "Oct",
-        "future": 0.93
+        "future": 0.73
       },
       {
         "name": "Guandul",
-        "score": 0.8,
+        "score": 0.68,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.4
       },
       {
         "name": "Maíz",
-        "score": 0.77,
+        "score": 0.45,
         "sow": "Sep",
-        "future": 0.55
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.95,
         "sow": "Nov",
-        "irrigationMm": 124
+        "irrigationMm": 136
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.86,
         "sow": "Nov",
-        "irrigationMm": 221
+        "irrigationMm": 242
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.81,
         "sow": "Nov",
-        "irrigationMm": 154
+        "irrigationMm": 168
       }
     ],
     "slopePct": 3.4,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 260,
+    "heatDaysFuture": 301
   },
   {
     "id": "p19.45_-71.40",
@@ -588,54 +588,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1468,
-    "heatDays": 177,
-    "waterBalanceMm": -157,
+    "heatDays": 233,
+    "waterBalanceMm": -204,
     "futureRainChangePct": -3,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.93,
         "sow": "Oct",
-        "future": 0.93
+        "future": 0.82
       },
       {
         "name": "Guandul",
-        "score": 0.81,
+        "score": 0.74,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.61
       },
       {
         "name": "Maíz",
-        "score": 0.77,
+        "score": 0.57,
         "sow": "Sep",
-        "future": 0.55
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.99,
         "sow": "Nov",
-        "irrigationMm": 125
+        "irrigationMm": 132
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.92,
         "sow": "Nov",
-        "irrigationMm": 225
+        "irrigationMm": 238
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.88,
         "sow": "Nov",
-        "irrigationMm": 155
+        "irrigationMm": 164
       }
     ],
     "slopePct": 5.6,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 233,
+    "heatDaysFuture": 277
   },
   {
     "id": "p19.75_-71.30",
@@ -646,54 +646,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1230,
-    "heatDays": 11,
-    "waterBalanceMm": 216,
+    "heatDays": 241,
+    "waterBalanceMm": -448,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "future": 1
-      },
-      {
-        "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "future": 0.9
+        "score": 0.92,
+        "sow": "Oct",
+        "future": 0.8
       },
       {
         "name": "Guandul",
-        "score": 0.85,
-        "sow": "Abr",
-        "future": 0.85
+        "score": 0.73,
+        "sow": "Sep",
+        "future": 0.55
+      },
+      {
+        "name": "Maíz",
+        "score": 0.53,
+        "sow": "Sep",
+        "future": 0.46
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "irrigationMm": 0
+        "score": 0.98,
+        "sow": "Nov",
+        "irrigationMm": 110
       },
       {
         "name": "Arroz",
-        "score": 0.95,
-        "sow": "Sep",
-        "irrigationMm": 1
+        "score": 0.92,
+        "sow": "Nov",
+        "irrigationMm": 207
       },
       {
         "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "irrigationMm": 0
+        "score": 0.87,
+        "sow": "Nov",
+        "irrigationMm": 141
       }
     ],
     "slopePct": 5.7,
     "erosionRisk": "media",
-    "heatDaysNow": 11,
-    "heatDaysFuture": 81
+    "heatDaysNow": 241,
+    "heatDaysFuture": 283
   },
   {
     "id": "p19.65_-71.30",
@@ -704,54 +704,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1244,
-    "heatDays": 177,
-    "waterBalanceMm": -380,
+    "heatDays": 266,
+    "waterBalanceMm": -462,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.78,
+        "score": 0.69,
         "sow": "Oct",
-        "future": 0.74
+        "future": 0.57
       },
       {
         "name": "Guandul",
-        "score": 0.54,
-        "sow": "Ago",
-        "future": 0.52
+        "score": 0.47,
+        "sow": "Sep",
+        "future": 0.26
       },
       {
         "name": "Maíz",
-        "score": 0.51,
+        "score": 0.3,
         "sow": "Sep",
-        "future": 0.37
+        "future": 0.3
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
-        "score": 1,
+        "score": 0.88,
         "sow": "Nov",
-        "irrigationMm": 202
+        "irrigationMm": 226
       },
       {
         "name": "Sorgo",
-        "score": 0.8,
+        "score": 0.75,
         "sow": "Nov",
-        "irrigationMm": 110
+        "irrigationMm": 123
       },
       {
         "name": "Maíz",
-        "score": 0.6,
+        "score": 0.53,
         "sow": "Nov",
-        "irrigationMm": 140
+        "irrigationMm": 155
       }
     ],
     "slopePct": 2.1,
     "erosionRisk": "baja",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 266,
+    "heatDaysFuture": 306
   },
   {
     "id": "p19.55_-71.30",
@@ -762,54 +762,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1307,
-    "heatDays": 177,
-    "waterBalanceMm": -318,
+    "heatDays": 229,
+    "waterBalanceMm": -360,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.78,
+        "score": 0.75,
         "sow": "Oct",
-        "future": 0.74
+        "future": 0.66
       },
       {
         "name": "Guandul",
-        "score": 0.55,
+        "score": 0.53,
         "sow": "Sep",
-        "future": 0.52
+        "future": 0.45
       },
       {
         "name": "Maíz",
-        "score": 0.51,
+        "score": 0.39,
         "sow": "Sep",
-        "future": 0.37
+        "future": 0.3
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
-        "score": 1,
+        "score": 0.98,
         "sow": "Nov",
-        "irrigationMm": 212
+        "irrigationMm": 225
       },
       {
         "name": "Sorgo",
-        "score": 0.8,
+        "score": 0.79,
         "sow": "Nov",
-        "irrigationMm": 117
+        "irrigationMm": 123
       },
       {
         "name": "Maíz",
-        "score": 0.6,
+        "score": 0.59,
         "sow": "Nov",
-        "irrigationMm": 147
+        "irrigationMm": 154
       }
     ],
     "slopePct": 6.2,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 229,
+    "heatDaysFuture": 273
   },
   {
     "id": "p19.45_-71.30",
@@ -820,54 +820,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1422,
-    "heatDays": 177,
-    "waterBalanceMm": -204,
+    "heatDays": 238,
+    "waterBalanceMm": -256,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.78,
+        "score": 0.74,
         "sow": "Oct",
-        "future": 0.74
+        "future": 0.64
       },
       {
         "name": "Guandul",
-        "score": 0.57,
+        "score": 0.52,
         "sow": "Sep",
-        "future": 0.52
+        "future": 0.4
       },
       {
-        "name": "Maíz",
-        "score": 0.51,
-        "sow": "Sep",
-        "future": 0.37
+        "name": "Arroz",
+        "score": 0.48,
+        "sow": "Jun",
+        "future": 0.4
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
-        "score": 1,
+        "score": 0.97,
         "sow": "Nov",
-        "irrigationMm": 216
+        "irrigationMm": 231
       },
       {
         "name": "Sorgo",
-        "score": 0.8,
+        "score": 0.79,
         "sow": "Nov",
-        "irrigationMm": 118
+        "irrigationMm": 127
       },
       {
         "name": "Maíz",
-        "score": 0.6,
+        "score": 0.58,
         "sow": "Nov",
-        "irrigationMm": 149
+        "irrigationMm": 158
       }
     ],
     "slopePct": 5.1,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 238,
+    "heatDaysFuture": 281
   },
   {
     "id": "p19.75_-71.20",
@@ -878,54 +878,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1239,
-    "heatDays": 11,
-    "waterBalanceMm": 225,
+    "heatDays": 224,
+    "waterBalanceMm": -422,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "future": 1
-      },
-      {
-        "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "future": 0.9
+        "score": 0.94,
+        "sow": "Oct",
+        "future": 0.84
       },
       {
         "name": "Guandul",
-        "score": 0.85,
-        "sow": "Abr",
-        "future": 0.85
+        "score": 0.76,
+        "sow": "Sep",
+        "future": 0.66
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Sep",
+        "future": 0.47
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Abr",
-        "irrigationMm": 0
+        "score": 0.99,
+        "sow": "Nov",
+        "irrigationMm": 102
       },
       {
         "name": "Arroz",
-        "score": 0.95,
-        "sow": "Sep",
-        "irrigationMm": 0
+        "score": 0.94,
+        "sow": "Nov",
+        "irrigationMm": 196
       },
       {
         "name": "Maíz",
-        "score": 0.9,
-        "sow": "Ago",
-        "irrigationMm": 0
+        "score": 0.89,
+        "sow": "Nov",
+        "irrigationMm": 133
       }
     ],
     "slopePct": 9.3,
     "erosionRisk": "alta",
-    "heatDaysNow": 11,
-    "heatDaysFuture": 81
+    "heatDaysNow": 224,
+    "heatDaysFuture": 270
   },
   {
     "id": "p19.65_-71.20",
@@ -936,54 +936,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1245,
-    "heatDays": 177,
-    "waterBalanceMm": -379,
+    "heatDays": 264,
+    "waterBalanceMm": -459,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.86,
         "sow": "Oct",
-        "future": 0.93
-      },
-      {
-        "name": "Maíz",
-        "score": 0.77,
-        "sow": "Sep",
-        "future": 0.55
+        "future": 0.72
       },
       {
         "name": "Guandul",
-        "score": 0.77,
-        "sow": "Ago",
-        "future": 0.74
+        "score": 0.67,
+        "sow": "Sep",
+        "future": 0.42
+      },
+      {
+        "name": "Maíz",
+        "score": 0.45,
+        "sow": "Sep",
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.94,
         "sow": "Nov",
-        "irrigationMm": 104
+        "irrigationMm": 116
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.84,
         "sow": "Nov",
-        "irrigationMm": 195
+        "irrigationMm": 218
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.8,
         "sow": "Nov",
-        "irrigationMm": 134
+        "irrigationMm": 148
       }
     ],
     "slopePct": 1.8,
     "erosionRisk": "baja",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 264,
+    "heatDaysFuture": 304
   },
   {
     "id": "p19.55_-71.20",
@@ -994,54 +994,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1284,
-    "heatDays": 177,
-    "waterBalanceMm": -340,
+    "heatDays": 237,
+    "waterBalanceMm": -392,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.78,
+        "score": 0.74,
         "sow": "Oct",
-        "future": 0.74
+        "future": 0.64
       },
       {
         "name": "Guandul",
-        "score": 0.56,
+        "score": 0.52,
         "sow": "Sep",
-        "future": 0.52
+        "future": 0.41
       },
       {
         "name": "Maíz",
-        "score": 0.51,
+        "score": 0.36,
         "sow": "Sep",
-        "future": 0.37
+        "future": 0.3
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
-        "score": 1,
+        "score": 0.97,
         "sow": "Nov",
-        "irrigationMm": 203
+        "irrigationMm": 218
       },
       {
         "name": "Sorgo",
-        "score": 0.8,
+        "score": 0.79,
         "sow": "Nov",
-        "irrigationMm": 109
+        "irrigationMm": 118
       },
       {
         "name": "Maíz",
-        "score": 0.6,
+        "score": 0.58,
         "sow": "Nov",
-        "irrigationMm": 140
+        "irrigationMm": 149
       }
     ],
     "slopePct": 5.7,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 237,
+    "heatDaysFuture": 280
   },
   {
     "id": "p19.65_-71.10",
@@ -1052,54 +1052,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1259,
-    "heatDays": 177,
-    "waterBalanceMm": -365,
+    "heatDays": 261,
+    "waterBalanceMm": -441,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.87,
         "sow": "Oct",
-        "future": 0.93
+        "future": 0.73
       },
       {
         "name": "Guandul",
-        "score": 0.8,
+        "score": 0.68,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.5
       },
       {
         "name": "Maíz",
-        "score": 0.77,
+        "score": 0.45,
         "sow": "Sep",
-        "future": 0.55
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.95,
         "sow": "Nov",
-        "irrigationMm": 98
+        "irrigationMm": 110
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.85,
         "sow": "Nov",
-        "irrigationMm": 188
+        "irrigationMm": 209
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.81,
         "sow": "Nov",
-        "irrigationMm": 128
+        "irrigationMm": 142
       }
     ],
     "slopePct": 2.1,
     "erosionRisk": "baja",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 261,
+    "heatDaysFuture": 301
   },
   {
     "id": "p19.55_-71.10",
@@ -1110,54 +1110,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1295,
-    "heatDays": 177,
-    "waterBalanceMm": -330,
+    "heatDays": 251,
+    "waterBalanceMm": -397,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.78,
+        "score": 0.72,
         "sow": "Oct",
-        "future": 0.74
+        "future": 0.6
       },
       {
         "name": "Guandul",
-        "score": 0.57,
+        "score": 0.5,
         "sow": "Sep",
-        "future": 0.52
+        "future": 0.33
       },
       {
         "name": "Maíz",
-        "score": 0.51,
+        "score": 0.3,
         "sow": "Sep",
-        "future": 0.37
+        "future": 0.3
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
-        "score": 1,
+        "score": 0.94,
         "sow": "Nov",
-        "irrigationMm": 195
+        "irrigationMm": 214
       },
       {
         "name": "Sorgo",
-        "score": 0.8,
+        "score": 0.77,
         "sow": "Nov",
-        "irrigationMm": 103
+        "irrigationMm": 114
       },
       {
         "name": "Maíz",
-        "score": 0.6,
+        "score": 0.56,
         "sow": "Nov",
-        "irrigationMm": 133
+        "irrigationMm": 145
       }
     ],
     "slopePct": 2.9,
     "erosionRisk": "baja",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 251,
+    "heatDaysFuture": 293
   },
   {
     "id": "p19.45_-71.10",
@@ -1168,54 +1168,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1371,
-    "heatDays": 177,
-    "waterBalanceMm": -254,
+    "heatDays": 232,
+    "waterBalanceMm": -300,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.93,
         "sow": "Oct",
-        "future": 0.93
+        "future": 0.82
       },
       {
         "name": "Guandul",
-        "score": 0.81,
+        "score": 0.74,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.62
       },
       {
         "name": "Maíz",
-        "score": 0.77,
+        "score": 0.57,
         "sow": "Sep",
-        "future": 0.55
+        "future": 0.45
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.99,
         "sow": "Nov",
-        "irrigationMm": 103
+        "irrigationMm": 110
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.93,
         "sow": "Nov",
-        "irrigationMm": 196
+        "irrigationMm": 209
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.88,
         "sow": "Nov",
-        "irrigationMm": 133
+        "irrigationMm": 141
       }
     ],
     "slopePct": 12.7,
     "erosionRisk": "alta",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 232,
+    "heatDaysFuture": 276
   },
   {
     "id": "p19.75_-71.00",
@@ -1226,66 +1226,8 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1338,
-    "heatDays": 11,
-    "waterBalanceMm": 324,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Abr",
-        "future": 0.8
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Ago",
-        "future": 0.6
-      },
-      {
-        "name": "Guandul",
-        "score": 0.6,
-        "sow": "Abr",
-        "future": 0.6
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Sep",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Abr",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Ago",
-        "irrigationMm": 0
-      }
-    ],
-    "slopePct": 14.3,
-    "erosionRisk": "alta",
-    "heatDaysNow": 11,
-    "heatDaysFuture": 81
-  },
-  {
-    "id": "p19.65_-71.00",
-    "lat": 19.65,
-    "lon": -71,
-    "name": "7 km de Esperanza",
-    "elevationM": 129,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1323,
-    "heatDays": 177,
-    "waterBalanceMm": -301,
+    "heatDays": 167,
+    "waterBalanceMm": -203,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -1299,13 +1241,13 @@
         "name": "Guandul",
         "score": 0.57,
         "sow": "Sep",
-        "future": 0.52
+        "future": 0.56
       },
       {
         "name": "Maíz",
-        "score": 0.51,
+        "score": 0.52,
         "sow": "Sep",
-        "future": 0.41
+        "future": 0.46
       }
     ],
     "topIrrigated": [
@@ -1313,25 +1255,83 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 169
+        "irrigationMm": 148
       },
       {
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "irrigationMm": 78
+        "irrigationMm": 67
       },
       {
         "name": "Maíz",
         "score": 0.6,
         "sow": "Nov",
-        "irrigationMm": 109
+        "irrigationMm": 90
+      }
+    ],
+    "slopePct": 14.3,
+    "erosionRisk": "alta",
+    "heatDaysNow": 167,
+    "heatDaysFuture": 236
+  },
+  {
+    "id": "p19.65_-71.00",
+    "lat": 19.65,
+    "lon": -71,
+    "name": "7 km de Esperanza",
+    "elevationM": 129,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1323,
+    "heatDays": 246,
+    "waterBalanceMm": -363,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.72,
+        "sow": "Oct",
+        "future": 0.71
+      },
+      {
+        "name": "Guandul",
+        "score": 0.5,
+        "sow": "Sep",
+        "future": 0.46
+      },
+      {
+        "name": "Maíz",
+        "score": 0.33,
+        "sow": "Oct",
+        "future": 0.33
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 0.95,
+        "sow": "Nov",
+        "irrigationMm": 182
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.78,
+        "sow": "Nov",
+        "irrigationMm": 88
+      },
+      {
+        "name": "Maíz",
+        "score": 0.57,
+        "sow": "Nov",
+        "irrigationMm": 120
       }
     ],
     "slopePct": 3.7,
     "erosionRisk": "media",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 246,
+    "heatDaysFuture": 288
   },
   {
     "id": "p19.55_-71.00",
@@ -1342,54 +1342,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1337,
-    "heatDays": 177,
-    "waterBalanceMm": -288,
+    "heatDays": 259,
+    "waterBalanceMm": -363,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.87,
         "sow": "Oct",
-        "future": 0.97
+        "future": 0.85
       },
       {
         "name": "Guandul",
-        "score": 0.81,
+        "score": 0.69,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.61
       },
       {
-        "name": "Maíz",
-        "score": 0.77,
-        "sow": "Sep",
-        "future": 0.57
+        "name": "Habichuela",
+        "score": 0.53,
+        "sow": "Nov",
+        "future": 0.14
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.95,
         "sow": "Nov",
-        "irrigationMm": 83
+        "irrigationMm": 94
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.86,
         "sow": "Nov",
-        "irrigationMm": 173
+        "irrigationMm": 190
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.81,
         "sow": "Nov",
-        "irrigationMm": 113
+        "irrigationMm": 126
       }
     ],
     "slopePct": 2.4,
     "erosionRisk": "baja",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 259,
+    "heatDaysFuture": 300
   },
   {
     "id": "p19.45_-71.00",
@@ -1400,26 +1400,26 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1370,
-    "heatDays": 177,
-    "waterBalanceMm": -255,
+    "heatDays": 225,
+    "waterBalanceMm": -294,
     "futureRainChangePct": -2,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.98,
+        "score": 0.94,
         "sow": "Oct",
-        "future": 0.93
+        "future": 0.91
       },
       {
         "name": "Guandul",
-        "score": 0.81,
+        "score": 0.75,
         "sow": "Sep",
-        "future": 0.74
+        "future": 0.66
       },
       {
         "name": "Maíz",
-        "score": 0.77,
+        "score": 0.6,
         "sow": "Sep",
         "future": 0.55
       }
@@ -1427,27 +1427,27 @@
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
+        "score": 0.99,
         "sow": "Nov",
-        "irrigationMm": 84
+        "irrigationMm": 90
       },
       {
         "name": "Arroz",
-        "score": 0.95,
+        "score": 0.94,
         "sow": "Nov",
-        "irrigationMm": 174
+        "irrigationMm": 183
       },
       {
         "name": "Maíz",
-        "score": 0.9,
+        "score": 0.89,
         "sow": "Nov",
-        "irrigationMm": 114
+        "irrigationMm": 121
       }
     ],
     "slopePct": 9.3,
     "erosionRisk": "alta",
-    "heatDaysNow": 177,
-    "heatDaysFuture": 234
+    "heatDaysNow": 225,
+    "heatDaysFuture": 270
   },
   {
     "id": "p19.55_-70.90",
@@ -1458,8 +1458,8 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1373,
-    "heatDays": 126,
-    "waterBalanceMm": -145,
+    "heatDays": 193,
+    "waterBalanceMm": -185,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -1467,19 +1467,19 @@
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "future": 0.8
+        "future": 0.78
       },
       {
         "name": "Guandul",
-        "score": 0.59,
+        "score": 0.56,
         "sow": "Sep",
-        "future": 0.58
+        "future": 0.56
       },
       {
         "name": "Maíz",
-        "score": 0.56,
+        "score": 0.47,
         "sow": "Sep",
-        "future": 0.49
+        "future": 0.46
       }
     ],
     "topIrrigated": [
@@ -1487,25 +1487,25 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 134
+        "irrigationMm": 143
       },
       {
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "irrigationMm": 58
+        "irrigationMm": 63
       },
       {
         "name": "Maíz",
         "score": 0.6,
         "sow": "Nov",
-        "irrigationMm": 78
+        "irrigationMm": 84
       }
     ],
     "slopePct": 2.6,
     "erosionRisk": "baja",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
+    "heatDaysNow": 193,
+    "heatDaysFuture": 257
   },
   {
     "id": "p19.55_-70.80",
@@ -1516,8 +1516,8 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1402,
-    "heatDays": 126,
-    "waterBalanceMm": -117,
+    "heatDays": 164,
+    "waterBalanceMm": -140,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -1525,19 +1525,19 @@
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "future": 0.8
+        "future": 0.79
       },
       {
         "name": "Guandul",
         "score": 0.6,
-        "sow": "Oct",
-        "future": 0.59
+        "sow": "Nov",
+        "future": 0.57
       },
       {
         "name": "Maíz",
-        "score": 0.56,
+        "score": 0.52,
         "sow": "Sep",
-        "future": 0.54
+        "future": 0.5
       }
     ],
     "topIrrigated": [
@@ -1545,65 +1545,7 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 122
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "irrigationMm": 50
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Nov",
-        "irrigationMm": 70
-      }
-    ],
-    "slopePct": 4.2,
-    "erosionRisk": "media",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
-  },
-  {
-    "id": "p19.45_-70.80",
-    "lat": 19.45,
-    "lon": -70.8,
-    "name": "10 km de Santiago",
-    "elevationM": 213,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1387,
-    "heatDays": 126,
-    "waterBalanceMm": -133,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "future": 0.8
-      },
-      {
-        "name": "Guandul",
-        "score": 0.59,
-        "sow": "Sep",
-        "future": 0.59
-      },
-      {
-        "name": "Maíz",
-        "score": 0.56,
-        "sow": "Sep",
-        "future": 0.52
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Nov",
-        "irrigationMm": 128
+        "irrigationMm": 127
       },
       {
         "name": "Sorgo",
@@ -1618,10 +1560,68 @@
         "irrigationMm": 73
       }
     ],
+    "slopePct": 4.2,
+    "erosionRisk": "media",
+    "heatDaysNow": 164,
+    "heatDaysFuture": 234
+  },
+  {
+    "id": "p19.45_-70.80",
+    "lat": 19.45,
+    "lon": -70.8,
+    "name": "10 km de Santiago",
+    "elevationM": 213,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1387,
+    "heatDays": 152,
+    "waterBalanceMm": -148,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.79
+      },
+      {
+        "name": "Guandul",
+        "score": 0.58,
+        "sow": "Sep",
+        "future": 0.58
+      },
+      {
+        "name": "Maíz",
+        "score": 0.54,
+        "sow": "Sep",
+        "future": 0.51
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 131
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 55
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 75
+      }
+    ],
     "slopePct": 4.3,
     "erosionRisk": "media",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
+    "heatDaysNow": 152,
+    "heatDaysFuture": 224
   },
   {
     "id": "p19.45_-70.70",
@@ -1632,8 +1632,8 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1418,
-    "heatDays": 126,
-    "waterBalanceMm": -102,
+    "heatDays": 162,
+    "waterBalanceMm": -124,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -1641,19 +1641,19 @@
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "future": 0.8
+        "future": 0.79
       },
       {
         "name": "Guandul",
         "score": 0.6,
-        "sow": "Oct",
-        "future": 0.59
+        "sow": "Nov",
+        "future": 0.58
       },
       {
         "name": "Maíz",
-        "score": 0.56,
+        "score": 0.53,
         "sow": "Sep",
-        "future": 0.54
+        "future": 0.5
       }
     ],
     "topIrrigated": [
@@ -1661,7 +1661,123 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 116
+        "irrigationMm": 121
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 49
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 69
+      }
+    ],
+    "slopePct": 3.4,
+    "erosionRisk": "media",
+    "heatDaysNow": 162,
+    "heatDaysFuture": 233
+  },
+  {
+    "id": "p19.45_-70.60",
+    "lat": 19.45,
+    "lon": -70.6,
+    "name": "Licey al Medio",
+    "elevationM": 215,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1457,
+    "heatDays": 152,
+    "waterBalanceMm": -77,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.79
+      },
+      {
+        "name": "Guandul",
+        "score": 0.6,
+        "sow": "Nov",
+        "future": 0.58
+      },
+      {
+        "name": "Maíz",
+        "score": 0.54,
+        "sow": "Sep",
+        "future": 0.51
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 107
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 41
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 61
+      }
+    ],
+    "slopePct": 2.1,
+    "erosionRisk": "baja",
+    "heatDaysNow": 152,
+    "heatDaysFuture": 223
+  },
+  {
+    "id": "p19.35_-70.60",
+    "lat": 19.35,
+    "lon": -70.6,
+    "name": "9 km de Licey al Medio",
+    "elevationM": 219,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1439,
+    "heatDays": 151,
+    "waterBalanceMm": -95,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.79
+      },
+      {
+        "name": "Guandul",
+        "score": 0.6,
+        "sow": "Nov",
+        "future": 0.58
+      },
+      {
+        "name": "Maíz",
+        "score": 0.54,
+        "sow": "Sep",
+        "future": 0.51
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 117
       },
       {
         "name": "Sorgo",
@@ -1676,79 +1792,79 @@
         "irrigationMm": 66
       }
     ],
-    "slopePct": 3.4,
+    "slopePct": 4.1,
     "erosionRisk": "media",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
+    "heatDaysNow": 151,
+    "heatDaysFuture": 222
   },
   {
-    "id": "p19.45_-70.60",
-    "lat": 19.45,
+    "id": "p19.25_-70.60",
+    "lat": 19.25,
     "lon": -70.6,
-    "name": "Licey al Medio",
-    "elevationM": 215,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1457,
-    "heatDays": 126,
-    "waterBalanceMm": -63,
+    "name": "8 km de La Vega",
+    "elevationM": 250,
+    "soil": "Franco arcilloso",
+    "soilGroup": "franco-arcilloso",
+    "rainMm": 1447,
+    "heatDays": 138,
+    "waterBalanceMm": -81,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 0.8,
+        "score": 1,
         "sow": "Nov",
-        "future": 0.8
+        "future": 0.99
       },
       {
         "name": "Guandul",
-        "score": 0.6,
-        "sow": "Oct",
-        "future": 0.59
+        "score": 0.85,
+        "sow": "Nov",
+        "future": 0.83
       },
       {
         "name": "Maíz",
-        "score": 0.56,
+        "score": 0.83,
         "sow": "Sep",
-        "future": 0.54
+        "future": 0.79
       }
     ],
     "topIrrigated": [
       {
-        "name": "Arroz",
+        "name": "Sorgo",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 104
+        "irrigationMm": 50
       },
       {
-        "name": "Sorgo",
-        "score": 0.8,
+        "name": "Arroz",
+        "score": 0.95,
         "sow": "Nov",
-        "irrigationMm": 39
+        "irrigationMm": 125
       },
       {
         "name": "Maíz",
-        "score": 0.6,
+        "score": 0.9,
         "sow": "Nov",
-        "irrigationMm": 59
+        "irrigationMm": 70
       }
     ],
-    "slopePct": 2.1,
-    "erosionRisk": "baja",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
+    "slopePct": 13.8,
+    "erosionRisk": "alta",
+    "heatDaysNow": 138,
+    "heatDaysFuture": 212
   },
   {
-    "id": "p19.35_-70.60",
+    "id": "p19.35_-70.50",
     "lat": 19.35,
-    "lon": -70.6,
-    "name": "9 km de Licey al Medio",
-    "elevationM": 219,
+    "lon": -70.5,
+    "name": "5 km de Moca",
+    "elevationM": 148,
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
-    "rainMm": 1439,
-    "heatDays": 126,
+    "rainMm": 1469,
+    "heatDays": 176,
     "waterBalanceMm": -81,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
@@ -1757,19 +1873,19 @@
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "future": 0.8
+        "future": 0.79
       },
       {
         "name": "Guandul",
-        "score": 0.6,
+        "score": 0.59,
         "sow": "Oct",
-        "future": 0.59
+        "future": 0.57
       },
       {
         "name": "Maíz",
-        "score": 0.56,
-        "sow": "Sep",
-        "future": 0.54
+        "score": 0.53,
+        "sow": "Oct",
+        "future": 0.49
       }
     ],
     "topIrrigated": [
@@ -1777,7 +1893,7 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 114
+        "irrigationMm": 113
       },
       {
         "name": "Sorgo",
@@ -1792,80 +1908,22 @@
         "irrigationMm": 64
       }
     ],
-    "slopePct": 4.1,
-    "erosionRisk": "media",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
+    "slopePct": 2.4,
+    "erosionRisk": "baja",
+    "heatDaysNow": 176,
+    "heatDaysFuture": 242
   },
   {
-    "id": "p19.25_-70.60",
+    "id": "p19.25_-70.50",
     "lat": 19.25,
-    "lon": -70.6,
-    "name": "8 km de La Vega",
-    "elevationM": 250,
-    "soil": "Franco arcilloso",
-    "soilGroup": "franco-arcilloso",
-    "rainMm": 1447,
-    "heatDays": 126,
-    "waterBalanceMm": -74,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 1,
-        "sow": "Nov",
-        "future": 1
-      },
-      {
-        "name": "Maíz",
-        "score": 0.85,
-        "sow": "Sep",
-        "future": 0.81
-      },
-      {
-        "name": "Guandul",
-        "score": 0.85,
-        "sow": "Nov",
-        "future": 0.84
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Sorgo",
-        "score": 1,
-        "sow": "Nov",
-        "irrigationMm": 49
-      },
-      {
-        "name": "Arroz",
-        "score": 0.95,
-        "sow": "Nov",
-        "irrigationMm": 123
-      },
-      {
-        "name": "Maíz",
-        "score": 0.9,
-        "sow": "Nov",
-        "irrigationMm": 69
-      }
-    ],
-    "slopePct": 13.8,
-    "erosionRisk": "alta",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
-  },
-  {
-    "id": "p19.35_-70.50",
-    "lat": 19.35,
     "lon": -70.5,
-    "name": "5 km de Moca",
-    "elevationM": 148,
+    "name": "5 km de La Vega",
+    "elevationM": 91,
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
-    "rainMm": 1469,
-    "heatDays": 126,
-    "waterBalanceMm": -51,
+    "rainMm": 1462,
+    "heatDays": 197,
+    "waterBalanceMm": -102,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -1873,19 +1931,77 @@
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "future": 0.8
+        "future": 0.78
       },
       {
         "name": "Guandul",
-        "score": 0.6,
-        "sow": "Oct",
-        "future": 0.59
+        "score": 0.59,
+        "sow": "Nov",
+        "future": 0.56
       },
       {
         "name": "Maíz",
-        "score": 0.56,
-        "sow": "Sep",
-        "future": 0.54
+        "score": 0.5,
+        "sow": "Oct",
+        "future": 0.46
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 126
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 50
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 70
+      }
+    ],
+    "slopePct": 1.8,
+    "erosionRisk": "baja",
+    "heatDaysNow": 197,
+    "heatDaysFuture": 260
+  },
+  {
+    "id": "p19.35_-70.40",
+    "lat": 19.35,
+    "lon": -70.4,
+    "name": "4 km de Salcedo",
+    "elevationM": 156,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1512,
+    "heatDays": 173,
+    "waterBalanceMm": -36,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.79
+      },
+      {
+        "name": "Guandul",
+        "score": 0.59,
+        "sow": "Oct",
+        "future": 0.57
+      },
+      {
+        "name": "Maíz",
+        "score": 0.57,
+        "sow": "Oct",
+        "future": 0.49
       }
     ],
     "topIrrigated": [
@@ -1905,129 +2021,13 @@
         "name": "Maíz",
         "score": 0.6,
         "sow": "Nov",
-        "irrigationMm": 60
-      }
-    ],
-    "slopePct": 2.4,
-    "erosionRisk": "baja",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
-  },
-  {
-    "id": "p19.25_-70.50",
-    "lat": 19.25,
-    "lon": -70.5,
-    "name": "5 km de La Vega",
-    "elevationM": 91,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1462,
-    "heatDays": 126,
-    "waterBalanceMm": -59,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "future": 0.8
-      },
-      {
-        "name": "Guandul",
-        "score": 0.6,
-        "sow": "Oct",
-        "future": 0.59
-      },
-      {
-        "name": "Maíz",
-        "score": 0.56,
-        "sow": "Sep",
-        "future": 0.54
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Nov",
-        "irrigationMm": 116
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "irrigationMm": 45
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Nov",
-        "irrigationMm": 65
-      }
-    ],
-    "slopePct": 1.8,
-    "erosionRisk": "baja",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
-  },
-  {
-    "id": "p19.35_-70.40",
-    "lat": 19.35,
-    "lon": -70.4,
-    "name": "4 km de Salcedo",
-    "elevationM": 156,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1512,
-    "heatDays": 126,
-    "waterBalanceMm": -8,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "future": 0.8
-      },
-      {
-        "name": "Guandul",
-        "score": 0.6,
-        "sow": "Oct",
-        "future": 0.59
-      },
-      {
-        "name": "Maíz",
-        "score": 0.59,
-        "sow": "Oct",
-        "future": 0.54
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Nov",
-        "irrigationMm": 101
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "irrigationMm": 37
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Nov",
-        "irrigationMm": 57
+        "irrigationMm": 61
       }
     ],
     "slopePct": 2.8,
     "erosionRisk": "baja",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
+    "heatDaysNow": 173,
+    "heatDaysFuture": 241
   },
   {
     "id": "p19.25_-70.40",
@@ -2038,8 +2038,8 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1501,
-    "heatDays": 126,
-    "waterBalanceMm": -20,
+    "heatDays": 203,
+    "waterBalanceMm": -66,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -2047,19 +2047,19 @@
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "future": 0.8
+        "future": 0.78
       },
       {
         "name": "Guandul",
-        "score": 0.6,
-        "sow": "Oct",
-        "future": 0.59
+        "score": 0.59,
+        "sow": "Nov",
+        "future": 0.55
       },
       {
-        "name": "Cacao",
-        "score": 0.57,
-        "sow": "Ene",
-        "future": 0.47
+        "name": "Maíz",
+        "score": 0.54,
+        "sow": "Oct",
+        "future": 0.45
       }
     ],
     "topIrrigated": [
@@ -2067,25 +2067,25 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 112
+        "irrigationMm": 122
       },
       {
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "irrigationMm": 43
+        "irrigationMm": 48
       },
       {
         "name": "Maíz",
         "score": 0.6,
         "sow": "Nov",
-        "irrigationMm": 62
+        "irrigationMm": 68
       }
     ],
     "slopePct": 1.3,
     "erosionRisk": "baja",
-    "heatDaysNow": 126,
-    "heatDaysFuture": 201
+    "heatDaysNow": 203,
+    "heatDaysFuture": 264
   },
   {
     "id": "p19.15_-70.40",
@@ -2096,54 +2096,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1534,
-    "heatDays": 4,
-    "waterBalanceMm": 108,
+    "heatDays": 235,
+    "waterBalanceMm": -137,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
         "score": 1,
-        "sow": "Jul",
-        "future": 1
-      },
-      {
-        "name": "Maíz",
-        "score": 0.9,
-        "sow": "Sep",
-        "future": 0.9
+        "sow": "Nov",
+        "future": 0.94
       },
       {
         "name": "Guandul",
-        "score": 0.85,
-        "sow": "Jul",
-        "future": 0.85
+        "score": 0.81,
+        "sow": "Oct",
+        "future": 0.71
+      },
+      {
+        "name": "Maíz",
+        "score": 0.79,
+        "sow": "Oct",
+        "future": 0.63
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
         "score": 1,
-        "sow": "Jul",
-        "irrigationMm": 2
+        "sow": "Nov",
+        "irrigationMm": 69
       },
       {
         "name": "Arroz",
         "score": 0.95,
-        "sow": "Ago",
-        "irrigationMm": 58
+        "sow": "Nov",
+        "irrigationMm": 161
       },
       {
         "name": "Maíz",
         "score": 0.9,
-        "sow": "Sep",
-        "irrigationMm": 0
+        "sow": "Nov",
+        "irrigationMm": 96
       }
     ],
     "slopePct": 1.7,
     "erosionRisk": "baja",
-    "heatDaysNow": 4,
-    "heatDaysFuture": 24
+    "heatDaysNow": 235,
+    "heatDaysFuture": 298
   },
   {
     "id": "p19.55_-70.30",
@@ -2154,54 +2154,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1643,
-    "heatDays": 45,
-    "waterBalanceMm": 401,
+    "heatDays": 166,
+    "waterBalanceMm": 101,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
         "score": 1,
-        "sow": "Jul",
-        "future": 1
+        "sow": "Nov",
+        "future": 0.99
       },
       {
         "name": "Maíz",
-        "score": 0.9,
-        "sow": "Oct",
-        "future": 0.9
+        "score": 0.87,
+        "sow": "Nov",
+        "future": 0.88
       },
       {
-        "name": "Cacao",
-        "score": 0.9,
-        "sow": "Ene",
-        "future": 0.88
+        "name": "Guandul",
+        "score": 0.84,
+        "sow": "Nov",
+        "future": 0.81
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
         "score": 1,
-        "sow": "Jul",
-        "irrigationMm": 0
+        "sow": "Nov",
+        "irrigationMm": 27
       },
       {
         "name": "Arroz",
         "score": 0.95,
-        "sow": "Oct",
-        "irrigationMm": 22
+        "sow": "Nov",
+        "irrigationMm": 87
       },
       {
         "name": "Maíz",
         "score": 0.9,
-        "sow": "Oct",
-        "irrigationMm": 6
+        "sow": "Nov",
+        "irrigationMm": 47
       }
     ],
     "slopePct": 14.7,
     "erosionRisk": "alta",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
+    "heatDaysNow": 166,
+    "heatDaysFuture": 235
   },
   {
     "id": "p19.35_-70.30",
@@ -2212,54 +2212,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1558,
-    "heatDays": 45,
-    "waterBalanceMm": 314,
+    "heatDays": 169,
+    "waterBalanceMm": 12,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
         "score": 0.8,
-        "sow": "Jul",
-        "future": 0.8
+        "sow": "Nov",
+        "future": 0.79
+      },
+      {
+        "name": "Guandul",
+        "score": 0.6,
+        "sow": "Nov",
+        "future": 0.57
       },
       {
         "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.59
-      },
-      {
-        "name": "Cacao",
-        "score": 0.6,
-        "sow": "Ene",
-        "future": 0.59
+        "score": 0.57,
+        "sow": "Oct",
+        "future": 0.53
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
         "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 31
+        "sow": "Nov",
+        "irrigationMm": 103
       },
       {
         "name": "Sorgo",
         "score": 0.8,
-        "sow": "Jul",
-        "irrigationMm": 0
+        "sow": "Nov",
+        "irrigationMm": 38
       },
       {
         "name": "Maíz",
         "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
+        "sow": "Nov",
+        "irrigationMm": 58
       }
     ],
     "slopePct": 3.4,
     "erosionRisk": "media",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
+    "heatDaysNow": 169,
+    "heatDaysFuture": 238
   },
   {
     "id": "p19.25_-70.30",
@@ -2270,66 +2270,8 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1536,
-    "heatDays": 45,
-    "waterBalanceMm": 291,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "future": 0.8
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.59
-      },
-      {
-        "name": "Cacao",
-        "score": 0.6,
-        "sow": "Ene",
-        "future": 0.59
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 34
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
-      }
-    ],
-    "slopePct": 1.7,
-    "erosionRisk": "baja",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
-  },
-  {
-    "id": "p19.15_-70.30",
-    "lat": 19.15,
-    "lon": -70.3,
-    "name": "17 km de San Francisco de Macorís",
-    "elevationM": 50,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1557,
-    "heatDays": 205,
-    "waterBalanceMm": -91,
+    "heatDays": 232,
+    "waterBalanceMm": -132,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -2337,135 +2279,19 @@
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "future": 0.79
+        "future": 0.76
       },
       {
         "name": "Guandul",
-        "score": 0.58,
+        "score": 0.57,
         "sow": "Oct",
-        "future": 0.54
-      },
-      {
-        "name": "Maíz",
-        "score": 0.55,
-        "sow": "Oct",
-        "future": 0.49
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Nov",
-        "irrigationMm": 154
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "irrigationMm": 65
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Nov",
-        "irrigationMm": 90
-      }
-    ],
-    "slopePct": 1.6,
-    "erosionRisk": "baja",
-    "heatDaysNow": 204,
-    "heatDaysFuture": 269
-  },
-  {
-    "id": "p19.25_-70.20",
-    "lat": 19.25,
-    "lon": -70.2,
-    "name": "8 km de San Francisco de Macorís",
-    "elevationM": 77,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1577,
-    "heatDays": 45,
-    "waterBalanceMm": 333,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "future": 0.8
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.59
-      },
-      {
-        "name": "Cacao",
-        "score": 0.6,
-        "sow": "Ene",
-        "future": 0.59
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 33
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
-      }
-    ],
-    "slopePct": 2.1,
-    "erosionRisk": "baja",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
-  },
-  {
-    "id": "p19.15_-70.20",
-    "lat": 19.15,
-    "lon": -70.2,
-    "name": "11 km de Pimentel",
-    "elevationM": 40,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1586,
-    "heatDays": 205,
-    "waterBalanceMm": -62,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "future": 0.79
-      },
-      {
-        "name": "Arroz",
-        "score": 0.59,
-        "sow": "Ago",
         "future": 0.5
       },
       {
-        "name": "Guandul",
-        "score": 0.58,
+        "name": "Maíz",
+        "score": 0.54,
         "sow": "Oct",
-        "future": 0.54
+        "future": 0.45
       }
     ],
     "topIrrigated": [
@@ -2473,239 +2299,7 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 153
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "irrigationMm": 64
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Nov",
-        "irrigationMm": 89
-      }
-    ],
-    "slopePct": 1.6,
-    "erosionRisk": "baja",
-    "heatDaysNow": 204,
-    "heatDaysFuture": 269
-  },
-  {
-    "id": "p19.55_-70.10",
-    "lat": 19.55,
-    "lon": -70.1,
-    "name": "32 km de San Francisco de Macorís",
-    "elevationM": 91,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1756,
-    "heatDays": 45,
-    "waterBalanceMm": 513,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "future": 0.8
-      },
-      {
-        "name": "Arroz",
-        "score": 0.72,
-        "sow": "Ago",
-        "future": 0.74
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.6
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 17
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
-      }
-    ],
-    "slopePct": 8.3,
-    "erosionRisk": "alta",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
-  },
-  {
-    "id": "p19.45_-70.10",
-    "lat": 19.45,
-    "lon": -70.1,
-    "name": "23 km de San Francisco de Macorís",
-    "elevationM": 166,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1704,
-    "heatDays": 45,
-    "waterBalanceMm": 461,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "future": 0.8
-      },
-      {
-        "name": "Arroz",
-        "score": 0.69,
-        "sow": "Ago",
-        "future": 0.71
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.6
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 20
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Jul",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
-      }
-    ],
-    "slopePct": 10.6,
-    "erosionRisk": "alta",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
-  },
-  {
-    "id": "p19.25_-70.10",
-    "lat": 19.25,
-    "lon": -70.1,
-    "name": "8 km de Pimentel",
-    "elevationM": 99,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1628,
-    "heatDays": 45,
-    "waterBalanceMm": 383,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Abr",
-        "future": 0.8
-      },
-      {
-        "name": "Arroz",
-        "score": 0.62,
-        "sow": "Ago",
-        "future": 0.62
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.59
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 31
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Abr",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
-      }
-    ],
-    "slopePct": 4.9,
-    "erosionRisk": "media",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
-  },
-  {
-    "id": "p19.15_-70.10",
-    "lat": 19.15,
-    "lon": -70.1,
-    "name": "Pimentel",
-    "elevationM": 32,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1642,
-    "heatDays": 205,
-    "waterBalanceMm": -7,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Nov",
-        "future": 0.79
-      },
-      {
-        "name": "Arroz",
-        "score": 0.68,
-        "sow": "Ago",
-        "future": 0.5
-      },
-      {
-        "name": "Guandul",
-        "score": 0.58,
-        "sow": "Oct",
-        "future": 0.54
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Nov",
-        "irrigationMm": 152
+        "irrigationMm": 150
       },
       {
         "name": "Sorgo",
@@ -2717,13 +2311,419 @@
         "name": "Maíz",
         "score": 0.6,
         "sow": "Nov",
-        "irrigationMm": 88
+        "irrigationMm": 85
+      }
+    ],
+    "slopePct": 1.7,
+    "erosionRisk": "baja",
+    "heatDaysNow": 232,
+    "heatDaysFuture": 295
+  },
+  {
+    "id": "p19.15_-70.30",
+    "lat": 19.15,
+    "lon": -70.3,
+    "name": "17 km de San Francisco de Macorís",
+    "elevationM": 50,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1557,
+    "heatDays": 240,
+    "waterBalanceMm": -117,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.75
+      },
+      {
+        "name": "Guandul",
+        "score": 0.57,
+        "sow": "Oct",
+        "future": 0.49
+      },
+      {
+        "name": "Arroz",
+        "score": 0.54,
+        "sow": "Ago",
+        "future": 0.5
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 0.99,
+        "sow": "Nov",
+        "irrigationMm": 160
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 68
+      },
+      {
+        "name": "Maíz",
+        "score": 0.59,
+        "sow": "Nov",
+        "irrigationMm": 95
+      }
+    ],
+    "slopePct": 1.6,
+    "erosionRisk": "baja",
+    "heatDaysNow": 240,
+    "heatDaysFuture": 301
+  },
+  {
+    "id": "p19.25_-70.20",
+    "lat": 19.25,
+    "lon": -70.2,
+    "name": "8 km de San Francisco de Macorís",
+    "elevationM": 77,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1577,
+    "heatDays": 231,
+    "waterBalanceMm": -89,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.76
+      },
+      {
+        "name": "Guandul",
+        "score": 0.57,
+        "sow": "Oct",
+        "future": 0.51
+      },
+      {
+        "name": "Arroz",
+        "score": 0.54,
+        "sow": "Ago",
+        "future": 0.5
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 147
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 61
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 84
+      }
+    ],
+    "slopePct": 2.1,
+    "erosionRisk": "baja",
+    "heatDaysNow": 230,
+    "heatDaysFuture": 294
+  },
+  {
+    "id": "p19.15_-70.20",
+    "lat": 19.15,
+    "lon": -70.2,
+    "name": "11 km de Pimentel",
+    "elevationM": 40,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1586,
+    "heatDays": 243,
+    "waterBalanceMm": -90,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.79,
+        "sow": "Nov",
+        "future": 0.75
+      },
+      {
+        "name": "Guandul",
+        "score": 0.57,
+        "sow": "Oct",
+        "future": 0.49
+      },
+      {
+        "name": "Maíz",
+        "score": 0.53,
+        "sow": "Oct",
+        "future": 0.43
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 0.98,
+        "sow": "Nov",
+        "irrigationMm": 159
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.79,
+        "sow": "Nov",
+        "irrigationMm": 67
+      },
+      {
+        "name": "Maíz",
+        "score": 0.59,
+        "sow": "Nov",
+        "irrigationMm": 94
+      }
+    ],
+    "slopePct": 1.6,
+    "erosionRisk": "baja",
+    "heatDaysNow": 243,
+    "heatDaysFuture": 304
+  },
+  {
+    "id": "p19.55_-70.10",
+    "lat": 19.55,
+    "lon": -70.1,
+    "name": "32 km de San Francisco de Macorís",
+    "elevationM": 91,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1756,
+    "heatDays": 197,
+    "waterBalanceMm": 195,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.78
+      },
+      {
+        "name": "Arroz",
+        "score": 0.68,
+        "sow": "Ago",
+        "future": 0.5
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "future": 0.57
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 81
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 20
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 40
+      }
+    ],
+    "slopePct": 8.3,
+    "erosionRisk": "alta",
+    "heatDaysNow": 197,
+    "heatDaysFuture": 260
+  },
+  {
+    "id": "p19.45_-70.10",
+    "lat": 19.45,
+    "lon": -70.1,
+    "name": "23 km de San Francisco de Macorís",
+    "elevationM": 166,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1704,
+    "heatDays": 200,
+    "waterBalanceMm": 61,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.79
+      },
+      {
+        "name": "Arroz",
+        "score": 0.69,
+        "sow": "Ago",
+        "future": 0.61
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "future": 0.58
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 110
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 41
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 63
+      }
+    ],
+    "slopePct": 10.6,
+    "erosionRisk": "alta",
+    "heatDaysNow": 200,
+    "heatDaysFuture": 265
+  },
+  {
+    "id": "p19.25_-70.10",
+    "lat": 19.25,
+    "lon": -70.1,
+    "name": "8 km de Pimentel",
+    "elevationM": 99,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1628,
+    "heatDays": 223,
+    "waterBalanceMm": -33,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "future": 0.77
+      },
+      {
+        "name": "Arroz",
+        "score": 0.62,
+        "sow": "Ago",
+        "future": 0.5
+      },
+      {
+        "name": "Guandul",
+        "score": 0.58,
+        "sow": "Oct",
+        "future": 0.52
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 1,
+        "sow": "Nov",
+        "irrigationMm": 143
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.8,
+        "sow": "Nov",
+        "irrigationMm": 59
+      },
+      {
+        "name": "Maíz",
+        "score": 0.6,
+        "sow": "Nov",
+        "irrigationMm": 81
+      }
+    ],
+    "slopePct": 4.9,
+    "erosionRisk": "media",
+    "heatDaysNow": 223,
+    "heatDaysFuture": 287
+  },
+  {
+    "id": "p19.15_-70.10",
+    "lat": 19.15,
+    "lon": -70.1,
+    "name": "Pimentel",
+    "elevationM": 32,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1642,
+    "heatDays": 247,
+    "waterBalanceMm": -36,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.79,
+        "sow": "Nov",
+        "future": 0.74
+      },
+      {
+        "name": "Guandul",
+        "score": 0.57,
+        "sow": "Oct",
+        "future": 0.49
+      },
+      {
+        "name": "Maíz",
+        "score": 0.53,
+        "sow": "Oct",
+        "future": 0.45
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 0.98,
+        "sow": "Nov",
+        "irrigationMm": 159
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.79,
+        "sow": "Nov",
+        "irrigationMm": 67
+      },
+      {
+        "name": "Maíz",
+        "score": 0.59,
+        "sow": "Nov",
+        "irrigationMm": 94
       }
     ],
     "slopePct": 2.4,
     "erosionRisk": "baja",
-    "heatDaysNow": 204,
-    "heatDaysFuture": 269
+    "heatDaysNow": 247,
+    "heatDaysFuture": 306
   },
   {
     "id": "p19.55_-70.00",
@@ -2734,8 +2734,8 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1793,
-    "heatDays": 45,
-    "waterBalanceMm": 551,
+    "heatDays": 55,
+    "waterBalanceMm": 546,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -2755,7 +2755,7 @@
         "name": "Cacao",
         "score": 0.9,
         "sow": "Ene",
-        "future": 0.88
+        "future": 0.87
       }
     ],
     "topIrrigated": [
@@ -2780,8 +2780,8 @@
     ],
     "slopePct": 4.4,
     "erosionRisk": "media",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
+    "heatDaysNow": 55,
+    "heatDaysFuture": 154
   },
   {
     "id": "p19.45_-70.00",
@@ -2792,54 +2792,54 @@
     "soil": "Franco arcilloso",
     "soilGroup": "franco-arcilloso",
     "rainMm": 1764,
-    "heatDays": 45,
-    "waterBalanceMm": 521,
+    "heatDays": 251,
+    "waterBalanceMm": 86,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Jul",
-        "future": 1
+        "score": 0.99,
+        "sow": "Nov",
+        "future": 0.93
       },
       {
         "name": "Maíz",
-        "score": 0.9,
-        "sow": "Oct",
-        "future": 0.9
+        "score": 0.88,
+        "sow": "Nov",
+        "future": 0.77
       },
       {
-        "name": "Cacao",
-        "score": 0.9,
-        "sow": "Ene",
-        "future": 0.88
+        "name": "Guandul",
+        "score": 0.8,
+        "sow": "Oct",
+        "future": 0.68
       }
     ],
     "topIrrigated": [
       {
         "name": "Sorgo",
-        "score": 1,
-        "sow": "Jul",
-        "irrigationMm": 0
+        "score": 0.99,
+        "sow": "Nov",
+        "irrigationMm": 41
       },
       {
         "name": "Arroz",
-        "score": 0.95,
-        "sow": "Oct",
-        "irrigationMm": 18
+        "score": 0.93,
+        "sow": "Nov",
+        "irrigationMm": 113
       },
       {
         "name": "Maíz",
-        "score": 0.9,
-        "sow": "Oct",
-        "irrigationMm": 2
+        "score": 0.88,
+        "sow": "Nov",
+        "irrigationMm": 63
       }
     ],
     "slopePct": 2.4,
     "erosionRisk": "baja",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
+    "heatDaysNow": 251,
+    "heatDaysFuture": 308
   },
   {
     "id": "p19.35_-70.00",
@@ -2850,54 +2850,54 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1733,
-    "heatDays": 45,
-    "waterBalanceMm": 489,
+    "heatDays": 218,
+    "waterBalanceMm": 76,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
       {
         "name": "Sorgo",
         "score": 0.8,
-        "sow": "Abr",
-        "future": 0.8
-      },
-      {
-        "name": "Arroz",
-        "score": 0.76,
-        "sow": "Ago",
+        "sow": "Nov",
         "future": 0.77
       },
       {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.6
+        "name": "Arroz",
+        "score": 0.66,
+        "sow": "Ago",
+        "future": 0.51
+      },
+      {
+        "name": "Guandul",
+        "score": 0.58,
+        "sow": "Oct",
+        "future": 0.52
       }
     ],
     "topIrrigated": [
       {
         "name": "Arroz",
         "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 23
+        "sow": "Nov",
+        "irrigationMm": 123
       },
       {
         "name": "Sorgo",
         "score": 0.8,
-        "sow": "Abr",
-        "irrigationMm": 0
+        "sow": "Nov",
+        "irrigationMm": 46
       },
       {
         "name": "Maíz",
         "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
+        "sow": "Nov",
+        "irrigationMm": 68
       }
     ],
     "slopePct": 11.7,
     "erosionRisk": "alta",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
+    "heatDaysNow": 218,
+    "heatDaysFuture": 282
   },
   {
     "id": "p19.25_-70.00",
@@ -2908,66 +2908,8 @@
     "soil": "Arcilla",
     "soilGroup": "arcilloso",
     "rainMm": 1688,
-    "heatDays": 45,
-    "waterBalanceMm": 443,
-    "futureRainChangePct": -1,
-    "futureTempChangeC": 1.3,
-    "top": [
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Abr",
-        "future": 0.8
-      },
-      {
-        "name": "Arroz",
-        "score": 0.72,
-        "sow": "Ago",
-        "future": 0.72
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "future": 0.59
-      }
-    ],
-    "topIrrigated": [
-      {
-        "name": "Arroz",
-        "score": 1,
-        "sow": "Oct",
-        "irrigationMm": 28
-      },
-      {
-        "name": "Sorgo",
-        "score": 0.8,
-        "sow": "Abr",
-        "irrigationMm": 0
-      },
-      {
-        "name": "Maíz",
-        "score": 0.6,
-        "sow": "Jul",
-        "irrigationMm": 0
-      }
-    ],
-    "slopePct": 17.3,
-    "erosionRisk": "alta",
-    "heatDaysNow": 45,
-    "heatDaysFuture": 142
-  },
-  {
-    "id": "p19.15_-70.00",
-    "lat": 19.15,
-    "lon": -70,
-    "name": "10 km de Villa Riva",
-    "elevationM": 27,
-    "soil": "Arcilla",
-    "soilGroup": "arcilloso",
-    "rainMm": 1703,
-    "heatDays": 205,
-    "waterBalanceMm": 54,
+    "heatDays": 174,
+    "waterBalanceMm": 59,
     "futureRainChangePct": -1,
     "futureTempChangeC": 1.3,
     "top": [
@@ -2979,15 +2921,15 @@
       },
       {
         "name": "Arroz",
-        "score": 0.73,
+        "score": 0.72,
         "sow": "Ago",
-        "future": 0.5
+        "future": 0.53
       },
       {
         "name": "Guandul",
-        "score": 0.58,
+        "score": 0.59,
         "sow": "Oct",
-        "future": 0.54
+        "future": 0.57
       }
     ],
     "topIrrigated": [
@@ -2995,24 +2937,82 @@
         "name": "Arroz",
         "score": 1,
         "sow": "Nov",
-        "irrigationMm": 150
+        "irrigationMm": 132
       },
       {
         "name": "Sorgo",
         "score": 0.8,
         "sow": "Nov",
-        "irrigationMm": 61
+        "irrigationMm": 52
       },
       {
         "name": "Maíz",
         "score": 0.6,
         "sow": "Nov",
-        "irrigationMm": 86
+        "irrigationMm": 74
+      }
+    ],
+    "slopePct": 17.3,
+    "erosionRisk": "alta",
+    "heatDaysNow": 174,
+    "heatDaysFuture": 246
+  },
+  {
+    "id": "p19.15_-70.00",
+    "lat": 19.15,
+    "lon": -70,
+    "name": "10 km de Villa Riva",
+    "elevationM": 27,
+    "soil": "Arcilla",
+    "soilGroup": "arcilloso",
+    "rainMm": 1703,
+    "heatDays": 249,
+    "waterBalanceMm": 23,
+    "futureRainChangePct": -1,
+    "futureTempChangeC": 1.3,
+    "top": [
+      {
+        "name": "Sorgo",
+        "score": 0.79,
+        "sow": "Nov",
+        "future": 0.74
+      },
+      {
+        "name": "Guandul",
+        "score": 0.56,
+        "sow": "Oct",
+        "future": 0.48
+      },
+      {
+        "name": "Maíz",
+        "score": 0.53,
+        "sow": "Oct",
+        "future": 0.49
+      }
+    ],
+    "topIrrigated": [
+      {
+        "name": "Arroz",
+        "score": 0.98,
+        "sow": "Nov",
+        "irrigationMm": 157
+      },
+      {
+        "name": "Sorgo",
+        "score": 0.79,
+        "sow": "Nov",
+        "irrigationMm": 65
+      },
+      {
+        "name": "Maíz",
+        "score": 0.59,
+        "sow": "Nov",
+        "irrigationMm": 92
       }
     ],
     "slopePct": 2.9,
     "erosionRisk": "baja",
-    "heatDaysNow": 204,
-    "heatDaysFuture": 269
+    "heatDaysNow": 249,
+    "heatDaysFuture": 307
   }
 ]

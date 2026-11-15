@@ -183,7 +183,7 @@ function buildRotation(
 
 // Todas las secuencias de 1 a 3 cultivos anuales que caben en 12 meses, sin repetir
 // familia seguida (eso es lo que hace que sea una rotación).
-function candidateSequences(model: Model, clim: ClimMonth[]) {
+function candidateSequences(model: Model, clim: ClimMonth[], minRainfed = 0.45) {
   const annual = model.crops.filter((c) => c.family !== "perenne" && c.cycle <= 6);
   const evals = new Map<string, Evaluation[]>();
   for (const c of annual) evals.set(c.id, Array.from({ length: 12 }, (_, i) => evaluate(c, clim, i + 1, model.group)));
@@ -199,7 +199,7 @@ function candidateSequences(model: Model, clim: ClimMonth[]) {
         for (const start of starts) {
           if (used + gap + c.cycle > 12) continue;
           const ev = evals.get(c.id)![start - 1];
-          if (ev.rainfed < 0.45) continue; // solo cultivos que se dan con la lluvia de esa época
+          if (ev.rainfed < minRainfed) continue; // solo cultivos que se dan con la lluvia y el calor de esa época
           extend([...seq, { crop: c, ev, start }], used + gap + c.cycle);
         }
       }
@@ -233,7 +233,14 @@ function currentRotation(model: Model, clim: ClimMonth[], presetId: string): Pla
 
 export function rotationsFor(model: Model, presetId: string, clim: ClimMonth[] = model.clim) {
   const future = model.futures["ssp245_2041-2060"] ?? null;
-  const all = candidateSequences(model, clim).map((seq, i) => buildRotation(`c${i}`, "", "", seq, clim, future, model.group));
+  // En zonas muy calientes pocos cultivos pasan el mínimo: se afloja poco a poco hasta tener
+  // al menos 2 alternativas distintas (las débiles quedan marcadas como «Regular» o «Difícil»).
+  let all: Rotation[] = [];
+  for (const min of [0.45, 0.3, 0.15, 0]) {
+    all = candidateSequences(model, clim, min).map((seq, i) => buildRotation(`c${i}`, "", "", seq, clim, future, model.group));
+    const combos = new Set(all.filter((r) => r.placements.length >= 2).map((r) => r.placements.map((p) => p.crop.id).sort().join(",")));
+    if (combos.size >= 3) break;
+  }
   // Cada estrategia debe usar una combinación de cultivos distinta (no solo otras fechas)
   const sig = (r: { placements: Placement[] } | Placement[]) =>
     (Array.isArray(r) ? r : r.placements).map((p) => p.crop.id).sort().join(",");

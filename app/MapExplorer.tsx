@@ -526,6 +526,11 @@ function SowTab({ d }: { d: PointDetail }) {
           );
         })}
       </ol>
+      <p className="hint">
+        Esto dice qué tan bien le van el clima y la tierra de esta zona a cada cultivo. No mide precios, mercado ni
+        costumbre: por eso el sorgo, que aguanta mucho calor y sequía, suele salir arriba. Para elegir, mira también
+        las Rotaciones y lo que se vende en tu zona.
+      </p>
       {!!tips.length && (
         <ul className="insights">
           {tips.slice(0, 4).map((x, i) => (
