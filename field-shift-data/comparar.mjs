@@ -9,7 +9,8 @@ const antes = JSON.parse(fs.readFileSync("points.antes.json", "utf8"));
 const ahora = JSON.parse(fs.readFileSync("data/points.json", "utf8"));
 const sinNuevos = (p) => Object.fromEntries(Object.entries(p).filter(([k]) => !NUEVOS.includes(k)));
 const iguales =
-  antes.length === ahora.length && antes.every((p, i) => JSON.stringify(p) === JSON.stringify(sinNuevos(ahora[i])));
+  antes.length === ahora.length &&
+  antes.every((p, i) => JSON.stringify(sinNuevos(p)) === JSON.stringify(sinNuevos(ahora[i])));
 
 console.log(iguales ? "✅ Los datos de antes no cambiaron" : "⚠️ Algo cambió: no hagas commit");
 const riesgo = {};

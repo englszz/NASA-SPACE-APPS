@@ -7,6 +7,8 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { Model } from "./agro";
+import { RotationsTab, Timeline, WhatIf } from "./PanelExtras";
 
 // ---------- tipos (lo que usamos de los JSON de field-shift-data) ----------
 type PointSummary = {
@@ -63,6 +65,8 @@ type PointDetail = {
   projections?: Projection[];
   crops: Crop[];
   insights?: { type: string; text: string }[];
+  annual?: { year: number; rainMm: number | null; heatDays32: number | null }[];
+  model?: Model;
 };
 
 // ---------- textos sencillos ----------
@@ -390,7 +394,7 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
 
 // =====================================================================
 
-type Tab = "sembrar" | "futuro" | "pasado";
+type Tab = "sembrar" | "rotaciones" | "futuro" | "pasado";
 
 function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
   const [tab, setTab] = useState<Tab>("sembrar");
@@ -427,8 +431,9 @@ function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
         {(
           [
             ["sembrar", "Qué sembrar"],
+            ["rotaciones", "Rotaciones"],
             ["futuro", "El futuro"],
-            ["pasado", "Cómo ha cambiado"],
+            ["pasado", "Cómo cambió"],
           ] as [Tab, string][]
         ).map(([id, label]) => (
           <button
@@ -445,6 +450,8 @@ function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
       </div>
 
       {tab === "sembrar" && <SowTab d={d} />}
+      {tab === "rotaciones" &&
+        (d.model ? <RotationsTab model={d.model} /> : <p className="lede">Faltan datos: corre «npm run data».</p>)}
       {tab === "futuro" && <FutureTab d={d} />}
       {tab === "pasado" && <PastTab d={d} />}
 
@@ -452,6 +459,8 @@ function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
         <strong>Ojo:</strong> cada círculo resume una zona de unos 11 km, no tu finca exacta. Son datos de satélite y
         modelos de la NASA: úsalos como guía y confírmalos con tu experiencia y con un técnico agrícola.
       </p>
+
+      {!!d.annual?.length && <Timeline annual={d.annual} />}
     </div>
   );
 }
@@ -649,6 +658,8 @@ function FutureTab({ d }: { d: PointDetail }) {
         Esto no es el pronóstico del tiempo de mañana: es cómo podría ser el clima promedio de esos años, según los
         modelos climáticos de la NASA (NEX-GDDP-CMIP6).
       </p>
+
+      {d.model && <WhatIf model={d.model} />}
     </section>
   );
 }

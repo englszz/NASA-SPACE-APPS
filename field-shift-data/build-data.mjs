@@ -215,6 +215,9 @@ function evaluate(crop, clim, start, group) {
     heatDays: round(heat, 1), extremeRainDays: round(extreme, 1),
   };
 }
+// Mes de clima tal como lo usa evaluate(), para exportarlo a la web
+const modelMonth = (c) => ({ t: round(c.t, 2), p: round(c.p, 1), et0: round(c.et0, 1), heatDays: round(c.heatDays, 2),
+  heatDays35: round(c.heatDays35, 2), frostDays: round(c.frostDays, 2), extremeRainDays: round(c.extremeRainDays, 2) });
 function analyzeCrop(crop, clim, group) {
   const all = Array.from({ length: 12 }, (_, i) => evaluate(crop, clim, i + 1, group));
   const best = all.reduce((a, b) => (b.rainfed > a.rainfed || (b.rainfed === a.rainfed && b.irrigationMm < a.irrigationMm) ? b : a));
@@ -477,6 +480,15 @@ export function analyze({ region, daily, gee, soilRow, cmip6, soilsRaw = null, v
       heatDays: round(c.heatDays), frostDays: round(c.frostDays), extremeRainDays: round(c.extremeRainDays, 2), soilMoisture: round(c.soil, 3), ndvi: round(c.ndvi, 3) })),
     projections, soilTypes,
     crops, insights,
+    // Datos para que la web recalcule la aptitud con el mismo método que evaluate()
+    // (rotaciones por zona y simulador «¿y si llueve menos?»). Solo se agrega: no cambia nada de lo anterior.
+    model: {
+      group,
+      clim: climRecent.map(modelMonth),
+      futures: Object.fromEntries(futures.map((fu) => [fu.key, fu.clim.map(modelMonth)])),
+      crops: CROPS.map(({ id, name, family, cycle, kc, tOpt, tAbs, rainOpt, rainAbs, heatTol, texture }) =>
+        ({ id, name, family, cycle, kc, tOpt, tAbs, rainOpt, rainAbs, heatTol, texture })),
+    },
   };
 
   return { out, indicators, annual, drySpell, useImerg, projections, soilTypes, soil, crops, early, recent };

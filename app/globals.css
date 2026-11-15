@@ -2093,3 +2093,387 @@ button.cta {
     margin-bottom: 24px;
   }
 }
+
+/* =====================================================================
+   ROTACIONES POR ZONA, SIMULADOR Y LÍNEA DE TIEMPO (panel del mapa)
+   ===================================================================== */
+:root {
+  --chart-rain: #2f6fb0;
+  --chart-heat: #d0631d;
+}
+
+.panelTabs {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.panelTabs button {
+  font-size: 0.8rem;
+  padding-inline: 2px;
+}
+
+.presetPick {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 12px;
+}
+
+.presetPick > span {
+  font-weight: 800;
+  color: var(--green-deep);
+}
+
+.presetPick select {
+  padding: 8px;
+  font: inherit;
+  font-weight: 700;
+  color: var(--green-deep);
+  background: #fff;
+  border: 1px solid var(--line-light);
+  border-radius: 8px;
+}
+
+.presetPick small {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.yearStrip {
+  margin-bottom: 14px;
+}
+
+.yearGrid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 3px;
+}
+
+.yearCell {
+  display: grid;
+  gap: 3px;
+  justify-items: center;
+}
+
+.yearCell span:not(.yearM) {
+  width: 100%;
+  height: 7px;
+  border-radius: 3px;
+  background: rgba(29, 74, 25, 0.07);
+}
+
+.yearM {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.yearCell .on.rain, .yearKeys i.rain { background: var(--chart-rain); }
+.yearCell .on.hot, .yearKeys i.hot { background: var(--chart-heat); }
+.yearCell .on.dry, .yearKeys i.dry { background: #c9a227; }
+
+.yearKeys {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.yearKeys i {
+  display: inline-block;
+  width: 14px;
+  height: 7px;
+  margin-right: 4px;
+  border-radius: 3px;
+}
+
+.rotList {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rotCard {
+  padding: 14px;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 14px;
+}
+
+.rotCard.isBase {
+  background: transparent;
+  border-style: dashed;
+}
+
+.rotKind {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.rotCard h4 {
+  margin: 2px 0 2px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.35rem;
+  color: var(--green-title);
+}
+
+.rotSeq {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.badge {
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--green-deep);
+  background: rgba(44, 106, 40, 0.1);
+  border-radius: 999px;
+}
+
+.badge.b-futuro { background: rgba(244, 165, 24, 0.3); }
+.badge.b-lluvia { background: rgba(47, 111, 176, 0.15); }
+
+.rotCard .calBar {
+  height: 26px;
+}
+
+.calCell {
+  position: relative;
+  display: grid;
+  place-items: center start;
+  padding-left: 3px;
+  overflow: visible;
+  font-size: 0.66rem;
+  font-weight: 800;
+  white-space: nowrap;
+  color: var(--green-deep);
+  background: var(--fam);
+  border-radius: 4px;
+}
+
+.calCell.isBare {
+  --fam: transparent;
+  background: repeating-linear-gradient(-45deg, rgba(122, 74, 30, 0.35) 0 4px, transparent 4px 8px);
+}
+
+.hardDot {
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
+  background: #c0392b;
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+}
+
+.calLegend .hardDot {
+  position: static;
+  display: inline-block;
+}
+
+.calLegendSmall {
+  margin-top: 12px;
+  font-size: 0.75rem;
+}
+
+.rotStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+  margin: 12px 0 0;
+}
+
+.rotStats div {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  padding-top: 6px;
+  font-size: 0.82rem;
+  border-top: 1px solid var(--line-light);
+}
+
+.rotStats dt {
+  color: var(--ink-soft);
+}
+
+.rotStats dd {
+  margin: 0;
+  font-weight: 800;
+  color: var(--green-deep);
+  text-align: right;
+}
+
+.rotWhy {
+  margin-top: 10px;
+}
+
+.rotWhy summary,
+.timeline > summary,
+.tableView summary {
+  font-weight: 800;
+  color: var(--green-title);
+  cursor: pointer;
+}
+
+.rotWhy dl {
+  margin: 8px 0 0;
+}
+
+.rotWhy dl div {
+  padding: 8px 0;
+  border-top: 1px solid var(--line-light);
+}
+
+.rotWhy dt {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-title);
+}
+
+.rotWhy dd {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* ---- simulador ---- */
+.whatIf {
+  margin-top: 20px;
+  padding: 14px;
+  background: var(--paper);
+  border: 2px solid var(--sun);
+  border-radius: 14px;
+}
+
+.slider {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--green-deep);
+}
+
+.slider input {
+  width: 100%;
+  accent-color: var(--green-title);
+}
+
+.simList {
+  display: grid;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.simList li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: 0.88rem;
+  border-top: 1px solid var(--line-light);
+}
+
+.simList span {
+  font-weight: 800;
+  color: var(--green-deep);
+}
+
+.simList em {
+  min-width: 96px;
+  font-style: normal;
+  font-size: 0.8rem;
+  text-align: right;
+  color: var(--ink-soft);
+}
+
+.simList em.down { color: #b42e2e; font-weight: 800; }
+.simList em.up { color: #2f7d2a; font-weight: 800; }
+
+/* ---- línea de tiempo ---- */
+.timeline {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px solid var(--line-light);
+  border-radius: 12px;
+}
+
+.miniChart {
+  margin: 14px 0 0;
+}
+
+.miniChart figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.miniChart figcaption b {
+  color: var(--ink);
+}
+
+.miniChart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.miniChart .axis { stroke: rgba(29, 74, 25, 0.3); stroke-width: 1; }
+.miniChart .avgLine { stroke: rgba(29, 74, 25, 0.35); stroke-width: 1; stroke-dasharray: 3 3; }
+.miniChart .tick { font-size: 10px; fill: var(--ink-soft); }
+.miniChart g:focus { outline: none; }
+
+.tableView {
+  margin-top: 12px;
+}
+
+.tableView table {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.tableView th,
+.tableView td {
+  padding: 4px 6px;
+  text-align: right;
+  border-bottom: 1px solid var(--line-light);
+}
+
+.tableView th:first-child,
+.tableView td:first-child {
+  text-align: left;
+}
