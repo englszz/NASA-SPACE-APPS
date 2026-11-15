@@ -6,22 +6,28 @@ import ConucoForm from "./ConucoForm";
 import Dashboard from "./Dashboard";
 import LoginCard from "./LoginCard";
 import AuthNav from "@/app/AuthNav";
+import LangToggle from "@/app/LangToggle";
+import { getLang } from "@/lib/lang-server";
+import { pick } from "@/lib/lang";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Mi conuco · The Conuco" };
+export async function generateMetadata() {
+  return { title: (await getLang()) === "en" ? "My conuco · The Conuco" : "Mi conuco · The Conuco" };
+}
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children, t }: { children: React.ReactNode; t: (es: string, en: string) => string }) {
   return (
     <div className="mcPage">
       <header className="mcHeader">
-        <Link href="/" className="brand" aria-label="Volver al inicio">
+        <Link href="/" className="brand" aria-label={t("Volver al inicio", "Back to home")}>
           <Image src="/logo-texto.png" alt="The Conuco" width={900} height={271} priority />
         </Link>
         <div className="mcBarActions">
           <Link href="/" className="mcBack">
-            ← Inicio
+            ← {t("Inicio", "Home")}
           </Link>
           <AuthNav showConuco={false} variant="bar" />
+          <LangToggle />
         </div>
       </header>
       <main className="mcMain">{children}</main>
@@ -31,15 +37,17 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 export default async function MiConucoPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
+  const t = pick(await getLang());
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
     return (
-      <Shell>
+      <Shell t={t}>
         <section className="mcCard">
-          <h1>Falta configurar el inicio de sesión</h1>
+          <h1>{t("Falta configurar el inicio de sesión", "Sign-in isn't set up yet")}</h1>
           <p>
-            Agrega <code>NEXT_PUBLIC_SUPABASE_URL</code> y <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> en{" "}
-            <code>.env.local</code> y reinicia el servidor. Los pasos están en <code>CONFIGURAR.md</code>.
+            {t("Agrega", "Add")} <code>NEXT_PUBLIC_SUPABASE_URL</code> {t("y", "and")} <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>{" "}
+            {t("en", "to")} <code>.env.local</code> {t("y reinicia el servidor. Los pasos están en", "and restart the server. The steps are in")}{" "}
+            <code>CONFIGURAR.md</code>.
           </p>
         </section>
       </Shell>
@@ -52,7 +60,7 @@ export default async function MiConucoPage({ searchParams }: { searchParams: Pro
 
   if (!user)
     return (
-      <Shell>
+      <Shell t={t}>
         <LoginCard failed={error === "login"} />
       </Shell>
     );
@@ -61,15 +69,22 @@ export default async function MiConucoPage({ searchParams }: { searchParams: Pro
   const firstName = (user.user_metadata?.full_name as string | undefined)?.split(" ")[0] ?? "";
 
   return (
-    <Shell>
+    <Shell t={t}>
       {conuco ? (
         <Dashboard conuco={conuco as Conuco} firstName={firstName} />
       ) : (
         <section className="mcCard">
-          <p className="eyebrowMini">Paso 1 de 1</p>
-          <h1>{firstName ? `Hola, ${firstName}. ` : ""}Cuéntanos sobre tu conuco</h1>
+          <p className="eyebrowMini">{t("Paso 1 de 1", "Step 1 of 1")}</p>
+          <h1>
+            {firstName ? t(`Hola, ${firstName}. `, `Hi, ${firstName}. `) : ""}
+            {t("Cuéntanos sobre tu conuco", "Tell us about your conuco")}
+          </h1>
           <p className="mcLead">
-            Con esto Ramoncito te da consejos para tu tierra exacta. Lo que escribas aquí <b>solo lo ves tú</b>.
+            {t(
+              "Con esto Ramoncito te da consejos para tu tierra exacta. Lo que escribas aquí",
+              "With this, Ramoncito can give you advice for your exact land. What you write here",
+            )}{" "}
+            <b>{t("solo lo ves tú", "is visible only to you")}</b>.
           </p>
           <ConucoForm />
         </section>

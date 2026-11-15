@@ -210,13 +210,13 @@ function candidateSequences(model: Model, clim: ClimMonth[], minRainfed = 0.45) 
 }
 
 // Rotación «de hoy»: lo que el agricultor dice que siembra
-export const CURRENT_PRESETS: { id: string; label: string; crops: string[] }[] = [
-  { id: "maiz-maiz", label: "Maíz, dos veces al año", crops: ["maiz", "maiz"] },
-  { id: "arroz-arroz", label: "Arroz, dos veces al año", crops: ["arroz", "arroz"] },
-  { id: "maiz-habichuela", label: "Maíz y luego habichuela", crops: ["maiz", "habichuela"] },
-  { id: "yuca", label: "Solo yuca", crops: ["yuca"] },
-  { id: "platano", label: "Plátano (todo el año)", crops: ["platano"] },
-  { id: "cacao", label: "Cacao (todo el año)", crops: ["cacao"] },
+export const CURRENT_PRESETS: { id: string; label: string; en: string; crops: string[] }[] = [
+  { id: "maiz-maiz", label: "Maíz, dos veces al año", en: "Corn, twice a year", crops: ["maiz", "maiz"] },
+  { id: "arroz-arroz", label: "Arroz, dos veces al año", en: "Rice, twice a year", crops: ["arroz", "arroz"] },
+  { id: "maiz-habichuela", label: "Maíz y luego habichuela", en: "Corn, then beans", crops: ["maiz", "habichuela"] },
+  { id: "yuca", label: "Solo yuca", en: "Cassava only", crops: ["yuca"] },
+  { id: "platano", label: "Plátano (todo el año)", en: "Plantain (year-round)", crops: ["platano"] },
+  { id: "cacao", label: "Cacao (todo el año)", en: "Cocoa (year-round)", crops: ["cacao"] },
 ];
 
 function currentRotation(model: Model, clim: ClimMonth[], presetId: string): Placement[] {
@@ -305,7 +305,7 @@ function withBadges(rots: Rotation[]): (Rotation & { badges: Badge[] })[] {
       if (isRain(r)) badges.push({ id: "lluvia", label: "Rinde más con la lluvia" });
       if (isIrr(r)) badges.push({ id: "riego", label: "Menos riego" });
       if (isBare(r)) badges.push({ id: "suelo", label: "Menos tierra desnuda" });
-      if (r.hasLegume) badges.push({ id: "nitrogeno", label: "Aporta nitrógeno" });
+      if (r.hasLegume) badges.push({ id: "nitrogeno", label: "Da nutrientes a la tierra" });
     }
     return { ...r, badges };
   });

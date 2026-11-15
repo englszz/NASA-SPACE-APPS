@@ -5,6 +5,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useRef, useState } from "react";
 import { MAX_ZONE_KM, nearestZone, type ZonePoint } from "@/lib/conuco";
+import { useLang } from "@/lib/i18n";
+import { zoneName } from "@/lib/lang";
 
 export default function LocationPicker({
   value,
@@ -13,6 +15,7 @@ export default function LocationPicker({
   value: { lat: number; lon: number } | null;
   onChange: (v: { lat: number; lon: number }) => void;
 }) {
+  const { lang, t } = useLang();
   const el = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const pinRef = useRef<L.CircleMarker | null>(null);
@@ -31,7 +34,7 @@ export default function LocationPicker({
     const map = L.map(el.current, { zoomSnap: 0.25 }).setView(value ? [value.lat, value.lon] : [19.45, -70.85], value ? 13 : 8.75);
     L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
       maxZoom: 18,
-      attribution: "Imagen © Esri, Maxar, Earthstar Geographics",
+      attribution: "© Esri, Maxar, Earthstar Geographics",
     }).addTo(map);
     L.tileLayer(
       "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
@@ -66,8 +69,8 @@ export default function LocationPicker({
   }, [value]);
 
   const useMyLocation = () => {
-    if (!navigator.geolocation) return setGeoMsg("Tu teléfono o navegador no permite saber la ubicación.");
-    setGeoMsg("Buscando tu ubicación…");
+    if (!navigator.geolocation) return setGeoMsg(t("Tu teléfono o navegador no permite saber la ubicación.", "Your phone or browser can't share your location."));
+    setGeoMsg(t("Buscando tu ubicación…", "Finding your location…"));
     navigator.geolocation.getCurrentPosition(
       (p) => {
         const v = { lat: p.coords.latitude, lon: p.coords.longitude };
@@ -75,7 +78,7 @@ export default function LocationPicker({
         mapRef.current?.setView([v.lat, v.lon], 14);
         setGeoMsg("");
       },
-      () => setGeoMsg("No pudimos saber tu ubicación. Toca tu conuco en el mapa."),
+      () => setGeoMsg(t("No pudimos saber tu ubicación. Toca tu conuco en el mapa.", "We couldn't get your location. Tap your conuco on the map.")),
       { enableHighAccuracy: true, timeout: 10000 },
     );
   };
@@ -87,20 +90,23 @@ export default function LocationPicker({
       <div ref={el} className="pickerMap" />
       <div className="pickerBar">
         <button type="button" className="fcMore" onClick={useMyLocation}>
-          📍 Estoy en mi conuco: usar mi ubicación
+          📍 {t("Estoy en mi conuco: usar mi ubicación", "I'm at my conuco: use my location")}
         </button>
         {geoMsg && <span className="hint">{geoMsg}</span>}
       </div>
-      {!value && <p className="hint">Acerca el mapa y toca el lugar exacto de tu conuco.</p>}
+      {!value && <p className="hint">{t("Acerca el mapa y toca el lugar exacto de tu conuco.", "Zoom in and tap the exact spot of your conuco.")}</p>}
       {near &&
         (near.km <= MAX_ZONE_KM ? (
           <p className="pickerOk">
-            ✓ Tu conuco usa los datos de la zona <b>{near.zone.name}</b> (a {near.km.toFixed(1)} km).
+            ✓ {t("Tu conuco usa los datos de la zona", "Your conuco uses data from the area")} <b>{zoneName(lang, near.zone.name)}</b>{" "}
+            {t(`(a ${near.km.toFixed(1)} km).`, `(${near.km.toFixed(1)} km away).`)}
           </p>
         ) : (
           <p className="pickerWarn">
-            Tu conuco está a {Math.round(near.km)} km de la zona más cercana que analizamos. Por ahora The Conuco cubre
-            el Valle del Cibao: los consejos podrían no ajustarse bien a tu tierra.
+            {t(
+              `Tu conuco está a ${Math.round(near.km)} km de la zona más cercana que analizamos. Por ahora The Conuco cubre el Valle del Cibao: los consejos podrían no ajustarse bien a tu tierra.`,
+              `Your conuco is ${Math.round(near.km)} km from the nearest area we analyze. For now The Conuco covers the Cibao Valley: the advice may not fit your land well.`,
+            )}
           </p>
         ))}
     </div>

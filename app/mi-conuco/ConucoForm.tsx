@@ -6,6 +6,7 @@ import { useState } from "react";
 import { CURRENT_PRESETS } from "@/app/agro";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { AGUA, EQUIPO, PRIORIDADES, VENTA, type Conuco } from "@/lib/conuco";
+import { useLang } from "@/lib/i18n";
 
 const LocationPicker = dynamic(() => import("./LocationPicker"), {
   ssr: false,
@@ -24,6 +25,8 @@ const EMPTY: Omit<Conuco, "lat" | "lon"> = {
 };
 
 export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDone?: () => void }) {
+  const { lang, t } = useLang();
+  const tx = (x: { es: string; en: string }) => t(x.es, x.en);
   const router = useRouter();
   const [f, setF] = useState<Omit<Conuco, "lat" | "lon">>(initial ?? EMPTY);
   const [loc, setLoc] = useState<{ lat: number; lon: number } | null>(
@@ -38,8 +41,8 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!f.nombre.trim()) return setError("Ponle un nombre a tu conuco.");
-    if (!loc) return setError("Marca en el mapa dónde está tu conuco.");
+    if (!f.nombre.trim()) return setError(t("Ponle un nombre a tu conuco.", "Give your conuco a name."));
+    if (!loc) return setError(t("Marca en el mapa dónde está tu conuco.", "Mark where your conuco is on the map."));
     setBusy(true);
     setError("");
     const supabase = supabaseBrowser();
@@ -48,7 +51,7 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
     } = await supabase.auth.getUser();
     if (!user) {
       setBusy(false);
-      return setError("Tu sesión se cerró. Vuelve a entrar con Google.");
+      return setError(t("Tu sesión se cerró. Vuelve a entrar con Google.", "Your session ended. Sign in with Google again."));
     }
     const row = {
       user_id: user.id,
@@ -65,7 +68,7 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
     };
     const { error } = await supabase.from("conucos").upsert(row, { onConflict: "user_id" });
     setBusy(false);
-    if (error) return setError("No se pudo guardar. Revisa tu conexión e inténtalo otra vez.");
+    if (error) return setError(t("No se pudo guardar. Revisa tu conexión e inténtalo otra vez.", "Couldn't save. Check your connection and try again."));
     onDone?.();
     router.refresh();
   };
@@ -73,23 +76,23 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
   return (
     <form className="conucoForm" onSubmit={save}>
       <label className="field">
-        <span>¿Cómo se llama tu conuco?</span>
+        <span>{t("¿Cómo se llama tu conuco?", "What's your conuco called?")}</span>
         <input
           value={f.nombre}
           onChange={(e) => set("nombre", e.target.value)}
-          placeholder="Ej.: La finquita de abuela"
+          placeholder={t("Ej.: La finquita de abuela", "e.g. Grandma's little farm")}
           maxLength={80}
           required
         />
       </label>
 
       <div className="field">
-        <span>¿Dónde está?</span>
+        <span>{t("¿Dónde está?", "Where is it?")}</span>
         <LocationPicker value={loc} onChange={setLoc} />
       </div>
 
       <label className="field">
-        <span>¿Cuántas tareas tiene? (opcional)</span>
+        <span>{t("¿Cuántas tareas tiene? (opcional)", "How many tareas is it? (optional)")}</span>
         <input
           type="number"
           inputMode="decimal"
@@ -97,55 +100,55 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
           step="any"
           value={f.tareas ?? ""}
           onChange={(e) => set("tareas", e.target.value ? +e.target.value : null)}
-          placeholder="Ej.: 10"
+          placeholder={t("Ej.: 10", "e.g. 10")}
         />
-        <small>1 tarea son unos 629 m². 16 tareas ≈ 1 hectárea.</small>
+        <small>{t("1 tarea son unos 629 m². 16 tareas ≈ 1 hectárea.", "A tarea is a Dominican land unit of about 629 m². 16 tareas ≈ 1 hectare (≈ 2.5 acres).")}</small>
       </label>
 
       <label className="field">
-        <span>¿Qué siembras hoy?</span>
+        <span>{t("¿Qué siembras hoy?", "What do you grow today?")}</span>
         <select value={f.siembra_actual} onChange={(e) => set("siembra_actual", e.target.value)}>
           {CURRENT_PRESETS.map((p) => (
             <option key={p.id} value={p.id}>
-              {p.label}
+              {lang === "en" ? p.en : p.label}
             </option>
           ))}
         </select>
-        <small>Es tu rotación de hoy: así comparamos con otras opciones.</small>
+        <small>{t("Es tu rotación de hoy: así comparamos con otras opciones.", "This is your current rotation: we compare other options against it.")}</small>
       </label>
 
       <fieldset className="field">
-        <legend>¿Qué agua tienes?</legend>
+        <legend>{t("¿Qué agua tienes?", "What water do you have?")}</legend>
         {(Object.keys(AGUA) as Conuco["agua"][]).map((k) => (
           <label key={k} className="choice">
             <input type="radio" name="agua" checked={f.agua === k} onChange={() => set("agua", k)} />
-            {AGUA[k]}
+            {tx(AGUA[k])}
           </label>
         ))}
       </fieldset>
 
       <fieldset className="field">
-        <legend>¿Cómo trabajas la tierra?</legend>
+        <legend>{t("¿Cómo trabajas la tierra?", "How do you work the land?")}</legend>
         {(Object.keys(EQUIPO) as Conuco["equipo"][]).map((k) => (
           <label key={k} className="choice">
             <input type="radio" name="equipo" checked={f.equipo === k} onChange={() => set("equipo", k)} />
-            {EQUIPO[k]}
+            {tx(EQUIPO[k])}
           </label>
         ))}
       </fieldset>
 
       <fieldset className="field">
-        <legend>¿Dónde vendes tu cosecha?</legend>
+        <legend>{t("¿Dónde vendes tu cosecha?", "Where do you sell your harvest?")}</legend>
         {(Object.keys(VENTA) as Conuco["venta"][]).map((k) => (
           <label key={k} className="choice">
             <input type="radio" name="venta" checked={f.venta === k} onChange={() => set("venta", k)} />
-            {VENTA[k]}
+            {tx(VENTA[k])}
           </label>
         ))}
       </fieldset>
 
       <fieldset className="field">
-        <legend>¿Qué es lo más importante para ti? (puedes marcar varias)</legend>
+        <legend>{t("¿Qué es lo más importante para ti? (puedes marcar varias)", "What matters most to you? (you can pick several)")}</legend>
         <div className="prioChips">
           {PRIORIDADES.map((p) => (
             <button
@@ -155,31 +158,32 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
               className={f.prioridades.includes(p.id) ? "isOn" : undefined}
               onClick={() => togglePriority(p.id)}
             >
-              {p.label}
+              <span className="prioLabel">{tx(p.label)}</span>
+              <small className="prioHint">{tx(p.hint)}</small>
             </button>
           ))}
         </div>
       </fieldset>
 
       <label className="field">
-        <span>¿Algo más que Ramoncito deba saber? (opcional)</span>
+        <span>{t("¿Algo más que Ramoncito deba saber? (opcional)", "Anything else Ramoncito should know? (optional)")}</span>
         <textarea
           value={f.notas ?? ""}
           onChange={(e) => set("notas", e.target.value)}
           maxLength={500}
           rows={3}
-          placeholder="Ej.: la parte de abajo se encharca cuando llueve mucho"
+          placeholder={t("Ej.: la parte de abajo se encharca cuando llueve mucho", "e.g. the lower part floods when it rains a lot")}
         />
       </label>
 
       {error && <p className="mcError">{error}</p>}
       <div className="formActions">
         <button type="submit" className="cta" disabled={busy}>
-          {busy ? "Guardando…" : initial ? "Guardar cambios" : "Guardar mi conuco"}
+          {busy ? t("Guardando…", "Saving…") : initial ? t("Guardar cambios", "Save changes") : t("Guardar mi conuco", "Save my conuco")}
         </button>
         {onDone && (
           <button type="button" className="fcMore" onClick={onDone}>
-            Cancelar
+            {t("Cancelar", "Cancel")}
           </button>
         )}
       </div>

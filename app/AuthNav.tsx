@@ -4,11 +4,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { useLang } from "@/lib/i18n";
 
 const configured = () => !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 export default function AuthNav({ showConuco = true, variant = "nav" }: { showConuco?: boolean; variant?: "nav" | "bar" }) {
   const router = useRouter();
+  const { t } = useLang();
   const [signedIn, setSignedIn] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -33,12 +35,12 @@ export default function AuthNav({ showConuco = true, variant = "nav" }: { showCo
     <>
       {showConuco && (
         <a href="/mi-conuco" className="navConuco">
-          Mi conuco
+          {t("Mi conuco", "My conuco")}
         </a>
       )}
       {signedIn && (
         <button type="button" className={variant === "bar" ? "mcSignOut" : "navSignOut"} onClick={signOut} disabled={busy}>
-          {busy ? "Saliendo…" : "Cerrar sesión"}
+          {busy ? t("Saliendo…", "Signing out…") : t("Cerrar sesión", "Sign out")}
         </button>
       )}
     </>

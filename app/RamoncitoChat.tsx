@@ -8,17 +8,22 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import RichText from "./RichText";
+import { useLang } from "@/lib/i18n";
 
 type Msg = { role: "user" | "assistant"; content: string };
 type Access = "loading" | "noconfig" | "guest" | "noconuco" | "ready";
 
-const EXAMPLES = ["¿Qué siembro el mes que viene?", "¿Riego esta semana?", "¿Cómo protejo mi tierra de la lluvia?"];
+const EXAMPLES = {
+  es: ["¿Qué siembro el mes que viene?", "¿Riego esta semana?", "¿Cómo protejo mi tierra de la lluvia?"],
+  en: ["What should I plant next month?", "Should I water this week?", "How do I protect my soil from the rain?"],
+};
 
 const HINT_KEY = "ramoncito-globo-cerrado";
 
 export const openRamoncito = () => window.dispatchEvent(new Event("abrir-ramoncito"));
 
 export default function RamoncitoChat() {
+  const { lang, t } = useLang();
   const [open, setOpen] = useState(false);
   const [access, setAccess] = useState<Access>("loading");
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -101,10 +106,10 @@ export default function RamoncitoChat() {
       const r = await fetch("/api/ramoncito", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "chat", messages: next }),
+        body: JSON.stringify({ mode: "chat", messages: next, lang }),
       });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.error || "Ramoncito no pudo responder ahora.");
+      if (!r.ok) throw new Error(j.error || t("Ramoncito no pudo responder ahora.", "Ramoncito couldn't answer right now."));
       setMsgs([...next, { role: "assistant", content: j.reply }]);
     } catch (e) {
       setError((e as Error).message);
@@ -117,9 +122,17 @@ export default function RamoncitoChat() {
       {hint && !open && (
         <div className="rcHint" role="status">
           <button type="button" className="rcHintText" onClick={() => setOpen(true)}>
-            ¡Hola! Mi nombre es Ramoncito y soy tu asistente virtual. <b>¡Consulta cualquier duda!</b>
+            {lang === "en" ? (
+              <>
+                Hi! My name is Ramoncito and I'm your virtual assistant. <b>Ask me anything!</b>
+              </>
+            ) : (
+              <>
+                ¡Hola! Mi nombre es Ramoncito y soy tu asistente virtual. <b>¡Consulta cualquier duda!</b>
+              </>
+            )}
           </button>
-          <button type="button" className="rcHintClose" onClick={closeHint} aria-label="Cerrar este mensaje">
+          <button type="button" className="rcHintClose" onClick={closeHint} aria-label={t("Cerrar este mensaje", "Close this message")}>
             ×
           </button>
         </div>
@@ -130,50 +143,61 @@ export default function RamoncitoChat() {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="ramoncito-chat"
-        aria-label={open ? "Cerrar el chat de Ramoncito" : "Hablar con Ramoncito (IA)"}
+        aria-label={open ? t("Cerrar el chat de Ramoncito", "Close Ramoncito chat") : t("Hablar con Ramoncito (IA)", "Talk to Ramoncito (AI)")}
       >
         <Image src="/ia-sombrero.png" alt="" width={256} height={256} />
       </button>
 
       {open && (
-        <section id="ramoncito-chat" className="rcPanel" role="dialog" aria-label="Chat con Ramoncito">
+        <section id="ramoncito-chat" className="rcPanel" role="dialog" aria-label={t("Chat con Ramoncito", "Chat with Ramoncito")}>
           <header className="rcHead">
             <span className="rcAvatar">
               <Image src="/ia-sombrero.png" alt="" width={256} height={256} />
             </span>
             <div>
               <strong>Ramoncito</strong>
-              <span>Tu asistente del conuco · IA</span>
+              <span>{t("Tu asistente del conuco · IA", "Your conuco assistant · AI")}</span>
             </div>
-            <button type="button" className="rcClose" onClick={() => setOpen(false)} aria-label="Cerrar">
+            <button type="button" className="rcClose" onClick={() => setOpen(false)} aria-label={t("Cerrar", "Close")}>
               ×
             </button>
           </header>
 
           <div className="rcBody" aria-live="polite">
-            {access === "loading" && <p className="hint">Un momento…</p>}
+            {access === "loading" && <p className="hint">{t("Un momento…", "One moment…")}</p>}
 
             {access === "noconfig" && (
-              <p className="rcNote">El chat todavía no está configurado en esta web.</p>
+              <p className="rcNote">{t("El chat todavía no está configurado en esta web.", "Chat isn't set up on this site yet.")}</p>
             )}
 
             {access === "guest" && (
               <div className="rcNote">
-                <p>
-                  Hola, soy Ramoncito. Para darte consejos sobre <b>tu</b> conuco necesito saber dónde está.
-                </p>
-                <p>Entra con Google y regístralo: toma un minuto y tus datos solo los ves tú.</p>
+                {lang === "en" ? (
+                  <>
+                    <p>
+                      Hi, I'm Ramoncito. To give you advice about <b>your</b> conuco (farm), I need to know where it is.
+                    </p>
+                    <p>Sign in with Google and register it: it takes a minute and only you can see your data.</p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      Hola, soy Ramoncito. Para darte consejos sobre <b>tu</b> conuco necesito saber dónde está.
+                    </p>
+                    <p>Entra con Google y regístralo: toma un minuto y tus datos solo los ves tú.</p>
+                  </>
+                )}
                 <Link href="/mi-conuco" className="cta rcCta" onClick={() => setOpen(false)}>
-                  Entrar a Mi conuco
+                  {t("Entrar a Mi conuco", "Go to My conuco")}
                 </Link>
               </div>
             )}
 
             {access === "noconuco" && (
               <div className="rcNote">
-                <p>Ya entraste. Ahora cuéntame de tu conuco para poder ayudarte.</p>
+                <p>{t("Ya entraste. Ahora cuéntame de tu conuco para poder ayudarte.", "You're signed in. Now tell me about your conuco so I can help.")}</p>
                 <Link href="/mi-conuco" className="cta rcCta" onClick={() => setOpen(false)}>
-                  Registrar mi conuco
+                  {t("Registrar mi conuco", "Register my conuco")}
                 </Link>
               </div>
             )}
@@ -184,11 +208,14 @@ export default function RamoncitoChat() {
                   <>
                     <div className="bubbleMsg bot">
                       <p>
-                        Hola. Puedes preguntarme sobre tu conuco: qué sembrar, cuándo regar o cómo cuidar tu tierra.
+                        {t(
+                          "Hola. Puedes preguntarme sobre tu conuco: qué sembrar, cuándo regar o cómo cuidar tu tierra.",
+                          "Hi. You can ask me about your conuco: what to plant, when to water or how to care for your soil.",
+                        )}
                       </p>
                     </div>
                     <div className="rcChips">
-                      {EXAMPLES.map((q) => (
+                      {EXAMPLES[lang].map((q) => (
                         <button key={q} type="button" onClick={() => send(q)}>
                           {q}
                         </button>
@@ -201,7 +228,7 @@ export default function RamoncitoChat() {
                     {m.role === "assistant" ? <RichText text={m.content} /> : m.content}
                   </div>
                 ))}
-                {busy && <div className="bubbleMsg bot rcTyping">Ramoncito está escribiendo…</div>}
+                {busy && <div className="bubbleMsg bot rcTyping">{t("Ramoncito está escribiendo…", "Ramoncito is typing…")}</div>}
                 {error && <p className="mcError">{error}</p>}
               </>
             )}
@@ -220,16 +247,16 @@ export default function RamoncitoChat() {
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Escribe tu pregunta…"
+                placeholder={t("Escribe tu pregunta…", "Type your question…")}
                 maxLength={1500}
-                aria-label="Tu pregunta para Ramoncito"
+                aria-label={t("Tu pregunta para Ramoncito", "Your question for Ramoncito")}
               />
               <button type="submit" className="cta" disabled={busy || !input.trim()}>
-                Enviar
+                {t("Enviar", "Send")}
               </button>
             </form>
           )}
-          <p className="rcFoot">Ramoncito es una IA: puede equivocarse. Confírmalo con un técnico agrícola.</p>
+          <p className="rcFoot">{t("Ramoncito es una IA: puede equivocarse. Confírmalo con un técnico agrícola.", "Ramoncito is an AI: it can make mistakes. Check with an agronomist.")}</p>
         </section>
       )}
     </>

@@ -3,10 +3,14 @@
 import Image from "next/image";
 import { useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { useLang } from "@/lib/i18n";
 
 export default function LoginCard({ failed }: { failed?: boolean }) {
+  const { lang, t } = useLang();
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState(failed ? "No se pudo entrar con Google. Inténtalo otra vez." : "");
+  const [error, setError] = useState(
+    failed ? t("No se pudo entrar con Google. Inténtalo otra vez.", "Couldn't sign in with Google. Please try again.") : "",
+  );
 
   const login = async () => {
     setBusy(true);
@@ -17,7 +21,7 @@ export default function LoginCard({ failed }: { failed?: boolean }) {
     });
     if (error) {
       setBusy(false);
-      setError("No se pudo conectar con Google. Inténtalo otra vez.");
+      setError(t("No se pudo conectar con Google. Inténtalo otra vez.", "Couldn't connect to Google. Please try again."));
     }
   };
 
@@ -25,11 +29,13 @@ export default function LoginCard({ failed }: { failed?: boolean }) {
     <section className="mcCard mcLogin">
       <Image src="/ramoncito-ok.png" alt="" width={489} height={624} className="mcLoginArt" />
       <div>
-        <p className="eyebrowMini">Mi conuco</p>
-        <h1>Tu tierra, tus datos, tus consejos</h1>
+        <p className="eyebrowMini">{t("Mi conuco", "My conuco")}</p>
+        <h1>{t("Tu tierra, tus datos, tus consejos", "Your land, your data, your advice")}</h1>
         <p className="mcLead">
-          Registra tu conuco una sola vez y cada día verás el tiempo, qué sembrar y los consejos de Ramoncito para tu
-          tierra.
+          {t(
+            "Registra tu conuco una sola vez y cada día verás el tiempo, qué sembrar y los consejos de Ramoncito para tu tierra.",
+            "Register your conuco (your farm) once, and every day you'll see the weather, what to plant and Ramoncito's advice for your land.",
+          )}
         </p>
         <button type="button" className="googleBtn" onClick={login} disabled={busy}>
           <svg viewBox="0 0 48 48" aria-hidden="true" width="20" height="20">
@@ -38,13 +44,22 @@ export default function LoginCard({ failed }: { failed?: boolean }) {
             <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z" />
             <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.2-.1-2.3-.4-3.5z" />
           </svg>
-          {busy ? "Abriendo Google…" : "Entrar con Google"}
+          {busy ? t("Abriendo Google…", "Opening Google…") : t("Entrar con Google", "Sign in with Google")}
         </button>
         {error && <p className="mcError">{error}</p>}
         <p className="hint">
-          Solo usamos tu nombre para saludarte. Los datos de tu conuco solo los ves tú; para darte consejos, Ramoncito
-          envía a la IA (Groq) un resumen de tu conuco <b>sin tu nombre, tu correo ni tu ubicación exacta</b>.{" "}
-          <a href="/privacidad">Política de privacidad</a>.
+          {lang === "en" ? (
+            <>
+              We only use your name to greet you. Only you can see your conuco's data; to give you advice, Ramoncito sends
+              the AI (Groq) a summary of your conuco <b>without your name, email or exact location</b>.
+            </>
+          ) : (
+            <>
+              Solo usamos tu nombre para saludarte. Los datos de tu conuco solo los ves tú; para darte consejos, Ramoncito
+              envía a la IA (Groq) un resumen de tu conuco <b>sin tu nombre, tu correo ni tu ubicación exacta</b>.
+            </>
+          )}{" "}
+          <a href="/privacidad">{t("Política de privacidad", "Privacy policy")}</a>.
         </p>
       </div>
     </section>

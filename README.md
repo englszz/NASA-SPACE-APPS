@@ -40,8 +40,10 @@ hasta San Francisco de Macorís y Nagua, pasando por Santiago, Mao y La Vega.
 | **Mi conuco** | Entrar con Google y registrar el conuco (ubicación, tamaño en tareas, siembra actual, agua, equipo, mercado y prioridades). Cada persona **solo ve su propio conuco**. |
 | **Ramoncito (IA)** | Consejos diarios para el conuco del agricultor y un chat disponible en todas las páginas (el sombrero de abajo a la derecha). Usa solo los datos de la zona y avisa de sus límites. |
 
-Todo está escrito en **español sencillo**, con un glosario y avisos de incertidumbre, porque el reto pide que
-la herramienta sirva a agricultores con poca experiencia técnica.
+Todo está escrito en **palabras sencillas**, con un glosario y avisos de incertidumbre, porque el reto pide que
+la herramienta sirva a agricultores con poca experiencia técnica. La web está en **inglés por defecto** y se
+puede cambiar a **español** con el botón **EN | ES** (la elección se recuerda); Ramoncito responde en el idioma
+elegido.
 
 ## Datos y fuentes
 

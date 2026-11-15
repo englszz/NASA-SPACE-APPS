@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import { useLang } from "@/lib/i18n";
 
 // Leaflet usa `window`: el mapa solo se carga en el navegador
 const MapExplorer = dynamic(() => import("./MapExplorer"), { ssr: false });
@@ -20,6 +21,7 @@ const CREAM = "#fbf6e6";
 const ROOF = "#b4561c"; // tierra, de la familia de la montaña del logo
 
 export default function BarnTransition({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const { t } = useLang();
   const [phase, setPhase] = useState<Phase>("closed");
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export default function BarnTransition({ open, onClose }: { open: boolean; onClo
     <div className={cls} aria-hidden={!open}>
       <div className="barnZoom">
         <div className="barnPop">
-          <svg viewBox="0 0 400 360" className="barnSvg" role="img" aria-label="Granero de The Conuco">
+          <svg viewBox="0 0 400 360" className="barnSvg" role="img" aria-label={t("Granero de The Conuco", "The Conuco barn")}>
             {/* sombra en el suelo */}
             <ellipse cx="200" cy="334" rx="175" ry="11" fill="#000" opacity="0.2" />
 
@@ -99,7 +101,7 @@ export default function BarnTransition({ open, onClose }: { open: boolean; onClo
         </div>
       </div>
 
-      <section className="mapRoom" aria-label="El mapa">
+      <section className="mapRoom" aria-label={t("El mapa", "The map")}>
         {/* Se monta durante el zoom para que el mapa ya esté cargando al entrar */}
         {reached("zoom") && <MapExplorer onClose={onClose} />}
       </section>
