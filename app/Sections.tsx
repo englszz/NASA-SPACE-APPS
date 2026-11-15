@@ -491,15 +491,24 @@ export function ClimateSection() {
   return (
     <section id="clima" className="band bandCream">
       <div className="container">
-        <SectionHead
-          n="04"
-          eyebrow={t("Clima futuro", "Future climate")}
-          title={t("Ocho señales para leer el clima de tu tierra", "Eight signals to read your land's climate")}
-          lead={t(
-            "Comparamos 2006–2015 con 2016–2025 para ver qué ya cambió, y usamos los modelos CMIP6 para estimar lo que viene.",
-            "We compare 2006–2015 with 2016–2025 to see what has already changed, and use CMIP6 models to estimate what's coming.",
-          )}
-        />
+        <div className="headWithArt">
+          <SectionHead
+            n="04"
+            eyebrow={t("Clima futuro", "Future climate")}
+            title={t("Ocho señales para leer el clima de tu tierra", "Eight signals to read your land's climate")}
+            lead={t(
+              "Comparamos 2006–2015 con 2016–2025 para ver qué ya cambió, y usamos los modelos CMIP6 para estimar lo que viene.",
+              "We compare 2006–2015 with 2016–2025 to see what has already changed, and use CMIP6 models to estimate what's coming.",
+            )}
+          />
+          <Image
+            src="/plantita.png"
+            alt={t("Una plantita brotando de la tierra", "A seedling sprouting from the soil")}
+            width={429}
+            height={600}
+            className="sectionArt sectionArtPlant"
+          />
+        </div>
 
         <div className="scenario">
           <div>
