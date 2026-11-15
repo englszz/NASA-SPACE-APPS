@@ -30,8 +30,10 @@ const monthList = (idx: number[]) => idx.map((i) => MONTHS[i]).join(", ");
 // ROTACIONES
 // =====================================================================
 
-export function RotationsTab({ model }: { model: Model }) {
-  const [preset, setPreset] = useState(CURRENT_PRESETS[0].id);
+export function RotationsTab({ model, initialPreset }: { model: Model; initialPreset?: string }) {
+  const [preset, setPreset] = useState(
+    CURRENT_PRESETS.some((p) => p.id === initialPreset) ? initialPreset! : CURRENT_PRESETS[0].id,
+  );
   const rots = useMemo(() => rotationsFor(model, preset), [model, preset]);
   const notes = useMemo(() => monthNotes(model.clim), [model]);
   const base = rots[0];

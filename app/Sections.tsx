@@ -455,7 +455,7 @@ export function RamoncitoSection() {
           <div className="chatMock">
             <div className="chatTop">
               <strong>Ramoncito</strong>
-              <span className="tag tagSun">Próximamente</span>
+              <span className="tag tagSun">Con IA</span>
             </div>
             <ul className="chips">
               {examples.map((q) => (
@@ -465,6 +465,9 @@ export function RamoncitoSection() {
             <div className="chatInput" aria-disabled="true">
               Escribe tu pregunta…
             </div>
+            <a className="ctaSmall" href="/mi-conuco">
+              Habla con Ramoncito en Mi conuco →
+            </a>
           </div>
         </div>
       </div>

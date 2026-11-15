@@ -78,6 +78,9 @@ export default function Home() {
               {item.label}
             </a>
           ))}
+          <a href="/mi-conuco" className="navConuco">
+            Mi conuco
+          </a>
         </nav>
       </header>
 
