@@ -3837,3 +3837,155 @@ button.ctaSmall {
     font-size: 0.8rem;
   }
 }
+
+/* =====================================================================
+   GUÍA DE RAMONCITO, «REGISTRAR MI CONUCO» Y CULTIVO «OTRO»
+   ===================================================================== */
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 22px;
+}
+
+.ctaGhost {
+  display: inline-block;
+  padding: 0.75em 1.4em;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--green-deep);
+  background: var(--cream);
+  border: 3px solid var(--green-deep);
+  border-radius: 14px;
+  box-shadow: 4px 5px 0 var(--green-deep);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.ctaGhost:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 7px 0 var(--green-deep);
+}
+
+/* el botón del menú cuando todavía no hay conuco registrado */
+.nav a.navConuco.isRegister {
+  color: var(--green-deep);
+  background: var(--sun);
+  border-color: var(--green-deep);
+}
+
+.panelRegister {
+  margin-top: 6px;
+  padding: 0.6em 1.2em;
+  font-size: 1rem;
+}
+
+/* globo de consejos: texto + «no mostrar más» */
+.rcHintMain {
+  display: grid;
+  gap: 6px;
+}
+
+.rcHintMute {
+  justify-self: start;
+  padding: 0;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink-soft, #4a5a45);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.rcNoteSoft {
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  background: rgba(244, 165, 24, 0.14);
+  border-radius: 12px;
+}
+
+.rcNoteSoft p {
+  margin: 0 0 6px;
+}
+
+.rcRegister {
+  font-weight: 800;
+  color: var(--green-title);
+  text-underline-offset: 3px;
+}
+
+/* «Otro» cultivo en Rotaciones */
+.otherCrop {
+  display: grid;
+  gap: 8px;
+  margin: -4px 0 14px;
+  padding: 12px;
+  background: rgba(244, 165, 24, 0.12);
+  border: 1px solid rgba(244, 165, 24, 0.5);
+  border-radius: 12px;
+}
+
+.otherCrop label {
+  display: grid;
+  gap: 4px;
+  font-weight: 800;
+  color: var(--green-deep);
+}
+
+.otherCrop input {
+  padding: 8px 10px;
+  font: inherit;
+  font-weight: 600;
+  background: #fff;
+  border: 1px solid var(--line-light);
+  border-radius: 8px;
+}
+
+.otherCrop .cta {
+  justify-self: start;
+  padding: 0.55em 1.1em;
+  font-size: 0.95rem;
+  box-shadow: 3px 4px 0 var(--green-deep);
+}
+
+.otherCrop .cta:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.otherCrop small {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--ink-soft, #4a5a45);
+}
+
+.conucoForm select + input {
+  margin-top: 8px;
+}
+
+/* «Inicia sesión para una experiencia más personalizada» */
+.mcLoginSmall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: 24px;
+}
+
+.mcLoginSmall > div {
+  flex: 1 1 320px;
+}
+
+.mcLoginSmall h2 {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+}
+
+.mcLoginSmall .hint {
+  margin: 0;
+}

@@ -9,6 +9,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Model } from "./agro";
 import { ForecastDays, RotationsTab, Timeline, WhatIf } from "./PanelExtras";
+import { guide } from "./guia";
 import { useLang } from "@/lib/i18n";
 import { type Lang, crop, dataText, locale, month, soil as soilName, zoneName } from "@/lib/lang";
 
@@ -355,6 +356,26 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
     };
   }, [selected]);
 
+  // Guía de Ramoncito: al abrir el mapa, al cambiar de capa y al alejarse
+  useEffect(() => {
+    guide("mapa");
+  }, []);
+  useEffect(() => {
+    if (zoomedOut) guide("lejos");
+  }, [zoomedOut]);
+  const pickLayer = (id: LayerId) => {
+    setLayer(id);
+    guide(`capa-${id}`);
+  };
+
+  // Ramoncito responde sobre la zona que la persona está mirando
+  useEffect(() => {
+    const p = points.find((x) => x.id === selected);
+    window.dispatchEvent(new CustomEvent("zona-elegida", { detail: p ? { id: p.id, name: zoneName(lang, p.name) } : null }));
+    if (p) guide("punto");
+  }, [selected, points, lang]);
+  useEffect(() => () => void window.dispatchEvent(new CustomEvent("zona-elegida", { detail: null })), []);
+
   // Botón «Centrar en el Cibao»: vuelve a encuadrar los 52 puntos
   const centerCibao = () => {
     const map = mapRef.current;
@@ -383,7 +404,7 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
               role="radio"
               aria-checked={layer === id}
               className={layer === id ? "isOn" : undefined}
-              onClick={() => setLayer(id)}
+              onClick={() => pickLayer(id)}
             >
               {tx(LAYERS[id].label)}
             </button>
@@ -462,6 +483,15 @@ export default function MapExplorer({ onClose }: { onClose: () => void }) {
                 {t(
                   "Arriba puedes cambiar lo que pintan los círculos: agua, futuro, lluvia, tierra o erosión.",
                   "At the top you can change what the circles show: water, future, rain, soil or erosion.",
+                )}
+              </p>
+              <a href="/mi-conuco" className="cta panelRegister">
+                {t("Registrar mi conuco", "Register my conuco")}
+              </a>
+              <p className="hint">
+                {t(
+                  "No hace falta cuenta. Así Ramoncito te da consejos para tu tierra.",
+                  "No account needed. That way Ramoncito can give you advice for your land.",
                 )}
               </p>
             </div>
@@ -556,7 +586,10 @@ function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
             role="tab"
             aria-selected={tab === id}
             className={tab === id ? "isOn" : undefined}
-            onClick={() => setTab(id)}
+            onClick={() => {
+              setTab(id);
+              if (id !== "sembrar") guide(`tab-${id}`);
+            }}
           >
             {label}
           </button>
@@ -566,7 +599,7 @@ function PointPanel({ d, s }: { d: PointDetail; s: PointSummary | null }) {
       {tab === "sembrar" && <SowTab d={d} />}
       {tab === "rotaciones" &&
         (d.model ? (
-          <RotationsTab model={d.model} />
+          <RotationsTab model={d.model} zone={s ? { id: s.id, name: zoneName(lang, s.name) } : undefined} />
         ) : (
           <p className="lede">{t("Faltan datos: corre «npm run data».", "Data missing: run «npm run data».")}</p>
         ))}

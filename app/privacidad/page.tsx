@@ -14,7 +14,7 @@ export async function generateMetadata() {
       };
 }
 
-const UPDATED = { es: "14 de noviembre de 2026", en: "November 14, 2026" };
+const UPDATED = { es: "15 de noviembre de 2026", en: "November 15, 2026" };
 const REPO = "https://github.com/englszz/NASA-SPACE-APPS";
 
 export default async function PrivacidadPage() {
@@ -67,16 +67,30 @@ function PrivacyEs() {
         </p>
 
         <h2>3. Los datos de tu conuco</h2>
-        <p>Si registras tu conuco, guardamos lo que tú escribas:</p>
+        <p>Si registras tu conuco, se guarda lo que tú escribas:</p>
         <ul>
           <li>el nombre del conuco y su ubicación en el mapa,</li>
           <li>el tamaño en tareas, lo que siembras hoy, el agua que tienes, cómo trabajas la tierra y dónde vendes,</li>
           <li>lo que es más importante para ti y las notas que quieras agregar.</li>
         </ul>
         <p>
-          Lo usamos <b>solo</b> para mostrarte información y consejos sobre tu conuco. <b>Solo tú puedes verlo</b>:
-          la base de datos tiene reglas que impiden que otra persona, incluso con acceso a la web, lea o cambie tu
-          conuco.
+          Lo usamos <b>solo</b> para mostrarte información y consejos sobre tu conuco. Dónde se guarda depende de ti:
+        </p>
+        <ul>
+          <li>
+            <b>Sin cuenta</b> (la opción de siempre): se guarda en una <b>cookie de tu propio navegador</b>, con la
+            ubicación redondeada a unos 100 metros. No queda en nuestra base de datos: tu navegador la envía a
+            nuestro servidor solo cuando le pides algo a Ramoncito, para calcular la zona y los consejos. Si borras
+            las cookies o usas otro teléfono, no estará.
+          </li>
+          <li>
+            <b>Con tu cuenta de Google</b>: se guarda en nuestra base de datos y <b>solo tú puedes verlo</b>. La base
+            de datos tiene reglas que impiden que otra persona, incluso con acceso a la web, lea o cambie tu conuco.
+          </li>
+        </ul>
+        <p>
+          La web también guarda en tu navegador algunas preferencias pequeñas: el idioma, si ya la visitaste y qué
+          consejos de Ramoncito ya viste.
         </p>
 
         <h2>4. Ramoncito (inteligencia artificial)</h2>
@@ -84,7 +98,8 @@ function PrivacyEs() {
           Para darte consejos y responder tus preguntas, enviamos a <b>Groq</b>, el servicio que ejecuta la
           inteligencia artificial, un <b>resumen</b> de tu conuco y de los datos de tu zona, junto con lo que escribes
           en el chat. Ese resumen <b>no incluye tu nombre, tu correo ni la ubicación exacta de tu conuco</b>. No
-          guardamos el historial de tus conversaciones: se borra al cerrar o recargar la página.
+          guardamos el historial de tus conversaciones: se borra al cerrar o recargar la página. Si estás mirando una
+          zona del mapa, también se usan los datos de esa zona.
         </p>
 
         <h2>5. Servicios que usamos</h2>
@@ -116,8 +131,9 @@ function PrivacyEs() {
 
         <h2>6. Cuánto tiempo los guardamos y cómo borrarlos</h2>
         <p>
-          Guardamos los datos de tu conuco mientras tengas tu cuenta. Puedes <b>cambiarlos o borrarlos cuando
-          quieras</b> desde <Link href="/mi-conuco">Mi conuco</Link> con el botón «Borrar mi conuco». Si también
+          Sin cuenta, la cookie dura un año en tu navegador. Con cuenta, guardamos los datos de tu conuco mientras
+          tengas tu cuenta. En los dos casos puedes <b>cambiarlos o borrarlos cuando quieras</b> desde{" "}
+          <Link href="/mi-conuco">Mi conuco</Link> con el botón «Borrar mi conuco». Si también
           quieres que borremos tu cuenta, escríbenos (punto 8).
         </p>
 
@@ -172,15 +188,30 @@ function PrivacyEn() {
         <p>We never receive your Google password or access to your email, contacts or files.</p>
 
         <h2>3. Your conuco&apos;s data</h2>
-        <p>If you register your conuco (your farm), we keep what you write:</p>
+        <p>If you register your conuco (your farm), what you write is saved:</p>
         <ul>
           <li>the conuco&apos;s name and its location on the map,</li>
           <li>its size in tareas, what you grow today, the water you have, how you work the land and where you sell,</li>
           <li>what matters most to you and any notes you add.</li>
         </ul>
         <p>
-          We use it <b>only</b> to show you information and advice about your conuco. <b>Only you can see it</b>: the
-          database has rules that stop anyone else, even with access to the site, from reading or changing your conuco.
+          We use it <b>only</b> to show you information and advice about your conuco. Where it&apos;s saved is up to you:
+        </p>
+        <ul>
+          <li>
+            <b>Without an account</b> (the default): it&apos;s saved in a <b>cookie in your own browser</b>, with the
+            location rounded to about 100 meters. It isn&apos;t kept in our database: your browser sends it to our server
+            only when you ask Ramoncito something, to work out your area and the advice. If you clear your cookies or
+            use another phone, it won&apos;t be there.
+          </li>
+          <li>
+            <b>With your Google account</b>: it&apos;s saved in our database and <b>only you can see it</b>. The database
+            has rules that stop anyone else, even with access to the site, from reading or changing your conuco.
+          </li>
+        </ul>
+        <p>
+          The site also keeps a few small preferences in your browser: the language, whether you&apos;ve visited before
+          and which of Ramoncito&apos;s tips you&apos;ve already seen.
         </p>
 
         <h2>4. Ramoncito (artificial intelligence)</h2>
@@ -188,7 +219,8 @@ function PrivacyEn() {
           To give you advice and answer your questions, we send <b>Groq</b>, the service that runs the artificial
           intelligence, a <b>summary</b> of your conuco and your area&apos;s data, along with what you type in the chat. That
           summary <b>does not include your name, your email or your conuco&apos;s exact location</b>. We don&apos;t keep your
-          chat history: it&apos;s erased when you close or reload the page.
+          chat history: it&apos;s erased when you close or reload the page. If you&apos;re looking at an area on the map, that
+          area&apos;s data is used too.
         </p>
 
         <h2>5. Services we use</h2>
@@ -220,8 +252,9 @@ function PrivacyEn() {
 
         <h2>6. How long we keep it and how to delete it</h2>
         <p>
-          We keep your conuco&apos;s data for as long as you have your account. You can <b>change or delete it at any
-          time</b> from <Link href="/mi-conuco">My conuco</Link> with the “Delete my conuco” button. If you also want us
+          Without an account, the cookie lasts one year in your browser. With an account, we keep your conuco&apos;s data
+          for as long as you have your account. Either way, you can <b>change or delete it at any time</b> from{" "}
+          <Link href="/mi-conuco">My conuco</Link> with the “Delete my conuco” button. If you also want us
           to delete your account, contact us (section 8).
         </p>
 

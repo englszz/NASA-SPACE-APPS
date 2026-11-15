@@ -2,8 +2,10 @@
 
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CURRENT_PRESETS } from "@/app/agro";
+import { guide } from "@/app/guia";
+import { OTHER_PREFIX, cleanCrop, isOther, otherText, saveLocalConuco } from "@/lib/conuco-local";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { AGUA, EQUIPO, PRIORIDADES, VENTA, type Conuco } from "@/lib/conuco";
 import { useLang } from "@/lib/i18n";
@@ -24,7 +26,17 @@ const EMPTY: Omit<Conuco, "lat" | "lon"> = {
   notas: null,
 };
 
-export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDone?: () => void }) {
+// mode «local»: se guarda en una cookie de este navegador (sin cuenta).
+// mode «cuenta»: se guarda en Supabase, en la cuenta de Google de la persona.
+export default function ConucoForm({
+  initial,
+  onDone,
+  mode,
+}: {
+  initial?: Conuco;
+  onDone?: () => void;
+  mode: "local" | "cuenta";
+}) {
   const { lang, t } = useLang();
   const tx = (x: { es: string; en: string }) => t(x.es, x.en);
   const router = useRouter();
@@ -34,6 +46,13 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
   );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  // Lo que siembra, si no está en la lista
+  const [other, setOther] = useState(initial && isOther(initial.siembra_actual) ? otherText(initial.siembra_actual) : "");
+
+  useEffect(() => {
+    if (mode === "local") guide("registro");
+    guide("ubicacion");
+  }, [mode]);
 
   const set = <K extends keyof typeof f>(k: K, v: (typeof f)[K]) => setF((x) => ({ ...x, [k]: v }));
   const togglePriority = (id: string) =>
@@ -43,8 +62,26 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
     e.preventDefault();
     if (!f.nombre.trim()) return setError(t("Ponle un nombre a tu conuco.", "Give your conuco a name."));
     if (!loc) return setError(t("Marca en el mapa dónde está tu conuco.", "Mark where your conuco is on the map."));
+    const siembra = isOther(f.siembra_actual) ? OTHER_PREFIX + cleanCrop(other) : f.siembra_actual;
+    if (isOther(siembra) && !otherText(siembra))
+      return setError(t("Escribe qué siembras en tu conuco.", "Type what you grow on your conuco."));
     setBusy(true);
     setError("");
+
+    if (mode === "local") {
+      const ok = saveLocalConuco({
+        ...f,
+        nombre: f.nombre.trim(),
+        lat: loc.lat,
+        lon: loc.lon,
+        siembra_actual: siembra,
+      });
+      setBusy(false);
+      if (!ok) return setError(t("No se pudo guardar. Revisa los datos e inténtalo otra vez.", "Couldn't save. Check the details and try again."));
+      onDone?.();
+      router.refresh();
+      return;
+    }
     const supabase = supabaseBrowser();
     const {
       data: { user },
@@ -59,7 +96,7 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
       lat: loc.lat,
       lon: loc.lon,
       tareas: f.tareas && f.tareas > 0 ? f.tareas : null,
-      siembra_actual: f.siembra_actual,
+      siembra_actual: siembra,
       agua: f.agua,
       prioridades: f.prioridades,
       equipo: f.equipo,
@@ -107,14 +144,37 @@ export default function ConucoForm({ initial, onDone }: { initial?: Conuco; onDo
 
       <label className="field">
         <span>{t("¿Qué siembras hoy?", "What do you grow today?")}</span>
-        <select value={f.siembra_actual} onChange={(e) => set("siembra_actual", e.target.value)}>
+        <select
+          value={isOther(f.siembra_actual) ? OTHER_PREFIX : f.siembra_actual}
+          onChange={(e) => {
+            set("siembra_actual", e.target.value);
+            if (isOther(e.target.value)) guide("otro");
+          }}
+        >
           {CURRENT_PRESETS.map((p) => (
             <option key={p.id} value={p.id}>
               {lang === "en" ? p.en : p.label}
             </option>
           ))}
+          <option value={OTHER_PREFIX}>{t("Otro cultivo (escríbelo)", "Another crop (type it)")}</option>
         </select>
-        <small>{t("Es tu rotación de hoy: así comparamos con otras opciones.", "This is your current rotation: we compare other options against it.")}</small>
+        {isOther(f.siembra_actual) && (
+          <input
+            value={other}
+            onChange={(e) => setOther(e.target.value)}
+            placeholder={t("Ej.: ají y tomate", "e.g. peppers and tomatoes")}
+            maxLength={60}
+            aria-label={t("¿Qué siembras?", "What do you grow?")}
+          />
+        )}
+        <small>
+          {isOther(f.siembra_actual)
+            ? t(
+                "Ese cultivo no está en nuestros cálculos, pero Ramoncito lo tendrá en cuenta al darte consejos.",
+                "That crop isn't in our calculations, but Ramoncito will take it into account when giving you advice.",
+              )
+            : t("Es tu rotación de hoy: así comparamos con otras opciones.", "This is your current rotation: we compare other options against it.")}
+        </small>
       </label>
 
       <fieldset className="field">

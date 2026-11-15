@@ -16,6 +16,8 @@ import {
 } from "./agro";
 import { useLang } from "@/lib/i18n";
 import { type Lang, crop, locale, monthByIndex } from "@/lib/lang";
+import { askRamoncito, guide } from "./guia";
+import { OTHER_PREFIX, cleanCrop, isOther, otherText } from "@/lib/conuco-local";
 
 type L2 = { es: string; en: string };
 
@@ -52,25 +54,71 @@ const joinAnd = (lang: Lang, items: string[]) =>
 // ROTACIONES
 // =====================================================================
 
-export function RotationsTab({ model, initialPreset }: { model: Model; initialPreset?: string }) {
+// «Otro»: si lo que siembra la persona no está en la lista, lo escribe y Ramoncito (IA)
+// lo compara con las opciones calculadas para la zona.
+export function RotationsTab({
+  model,
+  initialPreset,
+  zone,
+}: {
+  model: Model;
+  initialPreset?: string;
+  zone?: { id: string; name: string };
+}) {
   const { lang, t } = useLang();
   const [preset, setPreset] = useState(
-    CURRENT_PRESETS.some((p) => p.id === initialPreset) ? initialPreset! : CURRENT_PRESETS[0].id,
+    isOther(initialPreset)
+      ? OTHER_PREFIX
+      : CURRENT_PRESETS.some((p) => p.id === initialPreset)
+        ? initialPreset!
+        : CURRENT_PRESETS[0].id,
   );
-  const rots = useMemo(() => rotationsFor(model, preset), [model, preset]);
+  const [other, setOther] = useState(isOther(initialPreset) ? otherText(initialPreset!) : "");
+  const otherMode = preset === OTHER_PREFIX;
+  // Con «Otro» no hay rotación actual calculada: se muestran solo las opciones de la zona
+  const rots = useMemo(() => rotationsFor(model, otherMode ? CURRENT_PRESETS[0].id : preset), [model, preset, otherMode]);
+  const shown = otherMode ? rots.slice(1) : rots;
   const notes = useMemo(() => monthNotes(model.clim), [model]);
   const base = rots[0];
+
+  useEffect(() => {
+    guide("tab-rotaciones");
+  }, []);
+
+  const askOther = () => {
+    const what = cleanCrop(other);
+    if (!what) return;
+    const options = rots
+      .slice(1)
+      .map((r) => r.placements.map((p) => crop(lang, p.crop.name)).join(" → "))
+      .join("; ");
+    const where = zone ? t(`en la zona ${zone.name}`, `in the ${zone.name} area`) : t("en mi zona", "in my area");
+    askRamoncito(
+      t(
+        `Yo siembro ${what} ${where}. Eso no sale en la lista. ¿Le va bien a esta zona? ¿Cómo se compara con estas opciones (${options}) y con qué lo puedo rotar?`,
+        `I grow ${what} ${where}. It isn't on the list. Does it suit this area? How does it compare with these options (${options}) and what can I rotate it with?`,
+      ),
+      zone?.id,
+    );
+  };
 
   return (
     <section className="tabPane">
       <label className="presetPick">
         <span>{t("¿Qué siembras hoy en tu conuco?", "What do you grow on your conuco today?")}</span>
-        <select value={preset} onChange={(e) => setPreset(e.target.value)}>
+        <select
+          value={preset}
+          onChange={(e) => {
+            setPreset(e.target.value);
+            if (e.target.value === OTHER_PREFIX) guide("otro");
+          }}
+        >
           {CURRENT_PRESETS.map((p) => (
             <option key={p.id} value={p.id}>
               {lang === "en" ? p.en : p.label}
             </option>
           ))}
+          <option value={OTHER_PREFIX}>{t("Otro cultivo (escríbelo)", "Another crop (type it)")}</option>
         </select>
         {lang === "en" ? (
           <small>
@@ -85,11 +133,46 @@ export function RotationsTab({ model, initialPreset }: { model: Model; initialPr
         )}
       </label>
 
+      {otherMode && (
+        <form
+          className="otherCrop"
+          onSubmit={(e) => {
+            e.preventDefault();
+            askOther();
+          }}
+        >
+          <label>
+            <span>{t("¿Qué siembras?", "What do you grow?")}</span>
+            <input
+              value={other}
+              onChange={(e) => setOther(e.target.value)}
+              placeholder={t("Ej.: ají, tomate, café…", "e.g. peppers, tomatoes, coffee…")}
+              maxLength={60}
+            />
+          </label>
+          <button type="submit" className="cta" disabled={!cleanCrop(other)}>
+            {t("Pregúntale a Ramoncito", "Ask Ramoncito")}
+          </button>
+          <small>
+            {t(
+              "Ese cultivo no está en nuestros cálculos. Ramoncito (IA) lo compara con las opciones de esta zona que ves abajo.",
+              "That crop isn't in our calculations. Ramoncito (AI) compares it with this area's options shown below.",
+            )}
+          </small>
+        </form>
+      )}
+
       <YearStrip notes={notes} />
 
       <ol className="rotList">
-        {rots.map((r, i) => (
-          <RotationCard key={r.id + preset} r={r} base={i === 0 ? null : base} model={model} />
+        {shown.map((r, i) => (
+          <RotationCard
+            key={r.id + preset}
+            r={r}
+            base={otherMode ? null : i === 0 ? null : base}
+            standalone={otherMode}
+            model={model}
+          />
         ))}
       </ol>
 
@@ -187,14 +270,16 @@ function RotationCard({
   r,
   base,
   model,
+  standalone = false,
 }: {
   r: Rotation & { badges?: { id: string; label: string }[] };
   base: Rotation | null;
   model: Model;
+  standalone?: boolean; // una opción de la zona sin rotación actual con qué compararla («Otro»)
 }) {
   const { lang, t } = useLang();
-  const isBase = !base;
-  const why = explain(lang, r, base, model);
+  const isBase = !base && !standalone;
+  const why = explain(lang, r, base, model, standalone);
   const names = r.placements.map((p) => crop(lang, p.crop.name));
   return (
     <li className={`rotCard${isBase ? " isBase" : ""}`}>
@@ -254,7 +339,7 @@ function RotationCard({
 }
 
 // Las 5 cosas que pide el reto para cada estrategia, en palabras sencillas
-function explain(lang: Lang, r: Rotation, base: Rotation | null, model: Model): [string, string][] {
+function explain(lang: Lang, r: Rotation, base: Rotation | null, model: Model, standalone = false): [string, string][] {
   const t = (es: string, en: string) => (lang === "en" ? en : es);
   const crops = r.placements.map((p) => p.crop);
   const name = (c: { name: string }) => crop(lang, c.name);
@@ -262,7 +347,7 @@ function explain(lang: Lang, r: Rotation, base: Rotation | null, model: Model): 
   const out: [string, string][] = [];
 
   // 1. Por qué se sugiere
-  if (!base) {
+  if (!base && !standalone) {
     out.push([
       t("Por qué aparece", "Why it's here"),
       t("Es lo que siembras hoy. Sirve para comparar las otras opciones.", "It's what you grow today. It's the baseline for comparing the other options."),
@@ -281,7 +366,7 @@ function explain(lang: Lang, r: Rotation, base: Rotation | null, model: Model): 
           "The legume returns nitrogen to the soil, so you need less fertilizer.",
         ),
       );
-    if (r.bareMonths.length < base.bareMonths.length)
+    if (base && r.bareMonths.length < base.bareMonths.length)
       parts.push(
         t(
           `La tierra queda desnuda ${r.bareMonths.length} meses en vez de ${base.bareMonths.length}.`,
@@ -403,7 +488,17 @@ export function WhatIf({ model }: { model: Model }) {
               ? t(`La lluvia sube ${rain}%`, `Rainfall rises ${rain}%`)
               : t(`La lluvia baja ${Math.abs(rain)}%`, `Rainfall drops ${Math.abs(rain)}%`)}
         </span>
-        <input type="range" min={-40} max={20} step={5} value={rain} onChange={(e) => setRain(+e.target.value)} />
+        <input
+          type="range"
+          min={-40}
+          max={20}
+          step={5}
+          value={rain}
+          onChange={(e) => {
+            setRain(+e.target.value);
+            guide("simulador");
+          }}
+        />
       </label>
       <label className="slider">
         <span>

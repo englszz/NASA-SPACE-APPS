@@ -1,138 +1,275 @@
 "use client";
 
-// Chat flotante de Ramoncito (IA). Un círculo con el sombrero abajo a la derecha,
-// en todas las páginas. Se abre al tocarlo o con el evento «abrir-ramoncito».
+// Ramoncito: chat con IA y guía de la página. Un círculo con el sombrero abajo a la
+// derecha, en todas las páginas.
+// - Chat: funciona SIN iniciar sesión. Usa el conuco guardado (cuenta o cookie) y la
+//   zona del mapa que la persona esté mirando.
+// - Guía: globos cortos al tocar cosas difíciles (ver app/guia.ts) y, cada cierto
+//   tiempo, algún consejo general. Cada consejo sale una sola vez y se pueden apagar.
 
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { readLocalConuco } from "@/lib/conuco-local";
 import RichText from "./RichText";
+import { GENERAL_TIPS, MAP_TIPS, TIPS, type TipId } from "./guia";
 import { useLang } from "@/lib/i18n";
 
 type Msg = { role: "user" | "assistant"; content: string };
-type Access = "loading" | "noconfig" | "guest" | "noconuco" | "ready";
+type Known = "loading" | "none" | "local" | "cuenta";
+type Zone = { id: string; name: string } | null;
 
 const EXAMPLES = {
   es: ["¿Qué siembro el mes que viene?", "¿Riego esta semana?", "¿Cómo protejo mi tierra de la lluvia?"],
   en: ["What should I plant next month?", "Should I water this week?", "How do I protect my soil from the rain?"],
 };
 
-const HINT_KEY = "ramoncito-globo-cerrado";
+const SEEN_KEY = "ramoncito-consejos-vistos";
+const MUTE_KEY = "ramoncito-sin-consejos";
+const OLD_HINT_KEY = "ramoncito-globo-cerrado"; // el globo de bienvenida de antes
+
+const SHOW_MS = 13000; // cuánto dura un globo en pantalla
+const MIN_GAP_MS = 4000; // un consejo nuevo no tapa a otro que acaba de salir
+const GENERAL_EVERY_MS = 70000; // cada cuánto puede salir un consejo general
+const GENERAL_MAX = 4; // máximo de consejos generales por visita
+
+const store = {
+  get(k: string) {
+    try {
+      return localStorage.getItem(k);
+    } catch {
+      return null;
+    }
+  },
+  set(k: string, v: string) {
+    try {
+      localStorage.setItem(k, v);
+    } catch {
+      // sin almacenamiento (modo privado): solo vale para esta visita
+    }
+  },
+  del(k: string) {
+    try {
+      localStorage.removeItem(k);
+    } catch {
+      // nada que borrar
+    }
+  },
+};
 
 export const openRamoncito = () => window.dispatchEvent(new Event("abrir-ramoncito"));
 
 export default function RamoncitoChat() {
   const { lang, t } = useLang();
   const [open, setOpen] = useState(false);
-  const [access, setAccess] = useState<Access>("loading");
+  const [known, setKnown] = useState<Known>("loading");
+  const [zone, setZone] = useState<Zone>(null);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [hint, setHint] = useState(false);
+  const [tip, setTip] = useState<TipId | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // ¿Puede usar la IA? (sesión iniciada y conuco registrado)
-  const checkAccess = useCallback(async () => {
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return setAccess("noconfig");
-    try {
-      const sb = supabaseBrowser();
-      const {
-        data: { user },
-      } = await sb.auth.getUser();
-      if (!user) return setAccess("guest");
-      const { data } = await sb.from("conucos").select("id").eq("user_id", user.id).maybeSingle();
-      setAccess(data ? "ready" : "noconuco");
-    } catch {
-      setAccess("guest");
+  // ---------------- guía ----------------
+  const seen = useRef<Set<string>>(new Set());
+  const muted = useRef(false);
+  const shownAt = useRef(0);
+  const pending = useRef<TipId[]>([]); // consejos esperando turno, en orden
+  const generalCount = useRef(0);
+  const openRef = useRef(false);
+  openRef.current = open;
+
+  const show = useCallback((id: TipId) => {
+    if (muted.current || seen.current.has(id)) return;
+    // Un consejo del mapa que quedó esperando ya no sirve si el mapa se cerró
+    if (MAP_TIPS.has(id) && !document.querySelector(".mapRoom .explorer")) {
+      pending.current = pending.current.filter((x) => x !== id);
+      return;
     }
+    if (openRef.current || Date.now() - shownAt.current < MIN_GAP_MS) {
+      if (!pending.current.includes(id)) pending.current = [...pending.current, id].slice(-3); // sale cuando haya un hueco
+      return;
+    }
+    pending.current = pending.current.filter((x) => x !== id);
+    seen.current.add(id);
+    store.set(SEEN_KEY, JSON.stringify([...seen.current]));
+    shownAt.current = Date.now();
+    setTip(id);
   }, []);
 
-  // Globo «Soy tu asistente virtual»: se muestra hasta que la persona lo cierra con la X
+  // Cargar lo ya visto. En /jueces se empieza de cero para ver toda la guía.
   useEffect(() => {
-    let closed = false;
-    try {
-      closed = localStorage.getItem(HINT_KEY) === "1";
-    } catch {
-      // sin almacenamiento (modo privado): se muestra igual
+    if (location.pathname.startsWith("/jueces")) {
+      store.del(SEEN_KEY);
+      store.del(MUTE_KEY);
+    } else {
+      try {
+        seen.current = new Set(JSON.parse(store.get(SEEN_KEY) ?? "[]"));
+      } catch {
+        seen.current = new Set();
+      }
+      if (store.get(OLD_HINT_KEY) === "1") seen.current.add("hola");
+      muted.current = store.get(MUTE_KEY) === "1";
     }
-    if (closed) return;
-    const t = setTimeout(() => setHint(true), 1200);
-    return () => clearTimeout(t);
-  }, []);
+    const hello = setTimeout(() => show("hola"), 1200);
+    const onTip = (e: Event) => show((e as CustomEvent<TipId>).detail);
+    window.addEventListener("ramoncito-guia", onTip);
+    return () => {
+      clearTimeout(hello);
+      window.removeEventListener("ramoncito-guia", onTip);
+    };
+  }, [show]);
 
-  const closeHint = () => {
-    setHint(false);
-    try {
-      localStorage.setItem(HINT_KEY, "1");
-    } catch {
-      // sin almacenamiento: solo se oculta por ahora
+  // Cada globo se va solo; después sale el que estaba esperando
+  useEffect(() => {
+    if (!tip) {
+      const next = setTimeout(() => pending.current.length && show(pending.current[0]), 1500);
+      return () => clearTimeout(next);
     }
+    const hide = setTimeout(() => setTip(null), SHOW_MS);
+    return () => clearTimeout(hide);
+  }, [tip, open, show]);
+
+  // De vez en cuando, un consejo general (sin molestar: pocos y espaciados)
+  useEffect(() => {
+    const iv = setInterval(() => {
+      if (muted.current || openRef.current || document.hidden || generalCount.current >= GENERAL_MAX) return;
+      if (Date.now() - shownAt.current < GENERAL_EVERY_MS - 5000) return;
+      const onMap = !!document.querySelector(".mapRoom .explorer");
+      const id = GENERAL_TIPS[onMap ? "map" : "home"].find((x) => !seen.current.has(x));
+      if (!id) return;
+      generalCount.current++;
+      show(id);
+    }, GENERAL_EVERY_MS);
+    return () => clearInterval(iv);
+  }, [show]);
+
+  const closeTip = () => setTip(null);
+  const muteTips = () => {
+    muted.current = true;
+    pending.current = [];
+    store.set(MUTE_KEY, "1");
+    setTip(null);
   };
 
-  useEffect(() => {
-    const show = () => setOpen(true);
-    window.addEventListener("abrir-ramoncito", show);
-    return () => window.removeEventListener("abrir-ramoncito", show);
+  // ---------------- chat ----------------
+
+  // ¿Tiene un conuco guardado? (en su cuenta o en este navegador)
+  const checkKnown = useCallback(async () => {
+    if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      try {
+        const sb = supabaseBrowser();
+        const {
+          data: { session },
+        } = await sb.auth.getSession();
+        if (session) {
+          const { data } = await sb.from("conucos").select("id").eq("user_id", session.user.id).maybeSingle();
+          if (data) return setKnown("cuenta");
+        }
+      } catch {
+        // sin conexión con Supabase: se mira la cookie
+      }
+    }
+    setKnown(readLocalConuco() ? "local" : "none");
   }, []);
 
   useEffect(() => {
-    if (!open) return;
-    checkAccess();
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, checkAccess]);
+    checkKnown();
+    window.addEventListener("conuco-cambio", checkKnown);
+    return () => window.removeEventListener("conuco-cambio", checkKnown);
+  }, [checkKnown]);
 
+  // La zona del mapa que la persona está mirando (para responder sobre esa zona)
   useEffect(() => {
-    if (open && access === "ready") inputRef.current?.focus();
-  }, [open, access]);
+    const onZone = (e: Event) => setZone((e as CustomEvent<Zone>).detail);
+    window.addEventListener("zona-elegida", onZone);
+    return () => window.removeEventListener("zona-elegida", onZone);
+  }, []);
 
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ block: "nearest" });
-  }, [msgs, busy]);
+  // Refs para que «send» siempre vea lo último (también cuando la llama un evento)
+  const msgsRef = useRef<Msg[]>([]);
+  msgsRef.current = msgs;
+  const busyRef = useRef(false);
+  const zoneRef = useRef<Zone>(null);
+  zoneRef.current = zone;
+  const langRef = useRef(lang);
+  langRef.current = lang;
 
-  const send = async (text: string) => {
+  const send = useCallback(async (text: string, zoneId?: string) => {
     const q = text.trim();
-    if (!q || busy) return;
-    const next: Msg[] = [...msgs, { role: "user", content: q.slice(0, 1500) }];
+    if (!q || busyRef.current) return;
+    const en = langRef.current === "en";
+    const next: Msg[] = [...msgsRef.current, { role: "user", content: q.slice(0, 1500) }];
+    msgsRef.current = next;
     setMsgs(next);
     setInput("");
+    busyRef.current = true;
     setBusy(true);
     setError("");
     try {
       const r = await fetch("/api/ramoncito", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "chat", messages: next, lang }),
+        body: JSON.stringify({ mode: "chat", messages: next, lang: langRef.current, zoneId: zoneId ?? zoneRef.current?.id }),
       });
       const j = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(j.error || t("Ramoncito no pudo responder ahora.", "Ramoncito couldn't answer right now."));
-      setMsgs([...next, { role: "assistant", content: j.reply }]);
+      if (!r.ok) throw new Error(j.error || (en ? "Ramoncito couldn't answer right now." : "Ramoncito no pudo responder ahora."));
+      const done: Msg[] = [...next, { role: "assistant", content: j.reply }];
+      msgsRef.current = done;
+      setMsgs(done);
     } catch (e) {
       setError((e as Error).message);
     }
+    busyRef.current = false;
     setBusy(false);
-  };
+  }, []);
+
+  // Abrir el chat (desde un botón) o abrirlo con una pregunta ya escrita
+  useEffect(() => {
+    const onOpen = () => setOpen(true);
+    const onAsk = (e: Event) => {
+      const { question, zoneId } = (e as CustomEvent<{ question: string; zoneId?: string }>).detail;
+      setOpen(true);
+      setTip(null);
+      send(question, zoneId);
+    };
+    window.addEventListener("abrir-ramoncito", onOpen);
+    window.addEventListener("preguntar-ramoncito", onAsk);
+    return () => {
+      window.removeEventListener("abrir-ramoncito", onOpen);
+      window.removeEventListener("preguntar-ramoncito", onAsk);
+    };
+  }, [send]);
+
+  useEffect(() => {
+    if (!open) return;
+    setTip(null);
+    inputRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ block: "nearest" });
+  }, [msgs, busy]);
 
   return (
     <>
-      {hint && !open && (
-        <div className="rcHint" role="status">
-          <button type="button" className="rcHintText" onClick={() => setOpen(true)}>
-            {lang === "en" ? (
-              <>
-                Hi! My name is Ramoncito and I'm your virtual assistant. <b>Ask me anything!</b>
-              </>
-            ) : (
-              <>
-                ¡Hola! Mi nombre es Ramoncito y soy tu asistente virtual. <b>¡Consulta cualquier duda!</b>
-              </>
-            )}
-          </button>
-          <button type="button" className="rcHintClose" onClick={closeHint} aria-label={t("Cerrar este mensaje", "Close this message")}>
+      {tip && !open && (
+        <div className="rcHint" role="status" key={tip}>
+          <div className="rcHintMain">
+            <button type="button" className="rcHintText" onClick={() => setOpen(true)}>
+              {t(TIPS[tip].es, TIPS[tip].en)}
+            </button>
+            <button type="button" className="rcHintMute" onClick={muteTips}>
+              {t("No mostrar más consejos", "Don't show more tips")}
+            </button>
+          </div>
+          <button type="button" className="rcHintClose" onClick={closeTip} aria-label={t("Cerrar este mensaje", "Close this message")}>
             ×
           </button>
         </div>
@@ -164,98 +301,73 @@ export default function RamoncitoChat() {
           </header>
 
           <div className="rcBody" aria-live="polite">
-            {access === "loading" && <p className="hint">{t("Un momento…", "One moment…")}</p>}
-
-            {access === "noconfig" && (
-              <p className="rcNote">{t("El chat todavía no está configurado en esta web.", "Chat isn't set up on this site yet.")}</p>
-            )}
-
-            {access === "guest" && (
-              <div className="rcNote">
-                {lang === "en" ? (
-                  <>
-                    <p>
-                      Hi, I'm Ramoncito. To give you advice about <b>your</b> conuco (farm), I need to know where it is.
-                    </p>
-                    <p>Sign in with Google and register it: it takes a minute and only you can see your data.</p>
-                  </>
-                ) : (
-                  <>
-                    <p>
-                      Hola, soy Ramoncito. Para darte consejos sobre <b>tu</b> conuco necesito saber dónde está.
-                    </p>
-                    <p>Entra con Google y regístralo: toma un minuto y tus datos solo los ves tú.</p>
-                  </>
-                )}
-                <Link href="/mi-conuco" className="cta rcCta" onClick={() => setOpen(false)}>
-                  {t("Entrar a Mi conuco", "Go to My conuco")}
+            {known === "none" && (
+              <div className="rcNote rcNoteSoft">
+                <p>
+                  {zone
+                    ? t(
+                        `Te respondo con los datos de la zona que tocaste en el mapa (${zone.name}).`,
+                        `I'll answer with the data for the area you tapped on the map (${zone.name}).`,
+                      )
+                    : t(
+                        "Te respondo con datos generales del Cibao. Toca una zona en el mapa o registra tu conuco para consejos de tu tierra.",
+                        "I'll answer with general Cibao data. Tap an area on the map or register your conuco for advice about your land.",
+                      )}
+                </p>
+                <Link href="/mi-conuco" className="rcRegister" onClick={() => setOpen(false)}>
+                  {t("Registrar mi conuco (sin cuenta)", "Register my conuco (no account)")}
                 </Link>
               </div>
             )}
 
-            {access === "noconuco" && (
-              <div className="rcNote">
-                <p>{t("Ya entraste. Ahora cuéntame de tu conuco para poder ayudarte.", "You're signed in. Now tell me about your conuco so I can help.")}</p>
-                <Link href="/mi-conuco" className="cta rcCta" onClick={() => setOpen(false)}>
-                  {t("Registrar mi conuco", "Register my conuco")}
-                </Link>
-              </div>
-            )}
-
-            {access === "ready" && (
+            {!msgs.length && (
               <>
-                {!msgs.length && (
-                  <>
-                    <div className="bubbleMsg bot">
-                      <p>
-                        {t(
-                          "Hola. Puedes preguntarme sobre tu conuco: qué sembrar, cuándo regar o cómo cuidar tu tierra.",
-                          "Hi. You can ask me about your conuco: what to plant, when to water or how to care for your soil.",
-                        )}
-                      </p>
-                    </div>
-                    <div className="rcChips">
-                      {EXAMPLES[lang].map((q) => (
-                        <button key={q} type="button" onClick={() => send(q)}>
-                          {q}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-                {msgs.map((m, i) => (
-                  <div key={i} className={`bubbleMsg ${m.role === "user" ? "me" : "bot"}`}>
-                    {m.role === "assistant" ? <RichText text={m.content} /> : m.content}
-                  </div>
-                ))}
-                {busy && <div className="bubbleMsg bot rcTyping">{t("Ramoncito está escribiendo…", "Ramoncito is typing…")}</div>}
-                {error && <p className="mcError">{error}</p>}
+                <div className="bubbleMsg bot">
+                  <p>
+                    {t(
+                      "Hola. Puedes preguntarme qué sembrar, cuándo regar, cómo cuidar tu tierra o qué significa algo de la página.",
+                      "Hi. You can ask me what to plant, when to water, how to care for your soil or what something on the page means.",
+                    )}
+                  </p>
+                </div>
+                <div className="rcChips">
+                  {EXAMPLES[lang].map((q) => (
+                    <button key={q} type="button" onClick={() => send(q)} disabled={busy}>
+                      {q}
+                    </button>
+                  ))}
+                </div>
               </>
             )}
+            {msgs.map((m, i) => (
+              <div key={i} className={`bubbleMsg ${m.role === "user" ? "me" : "bot"}`}>
+                {m.role === "assistant" ? <RichText text={m.content} /> : m.content}
+              </div>
+            ))}
+            {busy && <div className="bubbleMsg bot rcTyping">{t("Ramoncito está escribiendo…", "Ramoncito is typing…")}</div>}
+            {error && <p className="mcError">{error}</p>}
             <div ref={endRef} />
           </div>
 
-          {access === "ready" && (
-            <form
-              className="chatForm rcForm"
-              onSubmit={(e) => {
-                e.preventDefault();
-                send(input);
-              }}
-            >
-              <input
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={t("Escribe tu pregunta…", "Type your question…")}
-                maxLength={1500}
-                aria-label={t("Tu pregunta para Ramoncito", "Your question for Ramoncito")}
-              />
-              <button type="submit" className="cta" disabled={busy || !input.trim()}>
-                {t("Enviar", "Send")}
-              </button>
-            </form>
-          )}
+          <form
+            className="chatForm rcForm"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!busy) send(input);
+            }}
+          >
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={t("Escribe tu pregunta…", "Type your question…")}
+              maxLength={1500}
+              aria-label={t("Tu pregunta para Ramoncito", "Your question for Ramoncito")}
+            />
+            <button type="submit" className="cta" disabled={busy || !input.trim()}>
+              {t("Enviar", "Send")}
+            </button>
+          </form>
           <p className="rcFoot">{t("Ramoncito es una IA: puede equivocarse. Confírmalo con un técnico agrícola.", "Ramoncito is an AI: it can make mistakes. Check with an agronomist.")}</p>
         </section>
       )}

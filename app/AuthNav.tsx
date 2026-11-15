@@ -1,10 +1,12 @@
 "use client";
 
-// «Mi conuco» y, si hay sesión iniciada, «Cerrar sesión».
+// Botón «Registrar mi conuco» (o «Mi conuco» si ya lo registró, con o sin cuenta) y,
+// si hay sesión iniciada, «Cerrar sesión».
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { useLang } from "@/lib/i18n";
+import { readLocalConuco } from "@/lib/conuco-local";
 
 const configured = () => !!process.env.NEXT_PUBLIC_SUPABASE_URL && !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -13,6 +15,14 @@ export default function AuthNav({ showConuco = true, variant = "nav" }: { showCo
   const { t } = useLang();
   const [signedIn, setSignedIn] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [hasLocal, setHasLocal] = useState(false);
+
+  useEffect(() => {
+    const check = () => setHasLocal(!!readLocalConuco());
+    check();
+    window.addEventListener("conuco-cambio", check);
+    return () => window.removeEventListener("conuco-cambio", check);
+  }, []);
 
   useEffect(() => {
     if (!configured()) return;
@@ -34,8 +44,8 @@ export default function AuthNav({ showConuco = true, variant = "nav" }: { showCo
   return (
     <>
       {showConuco && (
-        <a href="/mi-conuco" className="navConuco">
-          {t("Mi conuco", "My conuco")}
+        <a href="/mi-conuco" className={`navConuco${signedIn || hasLocal ? "" : " isRegister"}`}>
+          {signedIn || hasLocal ? t("Mi conuco", "My conuco") : t("Registrar mi conuco", "Register my conuco")}
         </a>
       )}
       {signedIn && (

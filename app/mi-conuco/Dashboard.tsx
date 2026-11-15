@@ -10,6 +10,8 @@ import { AGUA, MAX_ZONE_KM, nearestZone, type Conuco, type ZonePoint } from "@/l
 import ConucoForm from "./ConucoForm";
 import RichText from "@/app/RichText";
 import { openRamoncito } from "@/app/RamoncitoChat";
+import { guide } from "@/app/guia";
+import { clearLocalConuco, isOther, otherText } from "@/lib/conuco-local";
 import { useLang } from "@/lib/i18n";
 import { zoneName } from "@/lib/lang";
 
@@ -24,7 +26,7 @@ async function ask(body: object, fallback: string): Promise<string> {
   return j.reply as string;
 }
 
-export default function Dashboard({ conuco, firstName }: { conuco: Conuco; firstName: string }) {
+export default function Dashboard({ conuco, firstName, mode }: { conuco: Conuco; firstName: string; mode: "local" | "cuenta" }) {
   const { lang, t } = useLang();
   const router = useRouter();
   const [editing, setEditing] = useState(false);
@@ -47,6 +49,10 @@ export default function Dashboard({ conuco, firstName }: { conuco: Conuco; first
     };
   }, [conuco.lat, conuco.lon]);
 
+  useEffect(() => {
+    guide("mi-conuco");
+  }, []);
+
   const signOut = async () => {
     await supabaseBrowser().auth.signOut();
     router.refresh();
@@ -55,7 +61,8 @@ export default function Dashboard({ conuco, firstName }: { conuco: Conuco; first
   const remove = async () => {
     if (!confirm(t("¿Borrar tu conuco y todos sus datos? Esto no se puede deshacer.", "Delete your conuco and all its data? This can't be undone.")))
       return;
-    await supabaseBrowser().from("conucos").delete().eq("user_id", conuco.user_id!);
+    if (mode === "local") clearLocalConuco();
+    else await supabaseBrowser().from("conucos").delete().eq("user_id", conuco.user_id!);
     router.refresh();
   };
 
@@ -63,7 +70,7 @@ export default function Dashboard({ conuco, firstName }: { conuco: Conuco; first
     return (
       <section className="mcCard">
         <h1>{t("Cambiar los datos de tu conuco", "Edit your conuco details")}</h1>
-        <ConucoForm initial={conuco} onDone={() => setEditing(false)} />
+        <ConucoForm mode={mode} initial={conuco} onDone={() => setEditing(false)} />
       </section>
     );
 
@@ -100,9 +107,11 @@ export default function Dashboard({ conuco, firstName }: { conuco: Conuco; first
           <button type="button" className="fcMore" onClick={() => setEditing(true)}>
             {t("Cambiar datos", "Edit details")}
           </button>
-          <button type="button" className="fcMore" onClick={signOut}>
-            {t("Cerrar sesión", "Sign out")}
-          </button>
+          {mode === "cuenta" && (
+            <button type="button" className="fcMore" onClick={signOut}>
+              {t("Cerrar sesión", "Sign out")}
+            </button>
+          )}
         </div>
       </section>
 
@@ -120,15 +129,30 @@ export default function Dashboard({ conuco, firstName }: { conuco: Conuco; first
         <p className="mcLead">
           {t("Lo que siembras hoy, frente a otras opciones calculadas para tu zona.", "What you grow today, compared with other options calculated for your area.")}
         </p>
+        {isOther(conuco.siembra_actual) && (
+          <p className="hint">
+            {t(
+              `Lo que siembras (${otherText(conuco.siembra_actual)}) no está en nuestros cálculos. Toca «Pregúntale a Ramoncito» y lo compara con estas opciones.`,
+              `What you grow (${otherText(conuco.siembra_actual)}) isn't in our calculations. Tap «Ask Ramoncito» and it will be compared with these options.`,
+            )}
+          </p>
+        )}
         {model ? (
-          <RotationsTab model={model} initialPreset={conuco.siembra_actual} />
+          <RotationsTab model={model} initialPreset={conuco.siembra_actual} zone={zone ? { id: zone.id, name: zone.name } : undefined} />
         ) : (
           <p className="hint">{t("Cargando…", "Loading…")}</p>
         )}
       </section>
 
       <section className="mcPrivacy">
-        {lang === "en" ? (
+        {mode === "local" ? (
+          <p>
+            {t(
+              "Tus datos están guardados solo en este navegador (en una cookie), no en una cuenta. Para darte consejos, Ramoncito envía a la IA (Groq) un resumen de tu conuco y de tu zona, sin tu ubicación exacta.",
+              "Your details are saved only in this browser (in a cookie), not in an account. To give you advice, Ramoncito sends the AI (Groq) a summary of your conuco and your area, without your exact location.",
+            )}
+          </p>
+        ) : lang === "en" ? (
           <p>
             <b>Your data is yours.</b> Only you can see your conuco. To give you advice, Ramoncito sends the AI (Groq) a
             summary of your conuco and your area, without your name, email or exact location.
