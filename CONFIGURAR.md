@@ -27,9 +27,14 @@ van solo en el archivo `.env.local`, que git ya ignora.
 2. Cuando termine de crearse: menú **SQL Editor** → **New query** → pega TODO el contenido de
    `supabase/schema.sql` → **Run**. Debe decir *Success*.
    Esto crea la tabla `conucos` con la regla de que **cada persona solo ve su propio conuco**.
-3. Menú **Project Settings → API** (o **Data API / API Keys**): copia
-   - **Project URL** (algo como `https://abcdxyz.supabase.co`)
-   - la clave **anon / public** (o **publishable**, si tu proyecto usa las claves nuevas).
+3. Copia estos dos valores (Supabase cambió los nombres; estos son los actuales):
+   - **La URL del proyecto:** **Project Settings → Data API → API URL**.
+     Tiene la forma `https://xxxxxxxx.supabase.co`. («Project URL» y «API URL» son lo mismo.)
+   - **La clave pública:** **Project Settings → API Keys → Publishable key**
+     (empieza por `sb_publishable_…`; reemplaza a la antigua clave «anon»). Usa la que ya existe
+     (la marcada *default*); no hace falta crear otra.
+   - ⚠️ **NO uses la Secret key** (`sb_secret_…`): salta todas las reglas de privacidad y esta web no
+     la necesita. No la copies a ningún archivo.
 
 ---
 
@@ -72,8 +77,8 @@ cp .env.example .env.local
 Abre `.env.local` y reemplaza los valores:
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=   ← Project URL (Parte B3)
-NEXT_PUBLIC_SUPABASE_ANON_KEY=   ← clave anon/publishable (Parte B3)
+NEXT_PUBLIC_SUPABASE_URL=   ← API URL, https://xxxx.supabase.co (Parte B3)
+NEXT_PUBLIC_SUPABASE_ANON_KEY=   ← Publishable key, sb_publishable_… (Parte B3)
 GROQ_API_KEY=   ← clave gsk_... (Parte A2)
 GROQ_MODEL=   ← nombre del modelo (Parte A3)
 ```
