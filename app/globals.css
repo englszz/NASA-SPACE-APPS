@@ -3429,3 +3429,45 @@ button.ctaSmall {
 @media (max-width: 560px) {
   .canGrid { grid-template-columns: 1fr; }
 }
+
+/* ---- página de privacidad ---- */
+.legal {
+  max-width: 780px;
+  line-height: 1.65;
+}
+
+.legal h1 {
+  margin: 4px 0 10px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  color: var(--green-title);
+}
+
+.legal h2 {
+  margin: 28px 0 8px;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--green-title);
+}
+
+.legal p,
+.legal li {
+  color: var(--ink);
+}
+
+.legal ul {
+  padding-left: 22px;
+}
+
+.legal a {
+  color: var(--green-title);
+  font-weight: 700;
+}
+
+.footerLink {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-weight: 800;
+  color: var(--sun);
+}

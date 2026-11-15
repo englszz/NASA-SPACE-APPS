@@ -618,6 +618,10 @@ export function SiteFooter() {
         <div>
           <Image src="/logo-texto.png" alt="The Conuco" width={900} height={271} className="footerLogo" />
           <p>
+            <a href="/privacidad" className="footerLink">
+              Política de privacidad
+            </a>
+            <br />
             Proyecto del equipo The Conuco para NASA Space Apps Challenge 2026. Sitio independiente: no está
             afiliado ni respaldado por la NASA.
           </p>

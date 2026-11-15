@@ -16,6 +16,10 @@ const SITE_URL =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  // Código de Google Search Console, si Google pide comprobar que la web es tuya
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
+    : {}),
   title: "The Conuco",
   description: "Datos de la NASA para decidir qué sembrar, cuándo y dónde en el Cibao. Proyecto para NASA Space Apps Challenge 2026 (Field Shift).",
   applicationName: "The Conuco",

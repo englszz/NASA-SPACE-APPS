@@ -43,7 +43,8 @@ export default function LoginCard({ failed }: { failed?: boolean }) {
         {error && <p className="mcError">{error}</p>}
         <p className="hint">
           Solo usamos tu nombre para saludarte. Los datos de tu conuco solo los ves tú; para darte consejos, Ramoncito
-          envía a la IA (Groq) un resumen de tu conuco <b>sin tu nombre, tu correo ni tu ubicación exacta</b>.
+          envía a la IA (Groq) un resumen de tu conuco <b>sin tu nombre, tu correo ni tu ubicación exacta</b>.{" "}
+          <a href="/privacidad">Política de privacidad</a>.
         </p>
       </div>
     </section>
