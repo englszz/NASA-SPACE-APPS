@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Lilita_One, Nunito } from "next/font/google";
 import "./globals.css";
 import RamoncitoChat from "./RamoncitoChat";
@@ -9,8 +9,18 @@ const body = Nunito({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
   title: "The Conuco",
-  description: "Field Shift · NASA Space Apps Challenge",
+  description: "Datos de la NASA para decidir qué sembrar, cuándo y dónde en el Cibao. Proyecto para NASA Space Apps Challenge 2026 (Field Shift).",
+  applicationName: "The Conuco",
+  appleWebApp: { title: "The Conuco", capable: true, statusBarStyle: "default" },
+  openGraph: {
+    title: "The Conuco",
+    description: "Datos de la NASA para decidir qué sembrar, cuándo y dónde en el Cibao.",
+    locale: "es_DO",
+    type: "website",
+  },
 };
+
+export const viewport: Viewport = { themeColor: "#1d4a19" };
 
 export default function RootLayout({
   children,

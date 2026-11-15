@@ -2804,6 +2804,11 @@ button.cta {
 }
 
 .pickerMap {
+  /* Leaflet usa capas con z-index 400–800: se encierran aquí para que el mapa
+     no se monte encima de la barra fija de arriba al bajar la página */
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
   height: 340px;
   border-radius: 12px;
   overflow: hidden;
