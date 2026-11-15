@@ -5,6 +5,7 @@ import type { Conuco } from "@/lib/conuco";
 import ConucoForm from "./ConucoForm";
 import Dashboard from "./Dashboard";
 import LoginCard from "./LoginCard";
+import AuthNav from "@/app/AuthNav";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Mi conuco · The Conuco" };
@@ -16,9 +17,12 @@ function Shell({ children }: { children: React.ReactNode }) {
         <Link href="/" className="brand" aria-label="Volver al inicio">
           <Image src="/logo-texto.png" alt="The Conuco" width={900} height={271} priority />
         </Link>
-        <Link href="/" className="mcBack">
-          ← Inicio
-        </Link>
+        <div className="mcBarActions">
+          <Link href="/" className="mcBack">
+            ← Inicio
+          </Link>
+          <AuthNav showConuco={false} variant="bar" />
+        </div>
       </header>
       <main className="mcMain">{children}</main>
     </div>

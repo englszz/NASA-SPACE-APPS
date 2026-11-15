@@ -3251,3 +3251,181 @@ button.ctaSmall {
     height: calc(100dvh - 110px);
   }
 }
+
+/* ---- sección Ramoncito: lo que puede hacer ---- */
+.canGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.canGrid li {
+  padding: 18px;
+  background: rgba(251, 246, 230, 0.06);
+  border: 1px solid var(--line-dark);
+  border-radius: var(--radius);
+}
+
+.canIcon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  background: rgba(244, 165, 24, 0.18);
+  border-radius: 12px;
+}
+
+.canGrid h3 {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--cream);
+}
+
+.canGrid p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: rgba(251, 246, 230, 0.75);
+}
+
+.ramoncitoRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px, 4vw, 48px);
+  align-items: start;
+}
+
+.chatDemo .chatTop {
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.demoMe {
+  margin: 0 0 10px auto;
+  width: fit-content;
+  max-width: 85%;
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  color: var(--green-deep);
+  background: var(--cream);
+  border-radius: 14px 14px 4px 14px;
+}
+
+.demoBot {
+  max-width: 92%;
+  padding: 10px 12px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px 14px 14px 4px;
+}
+
+.demoBot p {
+  margin: 0 0 6px;
+}
+
+.demoBot p:last-child {
+  margin: 0;
+}
+
+.demoNote {
+  margin: 10px 0 0;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.ramoncitoSide h3 {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  color: var(--cream);
+}
+
+.stepsLight .stepN {
+  color: var(--sun);
+  border-color: var(--sun);
+}
+
+.stepsLight h4 {
+  margin: 4px 0 2px;
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--cream);
+}
+
+.stepsLight p {
+  color: rgba(251, 246, 230, 0.75);
+}
+
+.ramoncitoSide .formActions {
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.ctaGhost {
+  padding: 0.75em 1.4em;
+  font-weight: 800;
+  color: var(--cream);
+  text-decoration: none;
+  border: 2px solid var(--cream);
+  border-radius: 14px;
+}
+
+.ctaGhost:hover {
+  background: rgba(251, 246, 230, 0.1);
+}
+
+.ramoncitoLimits {
+  margin: 20px 0 0;
+  padding: 12px 14px;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: rgba(251, 246, 230, 0.85);
+  background: rgba(0, 0, 0, 0.18);
+  border-left: 3px solid var(--sun);
+  border-radius: 0 10px 10px 0;
+}
+
+/* ---- cerrar sesión ---- */
+.navSignOut,
+.mcSignOut {
+  padding: 0.55em 1em;
+  font: inherit;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--cream);
+  background: transparent;
+  border: 2px solid rgba(251, 246, 230, 0.5);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.navSignOut:hover,
+.mcSignOut:hover {
+  background: rgba(251, 246, 230, 0.12);
+}
+
+.mcBarActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+@media (max-width: 1080px) {
+  .canGrid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 820px) {
+  .ramoncitoRow { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .canGrid { grid-template-columns: 1fr; }
+}

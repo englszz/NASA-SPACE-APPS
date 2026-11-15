@@ -434,41 +434,129 @@ export function ClimateSection() {
   );
 }
 
+const RAMONCITO_CAN = [
+  {
+    icon: "🌦️",
+    title: "Te dice qué hacer esta semana",
+    text: "Mira el pronóstico de tu zona y te avisa si conviene regar, sembrar, abonar o esperar a que pase el aguacero.",
+  },
+  {
+    icon: "🌱",
+    title: "Qué sembrar y cuándo",
+    text: "Los cultivos que mejor se dan en tu tierra, con el mes para sembrar y el mes de cosecha.",
+  },
+  {
+    icon: "🔄",
+    title: "Compara tus rotaciones",
+    text: "Pone lo que siembras hoy al lado de otras opciones y te explica por qué podrían cuidar mejor tu tierra.",
+  },
+  {
+    icon: "🛰️",
+    title: "Traduce los datos de la NASA",
+    text: "Calor, lluvia, humedad de la tierra y salud de las plantas, explicados en palabras sencillas.",
+  },
+  {
+    icon: "⚠️",
+    title: "Te avisa de los riesgos",
+    text: "Meses de mucho calor, falta de agua, lluvias fuertes y terrenos donde la lluvia se lleva la tierra.",
+  },
+  {
+    icon: "📅",
+    title: "Piensa en los años que vienen",
+    text: "Cómo cambiarán el calor y el agua en tu zona hacia 2040–2060 y qué cultivos aguantarán mejor.",
+  },
+];
+
 export function RamoncitoSection() {
-  const examples = [
-    "¿Qué siembro en mayo si llovió poco?",
-    "¿El guandul aguanta más calor que la habichuela?",
-    "¿Cómo recupero un suelo cansado?",
-  ];
   return (
     <section id="ramoncito" className="band bandDeep bandPattern">
-      <div className="container split splitCenter">
-        <div className="ramoncitoArt">
-          <Image src="/ramoncito-rastrillo.png" alt="Ramoncito con su rastrillo" width={462} height={581} />
-        </div>
-        <div>
+      <div className="container">
+        <div className="headWithArt">
           <SectionHead
             n="05"
             eyebrow="Pregúntale a Ramoncito"
-            title="Un asistente que habla como en el conuco"
-            lead="Ramoncito explica los datos de tu parcela en palabras sencillas y responde tus dudas sobre siembra, agua y suelo."
+            title="Tu asistente para el conuco"
+            lead="Ramoncito es una inteligencia artificial que conoce los datos de tu zona y lo que siembras. Te responde en palabras sencillas, a cualquier hora."
           />
-          <div className="chatMock">
+          <Image
+            src="/ramoncito-rastrillo.png"
+            alt="Ramoncito con su rastrillo"
+            width={462}
+            height={581}
+            className="sectionArt"
+          />
+        </div>
+
+        <ul className="canGrid">
+          {RAMONCITO_CAN.map((c) => (
+            <li key={c.title}>
+              <span className="canIcon" aria-hidden="true">
+                {c.icon}
+              </span>
+              <h3>{c.title}</h3>
+              <p>{c.text}</p>
+            </li>
+          ))}
+        </ul>
+
+        <div className="ramoncitoRow">
+          <div className="chatMock chatDemo" aria-label="Ejemplo de conversación">
             <div className="chatTop">
-              <strong>Ramoncito</strong>
-              <span className="tag tagSun">Con IA</span>
+              <span className="rcAvatar">
+                <Image src="/ia-sombrero.png" alt="" width={256} height={256} />
+              </span>
+              <strong>Así responde Ramoncito</strong>
             </div>
-            <ul className="chips">
-              {examples.map((q) => (
-                <li key={q}>{q}</li>
-              ))}
-            </ul>
-            <div className="chatInput" aria-disabled="true">
-              Escribe tu pregunta…
+            <p className="demoMe">¿Riego esta semana? Siembro maíz cerca de Mao.</p>
+            <div className="demoBot">
+              <p>
+                <b>Esta semana no hace falta.</b> Mañana se esperan unos 16 mm de lluvia y la tierra de tu zona guarda
+                bien el agua.
+              </p>
+              <p>
+                <b>Ojo con:</b> la parte baja de tu conuco, que se encharca. Abre canales para que el agua corra.
+              </p>
             </div>
-            <button type="button" className="ctaSmall" onClick={openRamoncito}>
-              Habla con Ramoncito →
-            </button>
+            <p className="demoNote">Ejemplo basado en una respuesta real con datos de la zona de Mao.</p>
+          </div>
+
+          <div className="ramoncitoSide">
+            <h3>Para que te ayude mejor</h3>
+            <ol className="steps stepsLight">
+              <li>
+                <span className="stepN">1</span>
+                <div>
+                  <h4>Entra con Google</h4>
+                  <p>Es gratis. Tus datos solo los ves tú.</p>
+                </div>
+              </li>
+              <li>
+                <span className="stepN">2</span>
+                <div>
+                  <h4>Registra tu conuco</h4>
+                  <p>Dónde está, qué siembras, qué agua tienes y qué te importa más.</p>
+                </div>
+              </li>
+              <li>
+                <span className="stepN">3</span>
+                <div>
+                  <h4>Pregúntale lo que quieras</h4>
+                  <p>Toca el sombrero que está abajo a la derecha, en cualquier página.</p>
+                </div>
+              </li>
+            </ol>
+            <div className="formActions">
+              <button type="button" className="cta" onClick={openRamoncito}>
+                Habla con Ramoncito
+              </button>
+              <a href="/mi-conuco" className="ctaGhost">
+                Registrar mi conuco
+              </a>
+            </div>
+            <p className="ramoncitoLimits">
+              <b>Lo que Ramoncito no hace:</b> no ve tu finca exacta (sus datos son de una zona de unos 11 km), no
+              recomienda químicos ni dosis y no reemplaza a un técnico agrícola. Es una IA: puede equivocarse.
+            </p>
           </div>
         </div>
       </div>

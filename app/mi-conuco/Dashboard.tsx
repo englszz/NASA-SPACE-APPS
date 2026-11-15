@@ -90,7 +90,7 @@ export default function Dashboard({ conuco, firstName }: { conuco: Conuco; first
             Cambiar datos
           </button>
           <button type="button" className="fcMore" onClick={signOut}>
-            Salir
+            Cerrar sesión
           </button>
         </div>
       </section>

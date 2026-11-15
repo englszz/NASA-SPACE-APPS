@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Fields from "./Fields";
+import AuthNav from "./AuthNav";
 import BarnTransition from "./BarnTransition";
 import {
   ChallengeSection,
@@ -78,9 +79,7 @@ export default function Home() {
               {item.label}
             </a>
           ))}
-          <a href="/mi-conuco" className="navConuco">
-            Mi conuco
-          </a>
+          <AuthNav />
         </nav>
       </header>
 
