@@ -110,8 +110,10 @@ function PrivacyEs() {
         <p>
           Si usas <b>«Llamar a Ramoncito»</b>, la web te pide permiso para usar el micrófono. Solo graba mientras dura
           la llamada y mientras tú hablas; cada frase se envía a Groq para convertirla en texto (con el modelo Whisper)
-          y <b>no guardamos el audio</b>. La respuesta la lee en voz alta tu propio teléfono o computadora. Puedes
-          silenciar el micrófono o colgar cuando quieras.
+          y <b>no guardamos el audio</b>. La respuesta la lee en voz alta tu propio teléfono o computadora. Si tu
+          aparato no tiene voz, la web descarga una sola vez un modelo de voz abierto (Piper, desde HuggingFace) que
+          funciona dentro de tu navegador: el texto de la respuesta no sale de tu aparato para eso. Puedes silenciar el
+          micrófono o colgar cuando quieras.
         </p>
 
         <h2>5. Servicios que usamos</h2>
@@ -243,8 +245,9 @@ function PrivacyEn() {
         <p>
           If you use <b>“Call Ramoncito”</b>, the site asks for permission to use your microphone. It only records during
           the call and while you speak; each sentence is sent to Groq to turn it into text (with the Whisper model) and{" "}
-          <b>we don&apos;t keep the audio</b>. Your own phone or computer reads the answer aloud. You can mute the microphone
-          or hang up at any time.
+          <b>we don&apos;t keep the audio</b>. Your own phone or computer reads the answer aloud. If your device has no voice, the
+          site downloads, just once, an open voice model (Piper, from HuggingFace) that runs inside your browser: the answer&apos;s
+          text doesn&apos;t leave your device for that. You can mute the microphone or hang up at any time.
         </p>
 
         <h2>5. Services we use</h2>

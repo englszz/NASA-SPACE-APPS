@@ -121,6 +121,112 @@ function speak(text: string, lang: Lang): Promise<boolean> {
   });
 }
 
+// ---------- voz generada en el navegador (respaldo) ----------
+// Algunas computadoras (por ejemplo Chrome en Linux) no traen voces o «hablan» sin sonido.
+// Para que Ramoncito se oiga SIEMPRE, ahí se usa Piper: un modelo de voz abierto que corre
+// dentro del navegador (librería vits-web). Se descarga una sola vez (~63 MB) y queda guardado.
+
+type Tts = {
+  download: (voiceId: string, cb?: (p: { loaded: number; total: number }) => void) => Promise<void>;
+  predict: (cfg: { text: string; voiceId: string }) => Promise<Blob>;
+};
+const VITS_URL = "https://cdn.jsdelivr.net/npm/@diffusionstudio/vits-web@1.0.3/+esm";
+const PIPER_VOICE: Record<Lang, string> = { es: "es_MX-claude-high", en: "en_US-hfc_female-medium" };
+const SILENT_WAV = "data:audio/wav;base64,UklGRmQGAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YUAGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+
+let engine: "device" | "piper" = "device";
+let player: HTMLAudioElement | null = null;
+let ttsLib: Promise<Tts> | null = null;
+const piperReady: Partial<Record<Lang, Promise<boolean>>> = {};
+let speakToken = 0; // cambia al interrumpir: corta lo que se esté leyendo
+
+const emitProgress = (pct: number | null) =>
+  window.dispatchEvent(new CustomEvent("ramoncito-voz-progreso", { detail: pct }));
+
+function loadPiper(lang: Lang): Promise<boolean> {
+  piperReady[lang] ??= (async () => {
+    try {
+      ttsLib ??= import(/* webpackIgnore: true */ VITS_URL) as Promise<Tts>;
+      const tts = await ttsLib;
+      emitProgress(0);
+      // Hasta 3 intentos: una red lenta o un corte no deben dejar a Ramoncito mudo
+      for (let attempt = 1; ; attempt++) {
+        try {
+          await tts.download(PIPER_VOICE[lang], (p) => p.total && emitProgress(Math.round((p.loaded / p.total) * 100)));
+          break;
+        } catch (e) {
+          console.warn("Voz de Ramoncito: intento", attempt, "falló", e);
+          if (attempt >= 3) throw e;
+          await new Promise((r) => setTimeout(r, 1500 * attempt));
+        }
+      }
+      emitProgress(null);
+      return true;
+    } catch (e) {
+      console.warn("Voz de Ramoncito: no se pudo preparar", e);
+      emitProgress(null);
+      ttsLib = null;
+      delete piperReady[lang];
+      return false;
+    }
+  })();
+  return piperReady[lang]!;
+}
+
+/** Lee con Piper: genera la frase siguiente mientras suena la actual */
+async function speakPiper(text: string, lang: Lang): Promise<boolean> {
+  const token = ++speakToken;
+  if (!(await loadPiper(lang)) || token !== speakToken) return false;
+  const tts = await ttsLib!;
+  const parts = forSpeech(text).match(/[^.!?¡¿]+[.!?]*|[¡¿][^.!?]+[.!?]*/g)?.map((p) => p.trim()).filter(Boolean) ?? [];
+  if (!parts.length) return true;
+  player ??= new Audio();
+  try {
+    let next = tts.predict({ text: parts[0], voiceId: PIPER_VOICE[lang] });
+    for (let i = 0; i < parts.length; i++) {
+      const blob = await next;
+      if (token !== speakToken) return true;
+      if (i + 1 < parts.length) next = tts.predict({ text: parts[i + 1], voiceId: PIPER_VOICE[lang] });
+      const url = URL.createObjectURL(blob);
+      player.src = url;
+      await new Promise<void>((resolve) => {
+        const end = () => {
+          clearInterval(watch);
+          URL.revokeObjectURL(url);
+          resolve();
+        };
+        const watch = window.setInterval(() => token !== speakToken && (player!.pause(), end()), 150);
+        player!.onended = end;
+        player!.onerror = end;
+        player!.play().catch(end);
+      });
+      if (token !== speakToken) return true;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** Chrome en una computadora Linux: sus voces suelen fallar sin avisar */
+const isLinuxDesktop = () => /Linux/.test(navigator.userAgent) && !/Android|CrOS/.test(navigator.userAgent);
+
+/** Habla con el motor elegido; si la voz del aparato falla, pasa a Piper */
+async function speakAny(text: string, lang: Lang): Promise<boolean> {
+  if (engine === "piper") return speakPiper(text, lang);
+  const ok = await speak(text, lang);
+  if (ok) return true;
+  engine = "piper";
+  return speakPiper(text, lang);
+}
+
+/** Corta lo que Ramoncito esté diciendo (botón «Hablar yo» o colgar) */
+function stopSpeaking() {
+  speakToken++;
+  if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
+  player?.pause();
+}
+
 /**
  * Se llama DENTRO del toque en «Llamar» (los navegadores solo dejan usar el audio
  * después de un toque): prepara el audio y Ramoncito saluda.
@@ -133,19 +239,22 @@ export function prepareCall(lang: Lang) {
   } catch {
     audioCtx = null;
   }
-  greetingDone = speak(
-    lang === "en"
-      ? "Hi, this is Ramoncito. I'm listening: tell me how I can help."
-      : "¡Hola! Soy Ramoncito. Te escucho: dime en qué te ayudo.",
-    lang,
-  );
+  // Desbloquea el reproductor de audio con un sonido mudo (lo necesita Piper)
+  player ??= new Audio();
+  player.src = SILENT_WAV;
+  player.play().catch(() => {});
+
+  const greeting =
+    lang === "en" ? "Hi, this is Ramoncito. I'm listening: tell me how I can help." : "¡Hola! Soy Ramoncito. Te escucho: dime en qué te ayudo.";
+  const hasVoice = typeof speechSynthesis !== "undefined" && (speechSynthesis.getVoices().length === 0 || !!pickVoice(lang));
+  engine = isLinuxDesktop() || !hasVoice ? "piper" : "device";
+  greetingDone = speakAny(greeting, lang);
 }
 
 export const callSupported = () =>
   typeof window !== "undefined" &&
   !!navigator.mediaDevices?.getUserMedia &&
-  typeof MediaRecorder !== "undefined" &&
-  typeof speechSynthesis !== "undefined";
+  typeof MediaRecorder !== "undefined";
 
 // ---------- la llamada ----------
 
@@ -234,7 +343,7 @@ export default function RamoncitoCall({
     if (!alive.current) return;
     releaseMic();
     setPhase("speaking");
-    const ok = await speak(text, langRef.current);
+    const ok = await speakAny(text, langRef.current);
     if (!ok) setNoVoice(true);
   }, []);
 
@@ -370,9 +479,17 @@ export default function RamoncitoCall({
       cancelAnimationFrame(raf.current);
       if (recorder.current && recorder.current.state !== "inactive") recorder.current.stop();
       releaseMic();
-      if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
+      stopSpeaking();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Progreso de la descarga de la voz (solo la primera vez, en aparatos sin voz propia)
+  const [voicePct, setVoicePct] = useState<number | null>(null);
+  useEffect(() => {
+    const on = (e: Event) => setVoicePct((e as CustomEvent<number | null>).detail);
+    window.addEventListener("ramoncito-voz-progreso", on);
+    return () => window.removeEventListener("ramoncito-voz-progreso", on);
   }, []);
 
   useEffect(() => {
@@ -391,7 +508,7 @@ export default function RamoncitoCall({
   };
 
   // Cortar a Ramoncito mientras habla para hablar uno
-  const interrupt = () => speechSynthesis.cancel();
+  const interrupt = () => stopSpeaking();
 
   const STATUS: Record<Phase, string> = {
     connecting: t("Llamando…", "Calling…"),
@@ -419,8 +536,18 @@ export default function RamoncitoCall({
       </div>
 
       <p className="rcCallStatus" aria-live="polite">
-        {STATUS[phase]}
+        {voicePct != null
+          ? t(`Preparando la voz de Ramoncito… ${voicePct} %`, `Getting Ramoncito's voice ready… ${voicePct}%`)
+          : STATUS[phase]}
       </p>
+      {voicePct != null && (
+        <p className="rcCallHint">
+          {t(
+            "Solo la primera vez en este aparato. Después contesta enseguida.",
+            "Only the first time on this device. After that it answers right away.",
+          )}
+        </p>
+      )}
 
       {noVoice && !error && (
         <p className="rcCallError">

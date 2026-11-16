@@ -4405,3 +4405,9 @@ button.ctaSmall {
     animation: none !important;
   }
 }
+
+.rcCallHint {
+  margin: -6px 0 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
