@@ -4127,3 +4127,281 @@ button.ctaSmall {
     width: 110px;
   }
 }
+
+/* =====================================================================
+   LLAMADA CON RAMONCITO (voz)
+   ===================================================================== */
+.rcCallIcon {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  background: var(--sun);
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.rcCallIcon + .rcClose {
+  margin-left: 8px;
+}
+
+.rcCallIcon:focus-visible,
+.rcCallCta:focus-visible,
+.rcCallBtn:focus-visible {
+  outline: 3px dashed var(--sun);
+  outline-offset: 3px;
+}
+
+.rcCallCta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  font: inherit;
+  text-align: left;
+  color: var(--green-deep);
+  background: var(--sun);
+  border: 2px solid var(--green-deep);
+  border-radius: 14px;
+  box-shadow: 3px 4px 0 var(--green-deep);
+  cursor: pointer;
+}
+
+.rcCallCta > span:first-child {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  font-size: 1.3rem;
+  background: var(--cream);
+  border-radius: 50%;
+}
+
+.rcCallCta b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+}
+
+.rcCallCta small {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+/* pantalla de llamada */
+.rcCall {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: max(28px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  color: var(--cream);
+  text-align: center;
+  background:
+    linear-gradient(rgba(16, 40, 14, 0.82), rgba(16, 40, 14, 0.92)),
+    var(--green-deep) url("/patterns/hileras-oscuro.svg") repeat;
+  animation: rcIn 0.25s ease-out;
+}
+
+.rcCallTop {
+  display: grid;
+  gap: 2px;
+}
+
+.rcCallName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 2.6rem);
+  color: var(--sun);
+}
+
+.rcCallClock {
+  min-height: 1.2em;
+  margin: 0;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.rcCallAvatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(52vw, 220px);
+  aspect-ratio: 1;
+  margin: 10px 0;
+}
+
+.rcCallAvatar img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 16%;
+  object-fit: contain;
+  background: var(--cream);
+  border: 4px solid var(--sun);
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.rcCallAvatar .ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--sun);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+/* Las ondas: suaves al escuchar, fuertes cuando alguien habla */
+.rcCall.is-listening .ring,
+.rcCall.is-connecting .ring {
+  animation: callRing 2.4s ease-out infinite;
+}
+.rcCall.is-hearing .ring {
+  border-color: #9ad17f;
+  animation: callRing 1s ease-out infinite;
+}
+.rcCall.is-speaking .ring {
+  animation: callRing 1.2s ease-out infinite;
+}
+.rcCall .r2 { animation-delay: 0.4s !important; }
+.rcCall .r3 { animation-delay: 0.8s !important; }
+
+.rcCall.is-thinking .rcCallAvatar img {
+  animation: callThink 1.4s ease-in-out infinite;
+}
+
+@keyframes callRing {
+  0% { transform: scale(0.85); opacity: 0.75; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+@keyframes callThink {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+.rcCallStatus {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.rcCallError {
+  max-width: 420px;
+  margin: 0;
+  padding: 12px 14px;
+  color: var(--green-deep);
+  background: var(--cream);
+  border-radius: 12px;
+}
+
+.rcCallCaptions {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 520px);
+  text-align: left;
+}
+
+.rcCallCaptions p {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  border-radius: 14px;
+}
+
+.rcCallCaptions span {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.rcCallCaptions .me {
+  justify-self: end;
+  max-width: 85%;
+  color: var(--green-deep);
+  background: var(--sun);
+}
+
+.rcCallCaptions .bot {
+  max-width: 92%;
+  color: var(--ink);
+  background: var(--cream);
+}
+
+.rcCallActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.rcCallBtn {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 92px;
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--cream);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.rcCallBtn > span {
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  font-size: 1.6rem;
+  background: rgba(251, 246, 230, 0.16);
+  border: 2px solid rgba(251, 246, 230, 0.4);
+  border-radius: 50%;
+}
+
+.rcCallBtn.isOn > span {
+  color: var(--green-deep);
+  background: var(--cream);
+}
+
+.rcHangUp > span {
+  background: #c2362f;
+  border-color: #c2362f;
+  transform: rotate(135deg);
+}
+
+.rcCallFoot {
+  max-width: 460px;
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rcCall .ring,
+  .rcCall.is-thinking .rcCallAvatar img {
+    animation: none !important;
+  }
+}

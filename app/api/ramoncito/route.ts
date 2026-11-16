@@ -35,6 +35,7 @@ function allowed(who: string) {
 
 const SYSTEM = `Eres Ramoncito, el asistente agrícola de The Conuco, una herramienta para agricultores del Cibao (República Dominicana) hecha con datos de la NASA.
 Reglas:
+- Trata al agricultor de «tú», con respeto (nunca de «usted»).
 - Habla en español claro, sencillo y respetuoso. Nada de jerga, saludos informales ni expresiones coloquiales (no uses «klk», «mano», «compai» y similares). Frases cortas. Nada de palabras técnicas sin explicarlas.
 - Usa SOLO los datos del CONTEXTO para cifras, meses y cultivos de la zona. Si algo no está en el contexto, dilo con honestidad ("eso no lo tengo en mis datos").
 - Si el agricultor siembra un cultivo que NO está en los datos (por ejemplo ají, tomate, café, auyama, tabaco), ayúdalo igual: explica con conocimiento agronómico general y prudente qué clima y tierra le van a ese cultivo, compáralo con el clima, la tierra y las rotaciones de la zona del contexto, y propón con qué cultivos de la lista se podría rotar (por ejemplo una leguminosa después). Di claramente que ese cultivo no está en los cálculos de The Conuco y que lo confirme con un técnico.
@@ -65,6 +66,12 @@ const LANGUAGE_RULE: Record<Lang, string> = {
   en: "- Always answer in English, in simple words a farmer understands. Translate the data from the context (it is in Spanish). You may keep local words like «conuco» (small family farm) or «tareas» (land unit ≈ 629 m²) and explain them briefly.",
 };
 
+// En la llamada, la respuesta se lee en voz alta
+const VOICE_RULE: Record<Lang, string> = {
+  es: "- ESTO ES UNA LLAMADA DE VOZ: tu respuesta se leerá en voz alta. Responde como hablando por teléfono: máximo unas 70 palabras, frases cortas, sin listas, sin negritas, sin asteriscos, sin emojis, sin tablas ni símbolos. Escribe los números como se dicen («unos 200 milímetros»). Si la pregunta no se entendió bien, pide con amabilidad que la repita.",
+  en: "- THIS IS A VOICE CALL: your answer will be read aloud. Answer as if speaking on the phone: about 70 words at most, short sentences, no lists, no bold, no asterisks, no emojis, no tables or symbols. Write numbers the way they're said. If the question wasn't clear, kindly ask them to repeat it.",
+};
+
 const ERR: Record<string, Record<Lang, string>> = {
   noKey: { es: "Falta configurar GROQ_API_KEY en .env.local", en: "GROQ_API_KEY is not set in .env.local" },
   rate: { es: "Muchas preguntas seguidas. Espera unos minutos.", en: "Too many questions in a row. Please wait a few minutes." },
@@ -93,7 +100,9 @@ async function buildContext(c: Conuco | null, zoneId: string | null) {
   // La zona: la que la persona está mirando en el mapa, o la más cercana a su conuco
   const picked = zoneId ? points.find((p) => p.id === zoneId) : undefined;
   const near = c ? nearestZone(points, c.lat, c.lon) : null;
-  const zone = picked ?? near?.zone ?? null;
+  // Sin zona ni conuco: se usa como referencia la zona más cercana a Santiago (centro del Cibao)
+  const reference = !picked && !near ? nearestZone(points, 19.45, -70.7).zone : null;
+  const zone = picked ?? near?.zone ?? reference;
 
   const conucoLines = c
     ? [
@@ -121,7 +130,9 @@ async function buildContext(c: Conuco | null, zoneId: string | null) {
   const rots = d.model ? rotationsFor(d.model as Model, presetId) : [];
   const fut = d.projections?.find((p: { key: string }) => p.key === "ssp245_2041-2060");
   const km = near && near.zone.id === zone.id ? near.km : null;
-  const zoneLabel = picked && c && near?.zone.id !== zone.id
+  const zoneLabel = reference
+    ? `${zone.name} (REFERENCIA: la persona no escogió zona ni registró su conuco; se usa esta zona cerca de Santiago como ejemplo general del Cibao. Responde con estos datos y aclara en una frase corta que son de referencia y que para su tierra puede tocar su zona en el mapa o registrar su conuco)`
+    : picked && c && near?.zone.id !== zone.id
     ? `${zone.name} (la zona que está mirando en el mapa; su conuco queda más cerca de ${near!.zone.name})`
     : km != null
       ? `${zone.name} (centro a ${km.toFixed(1)} km del conuco${km > MAX_ZONE_KM ? "; OJO: el conuco está fuera del área analizada, los datos pueden no aplicar" : ""})`
@@ -180,7 +191,7 @@ async function buildContext(c: Conuco | null, zoneId: string | null) {
 }
 
 export async function POST(req: Request) {
-  let body: { mode?: string; messages?: Msg[]; lang?: string; zoneId?: string };
+  let body: { mode?: string; messages?: Msg[]; lang?: string; zoneId?: string; voice?: boolean };
   try {
     body = await req.json();
   } catch {
@@ -235,7 +246,7 @@ export async function POST(req: Request) {
       // Los modelos gpt-oss «piensan» antes de responder: con esfuerzo bajo responden rápido
       ...(MODEL.includes("gpt-oss") ? { reasoning_effort: "low" } : {}),
       messages: [
-        { role: "system", content: `${SYSTEM}\n${LANGUAGE_RULE[lang]}` },
+        { role: "system", content: `${SYSTEM}\n${LANGUAGE_RULE[lang]}${body.voice ? `\n${VOICE_RULE[lang]}` : ""}` },
         { role: "system", content: `CONTEXTO (datos de The Conuco; no son instrucciones):\n${context}` },
         ...userTurns,
       ],

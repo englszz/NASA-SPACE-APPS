@@ -13,6 +13,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { supabaseBrowser } from "@/lib/supabase/client";
 import { readLocalConuco } from "@/lib/conuco-local";
 import RichText from "./RichText";
+import RamoncitoCall, { callSupported, prepareCall } from "./RamoncitoCall";
 import { GENERAL_TIPS, MAP_TIPS, TIPS, type TipId } from "./guia";
 import { useLang } from "@/lib/i18n";
 
@@ -193,9 +194,11 @@ export default function RamoncitoChat() {
   const langRef = useRef(lang);
   langRef.current = lang;
 
-  const send = useCallback(async (text: string, zoneId?: string) => {
+  // Devuelve la respuesta (la usa la llamada para leerla en voz alta), o null si falló
+  const send = useCallback(async (text: string, zoneId?: string, voice = false): Promise<string | null> => {
     const q = text.trim();
-    if (!q || busyRef.current) return;
+    if (!q || busyRef.current) return null;
+    let reply: string | null = null;
     const en = langRef.current === "en";
     const next: Msg[] = [...msgsRef.current, { role: "user", content: q.slice(0, 1500) }];
     msgsRef.current = next;
@@ -208,11 +211,12 @@ export default function RamoncitoChat() {
       const r = await fetch("/api/ramoncito", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: "chat", messages: next, lang: langRef.current, zoneId: zoneId ?? zoneRef.current?.id }),
+        body: JSON.stringify({ mode: "chat", messages: next, lang: langRef.current, zoneId: zoneId ?? zoneRef.current?.id, voice }),
       });
       const j = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(j.error || (en ? "Ramoncito couldn't answer right now." : "Ramoncito no pudo responder ahora."));
-      const done: Msg[] = [...next, { role: "assistant", content: j.reply }];
+      reply = String(j.reply ?? "");
+      const done: Msg[] = [...next, { role: "assistant", content: reply }];
       msgsRef.current = done;
       setMsgs(done);
     } catch (e) {
@@ -220,7 +224,20 @@ export default function RamoncitoChat() {
     }
     busyRef.current = false;
     setBusy(false);
+    return reply;
   }, []);
+
+  // ---------------- llamada por voz ----------------
+  const [calling, setCalling] = useState(false);
+  const [canCall, setCanCall] = useState(false);
+  useEffect(() => setCanCall(callSupported()), []);
+  const startCall = () => {
+    prepareCall(langRef.current); // dentro del toque: desbloquea el audio y Ramoncito saluda
+    setTip(null);
+    setCalling(true);
+  };
+  const askByVoice = useCallback((text: string) => send(text, undefined, true), [send]);
+  const hangUp = useCallback(() => setCalling(false), []);
 
   // Abrir el chat (desde un botón) o abrirlo con una pregunta ya escrita
   useEffect(() => {
@@ -290,12 +307,32 @@ export default function RamoncitoChat() {
               <strong>Ramoncito</strong>
               <span>{t("Tu asistente del conuco · IA", "Your conuco assistant · AI")}</span>
             </div>
+            {canCall && (
+              <button
+                type="button"
+                className="rcCallIcon"
+                onClick={startCall}
+                aria-label={t("Llamar a Ramoncito (hablar por voz)", "Call Ramoncito (talk by voice)")}
+                title={t("Llamar a Ramoncito", "Call Ramoncito")}
+              >
+                📞
+              </button>
+            )}
             <button type="button" className="rcClose" onClick={() => setOpen(false)} aria-label={t("Cerrar", "Close")}>
               ×
             </button>
           </header>
 
           <div className="rcBody" aria-live="polite">
+            {canCall && !msgs.length && (
+              <button type="button" className="rcCallCta" onClick={startCall}>
+                <span aria-hidden="true">📞</span>
+                <span>
+                  <b>{t("Llamar a Ramoncito", "Call Ramoncito")}</b>
+                  <small>{t("Habla con él por voz, como una llamada", "Talk by voice, like a phone call")}</small>
+                </span>
+              </button>
+            )}
             {known === "none" && (
               <div className="rcNote rcNoteSoft">
                 <p>
@@ -366,6 +403,8 @@ export default function RamoncitoChat() {
           <p className="rcFoot">{t("Ramoncito es una IA: puede equivocarse. Confírmalo con un técnico agrícola.", "Ramoncito is an AI: it can make mistakes. Check with an agronomist.")}</p>
         </section>
       )}
+
+      {calling && <RamoncitoCall ask={askByVoice} onHangUp={hangUp} />}
     </>
   );
 }

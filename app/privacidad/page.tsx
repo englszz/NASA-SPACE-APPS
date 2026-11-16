@@ -107,6 +107,12 @@ function PrivacyEs() {
           guardamos el historial de tus conversaciones: se borra al cerrar o recargar la página. Si estás mirando una
           zona del mapa, también se usan los datos de esa zona.
         </p>
+        <p>
+          Si usas <b>«Llamar a Ramoncito»</b>, la web te pide permiso para usar el micrófono. Solo graba mientras dura
+          la llamada y mientras tú hablas; cada frase se envía a Groq para convertirla en texto (con el modelo Whisper)
+          y <b>no guardamos el audio</b>. La respuesta la lee en voz alta tu propio teléfono o computadora. Puedes
+          silenciar el micrófono o colgar cuando quieras.
+        </p>
 
         <h2>5. Servicios que usamos</h2>
         <ul>
@@ -233,6 +239,12 @@ function PrivacyEn() {
           summary <b>does not include your name, your email or your conuco&apos;s exact location</b>. We don&apos;t keep your
           chat history: it&apos;s erased when you close or reload the page. If you&apos;re looking at an area on the map, that
           area&apos;s data is used too.
+        </p>
+        <p>
+          If you use <b>“Call Ramoncito”</b>, the site asks for permission to use your microphone. It only records during
+          the call and while you speak; each sentence is sent to Groq to turn it into text (with the Whisper model) and{" "}
+          <b>we don&apos;t keep the audio</b>. Your own phone or computer reads the answer aloud. You can mute the microphone
+          or hang up at any time.
         </p>
 
         <h2>5. Services we use</h2>
