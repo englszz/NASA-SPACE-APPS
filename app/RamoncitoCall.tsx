@@ -22,7 +22,7 @@ const MIN_VOICE_MS = 350; // menos que esto es un ruido, no una frase
 // ---------- voz del teléfono (texto → voz) ----------
 
 let audioCtx: AudioContext | null = null;
-let greetingDone: Promise<void> = Promise.resolve();
+let greetingDone: Promise<boolean> = Promise.resolve(true);
 
 function pickVoice(lang: Lang) {
   const voices = typeof speechSynthesis !== "undefined" ? speechSynthesis.getVoices() : [];
@@ -43,33 +43,81 @@ const forSpeech = (s: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
-/** Lee un texto frase por frase (Chrome corta los textos largos si van de una vez) */
-function speak(text: string, lang: Lang): Promise<void> {
+// Chrome borra los textos en cola si nadie los guarda, y entonces se queda callado
+const keep: SpeechSynthesisUtterance[] = [];
+const isAndroid = () => /android/i.test(navigator.userAgent);
+
+// Las voces cargan tarde en algunos navegadores: se piden desde el principio
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  speechSynthesis.getVoices();
+  speechSynthesis.addEventListener?.("voiceschanged", () => speechSynthesis.getVoices());
+}
+
+/**
+ * Lee un texto en voz alta, frase por frase. Devuelve false si el navegador no habló
+ * (sin voces instaladas, bloqueado…), para avisar en pantalla.
+ */
+function speak(text: string, lang: Lang): Promise<boolean> {
   return new Promise((resolve) => {
-    if (typeof speechSynthesis === "undefined") return resolve();
-    speechSynthesis.cancel();
-    const parts = forSpeech(text).match(/[^.!?¡¿]+[.!?]*|[¡¿][^.!?]+[.!?]*/g)?.map((p) => p.trim()).filter(Boolean) ?? [];
-    if (!parts.length) return resolve();
-    const voice = pickVoice(lang);
-    let left = parts.length;
-    const done = () => {
-      left--;
-      if (left <= 0) resolve();
+    if (typeof speechSynthesis === "undefined") return resolve(false);
+    const clean = forSpeech(text);
+    const parts = clean.match(/[^.!?¡¿]+[.!?]*|[¡¿][^.!?]+[.!?]*/g)?.map((p) => p.trim()).filter(Boolean) ?? [];
+    if (!parts.length) return resolve(true);
+
+    let finished = false;
+    let started = false;
+    let keepAlive = 0;
+    let startCheck = 0;
+    let maxTime = 0;
+    const finish = (ok: boolean) => {
+      if (finished) return;
+      finished = true;
+      clearInterval(keepAlive);
+      clearTimeout(startCheck);
+      clearTimeout(maxTime);
+      keep.length = 0;
+      resolve(ok);
     };
-    for (const p of parts) {
-      const u = new SpeechSynthesisUtterance(p);
-      u.lang = lang === "en" ? "en-US" : "es-US";
-      if (voice) u.voice = voice;
-      u.rate = 1;
-      u.onend = done;
-      u.onerror = () => {
-        left = 0;
-        resolve();
-      };
-      speechSynthesis.speak(u);
-    }
-    // Por si el navegador nunca avisa que terminó
-    setTimeout(resolve, 5000 + forSpeech(text).length * 130);
+
+    const run = () => {
+      const voice = pickVoice(lang);
+      keep.length = 0;
+      parts.forEach((p, i) => {
+        const u = new SpeechSynthesisUtterance(p);
+        u.lang = voice?.lang ?? (lang === "en" ? "en-US" : "es-US");
+        if (voice) u.voice = voice;
+        u.rate = 1;
+        u.volume = 1;
+        u.onstart = () => (started = true);
+        if (i === parts.length - 1) u.onend = () => finish(true);
+        u.onerror = (e) => finish(e.error === "interrupted" || e.error === "canceled" ? true : started);
+        keep.push(u);
+        speechSynthesis.speak(u);
+      });
+      speechSynthesis.resume(); // a veces Chrome queda en pausa
+      // Chrome en computadora se corta tras ~15 s hablando: se le da un empujón
+      if (!isAndroid())
+        keepAlive = window.setInterval(() => {
+          if (speechSynthesis.speaking) {
+            speechSynthesis.pause();
+            speechSynthesis.resume();
+          }
+        }, 10000);
+      // Si en 4 s no empezó a hablar, este navegador no puede leer en voz alta
+      startCheck = window.setTimeout(() => {
+        if (!started && !speechSynthesis.speaking) {
+          speechSynthesis.cancel();
+          finish(false);
+        }
+      }, 4000);
+      maxTime = window.setTimeout(() => finish(started), 8000 + clean.length * 130);
+    };
+
+    // Hablar justo después de cancelar hace que Chrome se trague el texto: se espera un poco
+    if (speechSynthesis.speaking || speechSynthesis.pending) {
+      speechSynthesis.cancel();
+      setTimeout(run, 150);
+    } else run();
   });
 }
 
@@ -115,12 +163,14 @@ export default function RamoncitoCall({
   const [reply, setReply] = useState("");
   const [error, setError] = useState("");
   const [secs, setSecs] = useState(0);
+  const [noVoice, setNoVoice] = useState(false);
 
   const alive = useRef(true);
   const stream = useRef<MediaStream | null>(null);
   const recorder = useRef<MediaRecorder | null>(null);
   const raf = useRef(0);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const mutedRef = useRef(false);
   const idleCount = useRef(0);
   const langRef = useRef(lang);
@@ -137,16 +187,62 @@ export default function RamoncitoCall({
     if (recorder.current && recorder.current.state !== "inactive") recorder.current.stop();
   };
 
+  // El micrófono se abre solo para escuchar y se cierra mientras Ramoncito habla: con el
+  // micrófono abierto, los teléfonos (sobre todo iPhone) mandan el sonido al auricular de
+  // llamada y casi no se oye.
+  const releaseMic = () => {
+    sourceRef.current?.disconnect();
+    sourceRef.current = null;
+    analyserRef.current = null;
+    stream.current?.getTracks().forEach((tr) => tr.stop());
+    stream.current = null;
+  };
+
+  const openMic = useCallback(async () => {
+    if (stream.current?.getAudioTracks().some((tr) => tr.readyState === "live")) return true;
+    try {
+      stream.current = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+      });
+    } catch {
+      setError(
+        t(
+          "Necesito permiso para usar el micrófono. Actívalo en tu navegador y vuelve a llamar.",
+          "I need permission to use the microphone. Allow it in your browser and call again.",
+        ),
+      );
+      setPhase("error");
+      return false;
+    }
+    if (audioCtx) {
+      try {
+        void audioCtx.resume();
+        const src = audioCtx.createMediaStreamSource(stream.current);
+        const an = audioCtx.createAnalyser();
+        an.fftSize = 1024;
+        src.connect(an);
+        sourceRef.current = src;
+        analyserRef.current = an;
+      } catch {
+        analyserRef.current = null;
+      }
+    }
+    return true;
+  }, [t]);
+
   const say = useCallback(async (text: string) => {
     if (!alive.current) return;
+    releaseMic();
     setPhase("speaking");
-    await speak(text, langRef.current);
+    const ok = await speak(text, langRef.current);
+    if (!ok) setNoVoice(true);
   }, []);
 
   // Un turno: escuchar → transcribir → preguntar → hablar → (otro turno)
   const listen = useCallback(async () => {
-    if (!alive.current || !stream.current) return;
+    if (!alive.current) return;
     if (mutedRef.current) return setPhase("muted");
+    if (!(await openMic()) || !stream.current || !alive.current) return;
     setPhase("listening");
 
     const mime = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus"].find((m) =>
@@ -258,47 +354,22 @@ export default function RamoncitoCall({
     setReply(forSpeech(spoken));
     await say(spoken);
     return listen();
-  }, [ask, onHangUp, say]);
+  }, [ask, onHangUp, say, openMic]);
 
-  // Empezar: pedir el micrófono, esperar el saludo y escuchar
+  // Empezar: esperar el saludo de Ramoncito y escuchar
   useEffect(() => {
     alive.current = true;
     (async () => {
-      try {
-        stream.current = await navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-        });
-      } catch {
-        speechSynthesis.cancel();
-        setError(
-          t(
-            "Necesito permiso para usar el micrófono. Actívalo en tu navegador y vuelve a llamar.",
-            "I need permission to use the microphone. Allow it in your browser and call again.",
-          ),
-        );
-        setPhase("error");
-        return;
-      }
-      if (audioCtx) {
-        try {
-          const src = audioCtx.createMediaStreamSource(stream.current);
-          const an = audioCtx.createAnalyser();
-          an.fftSize = 1024;
-          src.connect(an);
-          analyserRef.current = an;
-        } catch {
-          analyserRef.current = null;
-        }
-      }
       setPhase("speaking");
-      await greetingDone;
+      const ok = await greetingDone;
+      if (!ok) setNoVoice(true);
       listen();
     })();
     return () => {
       alive.current = false;
       cancelAnimationFrame(raf.current);
       if (recorder.current && recorder.current.state !== "inactive") recorder.current.stop();
-      stream.current?.getTracks().forEach((tr) => tr.stop());
+      releaseMic();
       if (typeof speechSynthesis !== "undefined") speechSynthesis.cancel();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -314,6 +385,7 @@ export default function RamoncitoCall({
     mutedRef.current = !mutedRef.current;
     if (mutedRef.current) {
       stopRecording();
+      setTimeout(releaseMic, 300); // después de que se cierre la grabación
       setPhase((p) => (p === "listening" || p === "hearing" ? "muted" : p));
     } else if (phase === "muted") listen();
   };
@@ -350,6 +422,14 @@ export default function RamoncitoCall({
         {STATUS[phase]}
       </p>
 
+      {noVoice && !error && (
+        <p className="rcCallError">
+          {t(
+            "Este navegador no está leyendo las respuestas en voz alta. Léelas aquí abajo, o prueba en el teléfono con Chrome o Safari y con el volumen subido.",
+            "This browser isn't reading the answers aloud. Read them below, or try on a phone with Chrome or Safari and the volume up.",
+          )}
+        </p>
+      )}
       {error ? (
         <p className="rcCallError">{error}</p>
       ) : (
