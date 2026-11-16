@@ -189,18 +189,28 @@ async function speakPiper(text: string, lang: Lang): Promise<boolean> {
       if (i + 1 < parts.length) next = tts.predict({ text: parts[i + 1], voiceId: PIPER_VOICE[lang] });
       const url = URL.createObjectURL(blob);
       player.src = url;
-      await new Promise<void>((resolve) => {
+      // false si el navegador no dejó reproducir el sonido (por ejemplo, reproducción automática bloqueada)
+      const played = await new Promise<boolean>((resolve) => {
+        let ok = true;
         const end = () => {
           clearInterval(watch);
           URL.revokeObjectURL(url);
-          resolve();
+          resolve(ok);
         };
         const watch = window.setInterval(() => token !== speakToken && (player!.pause(), end()), 150);
         player!.onended = end;
-        player!.onerror = end;
-        player!.play().catch(end);
+        player!.onerror = () => {
+          ok = false;
+          end();
+        };
+        player!.play().catch((e) => {
+          console.warn("Voz de Ramoncito: el navegador no dejó reproducir el audio", e);
+          ok = false;
+          end();
+        });
       });
       if (token !== speakToken) return true;
+      if (!played) return false;
     }
     return true;
   } catch {
@@ -552,8 +562,8 @@ export default function RamoncitoCall({
       {noVoice && !error && (
         <p className="rcCallError">
           {t(
-            "Este navegador no está leyendo las respuestas en voz alta. Léelas aquí abajo, o prueba en el teléfono con Chrome o Safari y con el volumen subido.",
-            "This browser isn't reading the answers aloud. Read them below, or try on a phone with Chrome or Safari and the volume up.",
+            "Este navegador no deja que Ramoncito hable en voz alta. Permite el sonido para este sitio (en Brave: el ícono del candado o del escudo junto a la dirección → Reproducción automática → Permitir) y vuelve a llamar. Mientras, lee las respuestas aquí abajo.",
+            "This browser isn't letting Ramoncito speak aloud. Allow sound for this site (in Brave: the lock or shield icon next to the address → Autoplay → Allow) and call again. Meanwhile, read the answers below.",
           )}
         </p>
       )}
